@@ -1,0 +1,13 @@
+Course 4: Control Flow
+
+When writing a computer program, you need to be able to tell the computer what to do in different scenarios. For example, a calculator app would need to perform one action if the user taps the addition button, and another actionif the user taps the subtraction button
+
+In computer programming terms, this concept is known as control flow, because you can control the flow of decisions the code makes at multiple points. In this topic, you'll learn how to make decisions and repeat tasks in your programs.
+
+Topics to Cover
+1. Making Comparisons
+2. The if Statement
+3. Switch statements
+4. Loops
+5. Challenges
+6. Assignment

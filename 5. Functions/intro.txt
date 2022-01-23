@@ -1,0 +1,14 @@
+Course 5: Functions
+
+Each week, there are tasks that you repeat over and over: eat breakfast, brush your teeth, write your name, and so on. Brushing your teeth, for example includes putting toothpaste on the brush, brushing each tooth and rinsing your mouth out with water.
+
+The same idea exists in computer programming. A function is one small task, or sometimes a collection of several smaller, related tasks that you can use in conjuction with other functions to accomplish a larger task.
+
+In this topic, you'll learn how to write functions in Dart, including both named functions and anonymous functions.
+
+Topics to cover
+1. Function Basics
+2. Anonymous Functions
+3. Arrow Functions
+4. Challenges
+5. Assignment

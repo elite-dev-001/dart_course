@@ -1,0 +1,22 @@
+Introduction
+Dart is a general purpose programming language developed by Google. You can use it to develop web, server, desktop and
+mobile applications for iOS and Android. It’s easy to learn (especially if you attend my class) and also has great tooling support.
+
+In many ways Dart is a boring language, and that’s a good thing! It means that Dart is fast and easy to pick up. While
+Dart does have some unique characteristics, any knowledge you bring in from other object oriented or C-style languages
+will immediately be applicable. If you come here as a complete beginner to programming, Dart is a good place to
+start. The concepts that you’ll learn in this course will give you a solid foundation in your coding career.
+
+Don’t let Dart’s mundane syntax fool you. Dart is a modern and rapidly evolving language, and the things it allows you
+to do are both exciting and even historic in nature. Never before have you been able to create native applications for so many platforms using a single code base.
+
+There’s a good chance you choose this course because of the Flutter UI framework. However, it was no accident that
+Flutter chose Dart as its language. The Dart virtual machine allows lightning fast development-time rebuilds, its
+JavaScript complier allows you to build for the web, and its ahead-of-time compiler creates fast native applications
+across mobile and desktop platforms and even for servers and embedded devices.
+
+It’s no wonder then that developers across the world have taken notice. The language has been climbing the charts for
+both fastest growing: https://octoverse.github.com/#toplanguages and most loved https://bit.ly/2Q2ukO0. The wise
+developer takes note of industry trends and joins them.
+
+So welcome to this Course!

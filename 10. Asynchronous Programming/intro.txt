@@ -1,0 +1,19 @@
+Course 10: Asynchronous Programming 
+
+You’ve come a long way in your study of the Dart programming language. This course is an important one, as it fills in the remaining gaps needed to complete your Dart Tutorial. In it, you’ll not only learn how to deal with code that takes a long time to complete, but along the way, you’ll also see how to handle errors, connect to a remote server and read data from a file.
+
+Your computer does a lot of work, and it does the work so fast that you don’t usually realize how much it’s actually doing. Every now and then, though, especially on an older computer or phone, you may notice an app slow down or even freeze. This may express itself as jank during an animation: that annoying stutter that happens when the device is doing so much work that some animation framesget dropped.
+
+Tasks that take a long time generally fall into two categories: I/O tasks, and computationally intensive tasks. I/O, or input-output, includes things like reading and writing files, accessing a database, or downloading content from the
+internet. These all happen outside the CPU, so the CPU has to wait for them to complete. Computationally intensive tasks, on the other hand, happen inside the CPU. These tasks may include things like decrypting data, performing a
+mathematical calculation, or parsing JSON.
+
+As a developer, you have to think about how your app, and in particular your UI, will respond when it meets these timeconsuming tasks. Can you imagine if a user clicked a download button in your app, and the app simply froze until
+the 20 MB download was complete? You’d be collecting onestar reviews in a hurry.
+
+Topics to cover
+1. Concurrency in Dart
+2. Futures
+3. Streams
+4. Isolates
+5. Challenges

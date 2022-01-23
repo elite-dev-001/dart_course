@@ -1,0 +1,15 @@
+Course 3: Types & operations
+
+Life is full of variety, and that variety expresses itself in different types. What type of toothpaste do you use? Oral B? MacClean? What's your blood type? A? b? O+? What type of ice cream do you like? Vanilla? Strawberry? Praline pecan fudge swirl? Having names for all of these different things help you talk intelligently about them. It also helps you to recognize when something is out of place. After all, no one brushes their teeth with Vanilla ice cream.
+
+Programming types are just as useful as real life types. They help you to categorize all the different kinds of data you use in your code.
+
+In the previous course, you learned hoe to name data using variables and also got a brief introduction to Dart data types. In this course, you'll learn even more about types and what you can do with them.
+
+Topics to cover
+1. Data types in Dart
+2. Strings
+3. Working with Strings in Dart
+4. Object and dynamic types
+5. Challenges
+6. Assignment

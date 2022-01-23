@@ -1,0 +1,28 @@
+Course 7: Nullability
+
+You know that game where you try to find the item that
+doesn’t belong in a list? Here’s one for you:
+horse, camel, pig, cow, sheep, goat
+
+Which one doesn’t belong?
+
+It’s the third one, of course! The other animals are raised by
+nomadic peoples, but a pig is a farmer’s animal — it doesn’t
+do so well trekking across the steppe. About now you’re
+probably muttering to yourself why your answer was just as
+good — like, a sheep is the only animal with wool, or
+something similar. If you got an answer that works, good job.
+Here’s another one:
+196, 144, 169, 182, 121
+Did you get it? The answer is one hundred and eighty-two.
+All the other numbers are squares of integers.
+One more:
+3, null, 1, 7, 4, 5
+And the answer is . . . null! All of the other items in the list
+are integers, but null isn’t an integer.
+What? Was that too easy?
+
+Topics to Cover
+1. Null overview
+2. Handling nullable types
+3. Challenges

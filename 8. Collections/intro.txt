@@ -1,0 +1,17 @@
+Course 8: Collections
+
+In almost every application you make, you’ll be dealing with
+collections of data. Data can be organized in multiple ways,
+each with a different purpose. Dart provides multiple
+solutions to fit your collection’s needs, and in this topic
+you’ll learn about three of the main ones: lists, sets and
+maps.
+
+Topics to Cover
+1. Lists
+2. Sets 
+3. Maps 
+4. Higher order methods
+5. When to use lists, sets or maps
+6. Challenges
+7. Assignment

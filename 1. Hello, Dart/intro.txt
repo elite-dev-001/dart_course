@@ -1,0 +1,21 @@
+Course 1: Hello, Dart
+
+This first chapter is designed to help you set up your development environment so that you can get the most out
+of the following courses.
+
+There are several different tools that Dart developers use
+when building apps:
+
+*DartPad: This is a simple browser-based tool for writing and executing Dart code. It’s available at dartpad.dev.
+
+*IntelliJ IDEA: IntelliJ is a powerful Integrated Development Environment, or IDE, that supports Dart development through a Dart plugin. Although Android Studio, a popular IDE for Flutter development, is built on IntelliJ, this book recommends that you use plain IntelliJ for pure Dart projects. The IntelliJ Dart plugin makes this an easier task than doing it in Android Studio.
+
+*Visual Studio Code: Also known as VS Code, this is a lightweight IDE with a clean and simple interface. It fully supports Dart development with its Dart extension.
+
+In this course, we use Visual Studio Code for all of the examples contained within, but if you have another IDE you prefer then by all means, continue using that one for your Dart development. If you don’t have a preference, though, you’ll find using VS Code an enjoyable experience. VS Code also supports Flutter development through an extension, so you won’t be limiting yourself for future Flutter development if you choose to go the VS Code route now.
+
+Topics to Cover
+1. Installing Visual Studio Code
+2. Installing the Dart SDK
+3. Dart on the command line
+4. Using VS Code for Dart development

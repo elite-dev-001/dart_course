@@ -1,0 +1,14 @@
+Course 2: Expressions, Variables & Constants
+
+In this course, now that we have set up our Dart development environment, it's time to start writing some Dart code.
+
+Topics to Cover.
+1. Commenting code
+2. Statements and expressions
+3. Arithmetic operations
+4. Naming Data
+5. Increment and decrement
+6. Challenges
+7. Assignment
+
+#Goodluck
