@@ -1,0 +1,5 @@
+Installing the Dart SDK
+
+*The Dart Software Development Kit, or SDK, is a collection of command line tools that make it possible to develop Dart applications.
+
+*Go to https://dart.dev/get-dart and follow the directions on that site to download and install the Dart SDK on your platform.

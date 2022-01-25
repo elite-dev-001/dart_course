@@ -1,0 +1,7 @@
+1.1 Installing Visual Studio Code
+
+*Visual Studio Code is a cross-platform, open-source IDE from Microsoft. It runs on Windows, MacOS and Linux, so unless the only device you’ve got at your disposal is a mobile phone, then you’re covered!
+
+*Download Visual Studio Code at $code.visualstudio.com , and follow the directions provided on the site to install it.
+
+*You’ll also need the Dart SDK, which you’ll install in the next section.
