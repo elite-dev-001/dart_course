@@ -1,0 +1,7 @@
+Running the code
+
+Save the file, and then run the following command in the same folder as hello.dart:
+
+    dart run hello.dart
+
+The run keyword is the run tool from the Dart SDK that you learned about earlier. It runs the code in hello.dart in the Dart VM.

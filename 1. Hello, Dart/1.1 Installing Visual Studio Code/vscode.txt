@@ -1,4 +1,4 @@
-1.1 Installing Visual Studio Code
+* Installing Visual Studio Code
 
 *Visual Studio Code is a cross-platform, open-source IDE from Microsoft. It runs on Windows, MacOS and Linux, so unless the only device you’ve got at your disposal is a mobile phone, then you’re covered!
 

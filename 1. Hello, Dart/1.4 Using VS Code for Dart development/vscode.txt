@@ -1,0 +1,100 @@
+* Using VS Code for Dart development
+
+You’ve created and run a project from the command line, but it’s also possible to do the same thing from within VS Code. This section will walk you through that process.
+
+* Installing the Dart extension
+
+Open Visual Studio Code, and on the left hand side you’ll see a vertical toolbar called Activity Bar. Click the Extensions icon, which looks like four boxes. Then type dart in the search area. When the Dart extension appears, click the Install button to install it.
+
+* Creating a new Dart project
+
+The Dart extension in VS Code makes it easy to create a new Dart project. To see how this works, you’ll recreate the same simple console project that you previously created from the command line.
+
+To start, delete the hello_dart_project folder and its contents
+
+You can create a new project from the Command Palette. To access the Command Palette, either go to View ▸ Command Palette... in the menu, or press the shortcut Command+Shift+P on a Mac or Control+Shift+P on a PC.
+
+Start typing dart to bring up a list of matching commands. Then choose Dart: New Project.
+
+If you receive a message about Stagehand, then choose Activate Stagehand.
+
+Next, choose Simple Console Application from the list.
+
+As before, choose a location to save the project folder that VS Code will create, and name the project hello_dart_project.
+
+* Browsing the generated code
+
+Open the file hello_dart_project.dart in the bin directory, and you’ll see it contains the following code:
+
+    void main(List<String> arguments) {
+        print('Hello world');
+    }
+
+The List<String> arguments portion is only necessary when creating command-line apps that take arguments.
+
+Since you won’t be creating command-line apps in this course, you can remove the arguments portion to simplify things. Thus, replace the contents of hello_dart_project.dart with the following code:
+
+    void main() {
+        print('Hello, Dart project');
+    }
+
+* Running Dart in VS Code
+
+To run your code, click the word Run that appears directly over the main function.
+
+You’ll see Hello, Dart project! appear in the debug console.
+
+* Exploring the VS Code UI
+
+This is a good opportunity to explore the various parts of the Visual Studio Code user interface.
+
+    - Activity Bar: Choose which content to show in the side bar.
+    - Side Bar: The Explorer is displaying the current project and file.
+    - Editor: Write your Dart code here.
+    - Panels: Show program output, run terminal commands, and more.
+    - Status Bar: Display information about the current project.
+
+* More ways to run your project
+
+You ran your project earlier by pressing the Run label over the main function. Here are three more ways that you can run your project:
+
+    - Choose Run ▸ Start Debugging from the menu.
+    - Press F5.
+    - Click the triangular run button in the top right corner.
+
+* Project configuration file
+
+Sometimes when pressing F5 to run your project, VS Code doesn’t know where to look for the main function, and you’ll see a message.
+
+* Creating launch.json
+
+Create the launch.json file by clicking the Debug icon in the Activity Bar and then clicking the link to create a launch.json file.
+
+This will create a new launch.json file in the .vscode folder.
+
+* Updating the contents
+
+Now replace the contents of launch.json with the following:
+
+    {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Dart",
+                "type": "dart",
+                "request": "launch",
+                "program": "bin/hello_dart_project.dart"
+            }
+        ]
+    }
+
+These are what the configuration elements mean:
+
+    - name: This is your project’s configuration name. You can call it whatever you like.
+    - type: The type lets VS Code know that this is a Dart project.
+    - request: A request of launch tells VS Code that you want to run the project.
+    - program: This is the location where your program will start its execution. VS Code will look for the main function here so that it can launch your app.
+
+* Running your project again
+
+Save your changes and run the file again by pressing F5. VS Code should be satisfied now that it knows where to look for the main function.

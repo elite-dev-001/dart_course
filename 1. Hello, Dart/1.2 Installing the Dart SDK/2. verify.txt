@@ -1,4 +1,4 @@
-Verifying the Dart SDK installation
+* Verifying the Dart SDK installation
 
 After you’ve installed Dart, run the following command in a terminal to ensure that it’s working:
 

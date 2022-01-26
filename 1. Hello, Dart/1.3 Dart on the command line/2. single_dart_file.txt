@@ -1,0 +1,3 @@
+Running a single Dart file
+
+Find or create a convenient folder on your computer where you can save the Dart projects that you create in this course. Create a new file in that folder and name it hello.dart.
