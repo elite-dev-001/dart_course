@@ -1,0 +1,98 @@
+* Naming Data
+
+At its simplest, computer programming is all about manipulating data, since everything you see on your screen can be reduced to numbers. Sometimes you represent and work with data as various types of numbers, but other times, the data comes in more complex forms such as text, images and collections.
+
+In your Dart code, you can give each piece of data a name you can use to refer to that piece of data later. The name carries with it an associated type that denotes what sort of data the name refers to, such as text, numbers, or a date.
+
+* Variables
+
+Take a look at the following:
+    int number = 10;
+This statement declares a variable called number of type int. It then sets the value of the variable to the number 10. The int part of the statement is known as a type annotation, which tells Dart explicitly what the type is.
+
+If you want to change the value of a variable, then you can
+just give it a different value of the same type:
+    int number = 10;
+    number = 15;
+
+The type int can store integers. The way you store decimal numbers is like so:
+    double apple = 3.14159
+
+This is similar to the int example. This time, though, the variable is a double, a type that can store decimals with high precision.
+
+* Type safety
+Dart is a type-safe language. That means once you tell Dart
+what a variable’s type is, you can’t change it later. Here’s an
+example:
+
+    int myInteger = 10;
+    myInteger = 3.14159; // No, no, no. That’s not allowed
+3.14159 is a double, but you already defined myInteger as an int. No changes allowed!
+
+Dart’s type safety will save you countless hours when coding, since the compiler will tell you immediately whenever you try to give a variable the wrong type. This prevents you from having to chase down bugs after you experience runtime crashes.
+
+* Type inference
+Dart is smart in a lot of ways. You don’t even have to tell it the type of a variable, and Dart can still figure out what you mean. The var keyword says to Dart, “Use whatever type is appropriate.”
+
+    var someNumber = 10;
+There's no need to tell Dart that 10 is an integer. Dart infers the type and makes someNumber an int. Type safety still applies, though:
+    var someNumber = 10;
+    someNumber = 15;
+    someNumber = 3.14159
+
+Trying to set someNumber to a double will result in an error. Your program won’t even compile. Quick catch; time saved. Thanks, Dart!
+
+* Constants 
+Dart has two different types of “variables” whose values never change. They are declared with the const and final keywords, and the following sections will show the difference between the two.
+
+    - const constants
+    Variables whose value you can change are known as mutable data. Mutables certainly have their place in programs, but can also present problems. It’s easy to lose track of all the places in your code that can change the value of a particular variable. For that reason, you should use constants rather than variables whenever possible. These unchangeable variables are known as immutable data.
+
+    To create a constant in Dart, use the const keyword:
+        const myConstant = 10;
+    Just as with var, Dart uses type inference to determine that myConstant is an int
+
+    Once you’ve declared a constant, you can’t change its data. For example, consider the following example:
+        const myConstant = 10;
+        myConstant = 0; // Not allowed
+    
+    - final constants
+    Often, you know you’ll want a constant in your program, but you don’t know what its value is at compile time. You’ll only know the value after the program starts running. This kind of constant is known as a runtime constant.
+
+    In Dart const is only used for compile-time constants; that is, for values that can be determined by the compiler before the program ever starts running.
+
+    If you can’t create a const variable because you don’t know its value at compile time, then you must use the final keyword to make it a runtime constant. There are many reasons you might not know a value until after your program is running. For example, you might need to fetch a value from the server, or query the device settings, or ask a user to input their age.
+
+    Here is another example of a runtime value:
+        final hoursSinceMidnight = DateTime.now().hour;
+
+    DateTime.now() is a Dart function that tells you the current date and time when the code is run. Adding hour to that tells you the number of hours that have passed since the beginning of the day. Since that code will produce a different results depending on the time of day, this is most definitely a runtime value. So to make hoursSinceMidnight a constant,  you must use the final keyword instead of const.
+
+    If you try to change the final constant after it’s already been set:
+        hoursSinceMidnight = 0;
+    This will produce the following error:
+        The final variable 'hoursSinceMidnight' can only be set once.
+
+* Using meaningful names
+Always try to choose meaningful names for your variables and constants. Good names act as documentation and make your code easy to read.
+A good name specifically describes the role of a variable or constant. Here are some examples of good names:
+
+    - personAge
+    - numberOfPeople
+    - gradePointAverage
+Often a bad name is simply not descriptive enough. Here are some examples of bad names:
+    - a
+    - temp
+    - avearge
+
+The key is to ensure that you’ll understand what the variable or constant refers to when you read it again later. Don’t make the mistake of thinking you have an infallible memory! It’s common in computer programming to look back at your own code as early as a day or two later and have forgotten what it does. Make it easier for yourself by giving your variables and constants intuitive, precise names.
+
+Also, note how the names above are written. In Dart, it’s standard to use lowerCamelCase for variable and constant names. Follow these rules to properly case your names:
+    - Start with a lowercase letter.
+    - If the name is made up of multiple words, join them together and start every word after the first one with an uppercase letter.
+    - Treat abbreviations like words (for example, sourceUrl and urlDescription).
+
+Mini-exrcises
+1. Declare a constant of type int called myAge and set it to your age.
+2. Declare a variable of type double called averageAge. Initially, set the variable to your own age. Then, set it to the average of your age and your best friend’s age.
+3. Create a constant called testNumber and initialize it with whatever integer you’d like. Next, create another constant called evenOdd and set it equal to testNumber modulo 2. Now change testNumber to various numbers. What do you notice about evenOdd?

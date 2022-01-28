@@ -1,0 +1,28 @@
+* Commenting Code
+
+Dart, like most other programming languages, allows you to document your code through the use of comments. These allow you to write any text directly along side your code and are ignored by the compiler.
+
+The depth and complexity of the code you write can obscure the big-picture details of why you wrote your code a certain way, or even what problem it is your code is solving. To prevent this, it’s a good idea to document what you wrote so that the next human who passes through your code will be able to make sense of your work. That next human, after all, may be a future you!
+
+The first way to write a comment in Dart is like so:
+    // This is a comment. It is not executed.
+This is a single line comment.
+
+You can stack up single line comments to allow you to write multi-line comments as shown below:
+    // This is also a comment,
+    // over multiple lines.
+You may also create comment blocks by putting your comment text between /* and */:
+    /* This is also a comment. Over many...
+        many...
+        many lines. */
+The start is denoted by /* and the end is denoted by */.
+Simple!
+
+* Printing output
+
+print will output whatever you want to the debug console.
+For example, consider the following code:
+    print('Hello, Dart Student!');
+Run this code and it’ll output a nice message to the debug console.
+
+Adding print statements into your code is an easy way to monitor what’s happening at a particular point in your code.
