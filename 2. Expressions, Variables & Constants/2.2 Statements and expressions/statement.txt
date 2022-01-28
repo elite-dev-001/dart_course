@@ -1,0 +1,31 @@
+* Statements and expressions
+
+Two important words that you'll often hear thrown about in programming language documentation are statement and expression. Its helpful to understand the difference between the two.
+
+* Statements
+
+A statement is a command, something you tell the computer to do. In Dart, all simple statements end with a semicolon.You’ve already seen that with the print statement:
+
+    print('Hello, Dart Apprentice reader!');
+
+The semicolon on the right finishes the statement.
+
+In addition to simple statements, Dart also has complex statements and code blocks that use curly braces, but there’s no need to add semicolons after the braces.
+
+One example of a complex statement is the if statement:
+    if (someCondition) {
+        // code block
+    }
+No semicolons are needed on the lines with the opening or closing curly braces.
+
+* Expressions
+
+Unlike a statement, an expression doesn’t do something; it is something. That is, an expression is a value, or is something that can be calculated as a value.
+
+Here are a few examples of expressions in Dart:
+    42
+    3 + 2
+    'Hello, Dart Developers'
+    x
+The values can be numbers, text, or some other type. They can even be variables such as x whose value isn’t known until runtime.
+

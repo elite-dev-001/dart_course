@@ -1,0 +1,36 @@
+* Increment and decrement
+
+A common operation that you’ll need is to be able to increment or decrement a variable. In Dart, this is achieved like so:
+    var counter = 0;
+    counter += 1;
+    // counter = 1;
+    counter -= 1;
+    // counter = 0;
+
+The counter variable begins as 0. The increment sets its value to 1, and then the decrement sets its value back to 0.
+
+The += and -= operators are similar to the assignment operator (=), except they also perform an addition or subtraction. They take the current value of the variable, add or subtract the given value, and assign the result back to the variable.
+
+In other words, the code above is shorthand for the following:
+
+    var counter = 0;
+    counter = counter + 1;
+    counter = counter - 1;
+
+If you only need to increment or decrement by 1, then you  can use the ++ or -- operators:
+
+    var counter = 0;
+    counter++; // 1
+    counter--; // 0
+
+The *= and /= operators perform similar operations for multiplication and division, respectively:
+
+    double myValue = 10;
+
+    myValue *= 3; // same as myValue = myValue * 3;
+    // myValue = 30.0;
+
+    myValue /= 2; // same as myValue = myValue / 2;
+    // myValue = 15.0;
+
+Division in Dart produces a result with a type of double, so myValue could not be an int.
