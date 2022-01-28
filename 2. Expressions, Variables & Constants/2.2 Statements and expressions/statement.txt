@@ -6,7 +6,7 @@ Two important words that you'll often hear thrown about in programming language 
 
 A statement is a command, something you tell the computer to do. In Dart, all simple statements end with a semicolon.You’ve already seen that with the print statement:
 
-    print('Hello, Dart Apprentice reader!');
+    print('Hello, Dart Developers!');
 
 The semicolon on the right finishes the statement.
 
