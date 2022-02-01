@@ -1,0 +1,24 @@
+* Setting up a full Dart project
+
+It’s nice to be able to run a single file, but as you build bigger projects, you’ll want to divide your code into manageable pieces and also include configuration and asset files. To do that you need to create a full Dart project. Remember that create tool? The time has come.
+
+* Creating the project
+
+Go to the location where you want to create your project folder, and then run the following command in the terminal:
+
+    - dart create hello_dart_project
+
+This creates a simple Dart project with some default code.
+
+* Running the project
+
+Enter the new folder you just created like so
+    - cd hello_dart_project
+Now run the project with the following command:
+    - dart run bin/hello_dart_project.dart
+
+You'll see the text Hello world!, which is the output of the code in the default project that the create tool generated.
+
+The run keyword is actually optional. Run the project again without it:
+    - dart bin/hello_dart_project.dart
+Again, Hello world! is the result

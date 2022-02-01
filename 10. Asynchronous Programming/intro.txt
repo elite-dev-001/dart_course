@@ -1,6 +1,6 @@
 Course 10: Asynchronous Programming 
 
-You’ve come a long way in your study of the Dart programming language. This course is an important one, as it fills in the remaining gaps needed to complete your Dart Tutorial. In it, you’ll not only learn how to deal with code that takes a long time to complete, but along the way, you’ll also see how to handle errors, connect to a remote server and read data from a file.
+You’ve come a long way in your study of the Dart programming language. This course is an important one, as it fills in the remaining gaps needed to complete your Dart Tutorial. In it, you’ll not only learn how to deal with code that takes a long time to complete, but along the way, you’ll also see how to handle errors, connect to a remote server and course data from a file.
 
 Your computer does a lot of work, and it does the work so fast that you don’t usually realize how much it’s actually doing. Every now and then, though, especially on an older computer or phone, you may notice an app slow down or even freeze. This may express itself as jank during an animation: that annoying stutter that happens when the device is doing so much work that some animation framesget dropped.
 

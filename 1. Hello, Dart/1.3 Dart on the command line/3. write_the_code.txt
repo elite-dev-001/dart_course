@@ -1,0 +1,9 @@
+Writing the code
+
+* Next add the following Dart code to that empty file:
+
+    void main() {
+        print('Hello Dart');
+    }
+
+* This creates a Dart function named main. Inside that function, you call another function, print, which displays the text Hello, Dart! on the screen.

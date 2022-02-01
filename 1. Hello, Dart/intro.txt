@@ -1,5 +1,11 @@
 Course 1: Hello, Dart
+<<<<<<< HEAD
 Name: Smith
+=======
+
+Name: Wilson Chinedu
+
+>>>>>>> a078f4b530a1064372913755665098ac9bffb84f
 This first chapter is designed to help you set up your development environment so that you can get the most out
 of the following courses.
 
@@ -8,7 +14,7 @@ when building apps:
 
 *DartPad: This is a simple browser-based tool for writing and executing Dart code. It’s available at dartpad.dev.
 
-*IntelliJ IDEA: IntelliJ is a powerful Integrated Development Environment, or IDE, that supports Dart development through a Dart plugin. Although Android Studio, a popular IDE for Flutter development, is built on IntelliJ, this book recommends that you use plain IntelliJ for pure Dart projects. The IntelliJ Dart plugin makes this an easier task than doing it in Android Studio.
+*IntelliJ IDEA: IntelliJ is a powerful Integrated Development Environment, or IDE, that supports Dart development through a Dart plugin. Although Android Studio, a popular IDE for Flutter development, is built on IntelliJ, this course recommends that you use plain IntelliJ for pure Dart projects. The IntelliJ Dart plugin makes this an easier task than doing it in Android Studio.
 
 *Visual Studio Code: Also known as VS Code, this is a lightweight IDE with a clean and simple interface. It fully supports Dart development with its Dart extension.
 

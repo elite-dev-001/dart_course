@@ -1,0 +1,98 @@
+* Arithmetic operations
+
+In this section, you’ll learn about the various arithmetic operations that Dart has to offer by seeing how they apply to numbers. In later courses, you’ll learn about operations for types beyond simple numbers.
+
+* Simple operations
+
+Each operation in Dart uses a symbol known as the operator to denote the type of operation it performs. Consider the four arithmetic operations you learned in your early school days: addition, subtraction, multiplication and division. For these simple operations, Dart uses the following operators:
+    - Add: +
+    - Subtract: -
+    - Multiply: *
+    - Divide: /
+These operators are used like so: 
+    2 + 6
+    10 - 2
+    2 * 4
+    24 / 3
+
+Each of these lines is an expression, because each can be calculated down to a value. In these cases, all four expressions have the same value: 8. Notice how the code looks similar to how you would write the operations out with pen and paper.
+
+Check the answers yourself in VS Code using a print
+statement:
+
+* Decimal numbers
+
+All of the operations above use whole numbers, more formally known as integers. However, as you know, not every number is whole.
+
+consider the following:
+    22 / 7
+Dart gives you the standard decimal answer
+
+If you actually did want to perform integer division, then you could use the ~/ operator:
+
+    22 ~/ 7
+This produces a result of 3
+
+The ~/ operator is officially called the truncating division operator when applied to numbers
+
+* The Euclidean modulo operation
+
+Dart also has more complex operations you can use. All of them are standard mathematical operations, just not as common as the others. You’ll take a look at them now.
+
+The first of these is the Euclidean modulo operation. That’s a complex name for an easy task. In division, the denominator goes into the numerator a whole number of times, plus a remainder. This remainder is what the Euclidean modulo operation calculates.
+
+For example, 10 modulo 3 equals 1, because 3 goes into 10 three times, with a remainder of 1. In Dart, the Euclidean modulo operator is the % symbol. You use it like so:
+    28 % 10
+in this case, the result equals 8, because 10 goes into 28 twice with a remainder of 8.
+
+* Order of operations
+
+Of course, it’s likely that when you calculate a value, you’ll want to use multiple operators. Here’s an example of how to do this in Dart:
+
+    ((8000 / (5 * 10)) - 32) ~/ (29 % 5)
+Note the use of parentheses, which in Dart serve two purposes: to make it clear to anyone reading the code — including yourself — what you meant, and to disambiguate the intended order of operations. For example, consider the following:
+
+    350 / 5 + 2
+Does this equal 72 (350 divided by 5, plus 2) or 50 (350 divided by 7)?
+
+Dart uses the same reasoning and achieves this through what’s known as operator precedence. The division operator (/) has a higher precedence than the addition operator (+), so in this example, the code executes the division operation first.
+
+If you wanted Dart to perform the addition first — that is, so the expression will return 50 instead of 72 — then you could use parentheses, like so:
+    350 / (5 + 2)
+
+The precedence rules are the same as you learned in school. Multiplication and division have equal precedence. Addition and subtraction are equal in precedence to each other, but are lower in precedence than multiplication and division.
+
+The ~/ and % operators have the same precedence as multiplication and division. If you’re ever uncertain about what precedence an operator has, you can always use parentheses to be sure the expression evaluates as you want it to.
+
+* Math functions
+
+Dart also has a large range of math functions. To use these math functions, add the following import to the top of your file:
+
+    import 'dart:math';
+dart:math is one of Dart’s core libraries. Adding the import statement tells the compiler that you want to use something from that library.
+Now you can write the following:    
+
+    sin(45 * pi / 180)
+    // 0.7071067811865475
+    cos(135 * pi / 180)
+    // -0.7071067811865475
+
+These convert an angle from degrees to radians, and then compute the sine and cosine respectively. Notice how both make use of pi, which is a constant Dart provides you.
+
+Then there’s this: 
+    sqrt(2)
+    // 1.4142135623730951
+This computes the square root of 2
+
+    max(5, 10)
+    // 10
+    min(-5, -10)
+    // -10
+These compute the maximum and minimum of two numbers respectively.
+
+You can even combine these functions like so:
+    max(sqrt(2), pi / 2)
+    //1.5707963267948966
+
+Mini - exrcise
+In the example above you found the sine of 45  by first converting 45  to radians and then using the Dart sin function, which works in radians, to calculate the result. Now print the value of 1 over the square root of 2 in Dart. Confirm that it equals the sine of 45 .

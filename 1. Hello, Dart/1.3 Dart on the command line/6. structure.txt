@@ -1,0 +1,19 @@
+* The structure of a Dart project
+
+Take a look at the structure and contents of the hello_dart_project folder:
+
+The purposes of the main items in that folder are as follows:
+
+    - bin: Contains the executable Dart code.
+
+    - hello_dart_project.dart: Named the same as the project folder, the create tool generated this file for you to put your Dart code in.
+
+    - .gitignore: Formatted to exclude Dart-related files that you don’t need if you’re going to host your project on GitHub or another Git repository.
+
+    - analysis_options.yaml: Holds special rules that will help you detect issues with your code, a process known as linting.
+
+    - CHANGELOG.md: Holds a manually-curated Markdownformatted list of the latest updates to your project. Whenever you release a new version of a Dart project, you should let other developers know what you’ve changed.
+
+    - README.md: Provides a basic (or not-so-basic) description of what your project does and how to use it. Other developers will appreciate this greatly.
+
+    - pubspec.yaml: Contains a list of the third-party Pub dependencies you want to use in your project. The name “pubspec” stands for “Pub specifications”. You also set the version number of your project in this file.
