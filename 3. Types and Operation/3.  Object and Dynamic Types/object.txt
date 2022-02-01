@@ -1,0 +1,37 @@
+* Object and dynamic types
+Dart grew out of the desire to solve some problems inherent in JavaScript. JavaScript is a dynamically-typed language. Dynamic means that something can change, and for JavaScript that means the types can change at runtime.
+
+Here is an example in JavaScript:
+    var myVariable = 42;
+    myVariable = "hello";
+    
+In JavaScript, the first line is a number and the second line a string. Changing the types on the fly like this is completely valid in JavaScript. While this may be convenient at times, it makes it really easy to write buggy code. For example, you may be erroneously thinking that myVariable is still a number, so you write the following code:
+
+    var answer = myVariable * 3; // runtime error
+That’s an error because myVariable is actually a string, and the computer doesn’t know what to do with “hello” times 3. Not only is it an error, you won’t even discover the error until you run the code.
+
+You can totally prevent mistakes like that in Dart because it’s an optionally-typed language. That means you can choose to use Dart as a dynamically typed language or as a staticallytyped language. Static means that something cannot change; once you tell Dart what type a variable is, you’re not allowed to change it anymore.
+
+If you try to do the following in Dart:
+    var myVariable = 42;
+    myVariable = 'hello';
+The Dart compiler will immediately tell you that it's an error. 
+
+The creators of Dart did include a dynamic type for those who wish write their programs in a dynamically-typed way.
+
+    dynamic myVariable = 42;
+    myVariable = 'hello'; //OK
+
+Infact, this is the default if you use var and don't initialize your variable:
+    var myVariable; // defaults to dynamic
+    myVariable = 42; // OK
+    myVariable = 'hello'; // OK
+
+While dynamic is built into the system, it’s more of a concession rather than an encouragement to use it. You should still embrace static typing in your code as it will prevent you from making silly mistakes.
+
+If you need to explicitly say that any type is allowed, you should consider using the Object? type.
+
+    Object? myVariable = 42;
+    myVariable = 'hello'; // OK
+
+At runtime, Object? and dynamic behave nearly the same. However, when you explicitly declare a variable as Object?, you’re telling everyone that you generalized your variable on purpose, and that they’ll need to check its type at runtime if they want to do anything specific with it. Using dynamic, on the other hand, is more like saying you don’t know what the type is; you’re telling people they can do what they like with this variable, but it’s completely on them if their code crashes.

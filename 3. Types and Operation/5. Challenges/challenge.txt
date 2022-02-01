@@ -1,0 +1,20 @@
+* Challenges
+Before moving on, here are some challenges to test your knowledge of types and operations. It’s best if you try to solve them yourself.
+
+Challenge 1: Teacher’s grading
+You’re a teacher, and in your class, attendance is worth 20% of the grade, the homework is worth 30% and the exam is worth 50%. Your student got 90 points for her attendance, 80 points for her homework and 94 points on her exam. Calculate her grade as an integer percentage rounded down.
+
+Challenge 2: Find the error
+What is wrong with the following code?
+    const name = 'Chinedu';
+    name += ' Wilson';
+
+Challenge 3: What type?
+What’s the type of value?
+    const value = 10 / 2;
+
+Challenge 4: In summary
+What is the value of the constant named summary?
+    const number = 10;
+    const multiplier = 5;
+    final summary = '$number \u00D7 $multiplier = ${number * multiplier}';
