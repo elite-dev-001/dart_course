@@ -72,7 +72,7 @@ Dart also has a large range of math functions. To use these math functions, add 
 dart:math is one of Dart’s core libraries. Adding the import statement tells the compiler that you want to use something from that library.
 Now you can write the following:    
 
-    sin(45 * pi / 180)
+    
     // 0.7071067811865475
     cos(135 * pi / 180)
     // -0.7071067811865475
