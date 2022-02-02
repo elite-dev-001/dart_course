@@ -1,0 +1,33 @@
+* Challenges
+Before moving on, here are some challenges to test your knowledge of control flow. It’s best if you try to solve them yourself.
+
+Challenge 1: Find the error
+
+What’s wrong with the following code?
+    const firstName = 'Bob';
+    if (firstName == 'Bob') {
+        const lastName = 'Smith';
+    } else if (firstName == 'Wilson') {
+        const lastName = 'Wenderlich';
+    }
+    final fullName = firstName + ' ' + lastName;
+
+Challenge 2: Boolean Challenge
+In each of the following statements, what is the value of the Boolean expression?
+    true && true
+    false || false
+    (true && 1 != 2) || (4 > 3 && 100 < 1)
+    ((10 / 2) > 3) && ((10 % 2) == 0)
+
+Challenge 3: How many times?
+In the following for loop, what will be the value of sum, and how many iterations will happen?
+    var sum = 0;
+    for (var i = 0; i <= 5; i++) {
+        sum += i;
+    }
+Challenge 4: The final countdown
+Print a countdown from 10 to 0.
+
+Challenge 5: Print a sequence
+Print the sequence 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6,
+0.7, 0.8, 0.9, 1.0.

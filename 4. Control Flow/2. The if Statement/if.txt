@@ -1,0 +1,100 @@
+* The if statement
+The first and most common way of controlling the flow of a program is through the use of an if statement, which allows the program to do something only if a certain condition is true. For example, consider the following:
+    if(2 > 1) {
+        print('Yes, 2 is greater than 1. ');
+    }
+This is a simple if statement. The condition, which is always a Boolean expression, is the part within the parentheses that follows the if statement. If the condition is true, then the if statement will execute the code between the braces. If the condition is false, then the if statement won’t execute the code between the braces.
+
+* The else clause
+You can extend an if statement to provide code to run in the event that the condition turns out to be false. This is known as the else clause.
+    const animal = 'Fox';
+    if (animal == 'Cat' || animal == 'Dog') {
+        print('Animal is a house pet. ');
+    } else {
+        print('Animal is not a house pet.');
+    }
+If animal equals either 'Cat' or 'Dog', then the statement will execute the first block of code. If animal does not equal either 'Cat' or 'Dog', then the statement will run the block inside the else clause of the if statement.
+
+* Else-if chains
+You can go even further with if statements. Sometimes you want to check one condition, and then check another condition if the first condition isn't true. This is where elseif comes into play, nesting another if statement in the else clause of a previous if statement.
+    const trafficLight = 'yellow';
+    var command = '';
+    if (trafficLight == 'red') {
+        command = 'Stop';
+    } else if (trafficLight == 'yellow') {
+        command = 'Slow down';
+    } else if (trafficLight == 'green') {
+        command = 'Go';
+    } else {
+    command = 'INVALID COLOR!';
+    }
+    print(command);
+In this example, the first if statement will check if trafficLight is equal to 'red'. Since it’s not, the next if statement will check if trafficLight is equal to 'yellow'. It is equal to 'yellow', so no check will be made for the case of 'green'.
+
+These nested if statements test multiple conditions, one by one, until a true condition is found. Only the code associated with the first true condition encountered will be executed, regardless of whether there are subsequent else-if conditions that evaluate to true. In other words, the order of your conditions matters!
+
+You can add an else clause at the end to handle the case where none of the conditions are true. This else clause is optional if you don’t need it. In this example, you do need the else clause to ensure that command has a value by the time you print it out.
+
+* Variable scope
+if statements introduce a new concept called scope. Scope is the extent to which a variable can be seen throughout your code. Dart uses curly braces as the boundary markers in determining a variable’s scope. If you define a variable inside a pair of curly braces, then you’re not allowed to use that variable outside of those braces.
+
+To see how this works, replace the main function with the following code:
+    const global = 'Hello, world';
+    void main() {
+        const local = 'Hello, main';
+        if (2 > 1) {
+            const insideIf = 'Hello, anybody?';
+
+            print(global);
+            print(local);
+            print(insideIf);
+        }
+        print(global);
+        print(local);
+        print(insideIf); // Not allowed!
+    }
+Note the following points:
+    - There are three variables: global, local and insideIf.
+    - There are two sets of nested curly braces, one for the body of main and one for the body of the if statement.
+    - The variable named global is defined outside of the main function and outside of any curly braces. That makes it a top-level variable, which means it has a global scope. That is, it’s visible everywhere in the file. You can see print(global) references it both in the if statement body and in the main function body.
+    - The variable named local is defined inside the body of the main function. This makes it a local variable and it has local scope. It’s visible inside the main function, including inside the if statement, but local is not visible outside of the main function.
+    - The variable named insideIf is defined inside the body of the if statement. That means insideIf is only visible within the scope defined by the if statement’s curly braces.
+
+Since the final print statement is trying to reference insideIf outside of its scope, Dart gives you the following error:
+    Undefined name 'insideIf'.
+
+    As a general rule, you should make your variables have the smallest scope that they can get by with. Another way to say that is, define your variables as close to where you use them as possible. Doing so makes their purpose more clear, and it also prevents you from using or changing them in places where you shouldn’t.
+
+* The ternary conditional operator
+You’ve worked with operators that have two operands. For example, in (myAge > 16), the two operands are myAge and 16. But there’s also an operator that takes three operands: the ternary conditional operator. It’s strangely related to if statements
+
+Let’s take an example of telling a student whether their exam score is passing or not. Write an if-else statement to achieve this:
+    const score = 83;
+
+    String message;
+    if (score >= 60) {
+        message = 'You passed';
+    } else {
+        message = 'You failed';
+    }
+
+That’s pretty clear, but it’s a lot of code. Wouldn’t it be nice if you could shrink this to just a couple of lines? Well, you can, thanks to the ternary conditional operator!
+
+That’s pretty clear, but it’s a lot of code. Wouldn’t it be nice if you could shrink this to just a couple of lines? Well, you can, thanks to the ternary conditional operator!
+
+The ternary conditional operator takes a condition and returns one of two values, depending on whether the condition is true or false. The syntax is as follows:
+    (condition) ? valueIfTrue : valueIfFalse;
+Use the ternary conditional operator to rewrite your long code block above, like so:
+    const score = 83;
+    const message = (score >= 60) ? 'You passed' : 'You failed';
+
+In this example, the condition to evaluate is score >= 60. If the condition is true, the result assigned to message will be 'You passed'; if the condition is false, the result will instead be 'You failed'. Since 83 is greater than 60, the student receives good news.
+
+The ternary conditional operator makes basic if-else statements much more compact, which in turn can make your code more readable.
+
+The ternary conditional operator makes basic if-else statements much more compact, which in turn can make your code more readable.
+
+Mini-exercises
+    1. Create a constant named myAge and initialize it with your age. Write an if statement to print out “Teenager” if your age is between 13 and 19, and “Not a teenager” if your age is not between 13 and 19.
+
+    2. Use a ternary conditional operator to replace the elseif statement that you used above. Set the result to a variable named answer.

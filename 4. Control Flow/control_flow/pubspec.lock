@@ -5,12 +5,8 @@ packages:
     dependency: "direct dev"
     description:
       name: lints
-      url: "https://pub.dartlang.org":
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
 sdks:
-<<<<<<< HEAD
   dart: ">=2.15.1 <3.0.0"
-=======
-  dart: ">=2.14.3 <3.0.0"
->>>>>>> 3e5c728a1007786f9624d661533ecaf3bab1e184

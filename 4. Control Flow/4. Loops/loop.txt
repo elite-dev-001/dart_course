@@ -1,0 +1,155 @@
+* Loops
+Since the beginning of this course, your code ran from the top of the main function to the bottom, and then it was finished. With the addition of if statements in this section, you gave your code the opportunity to make decisions. However, it’s still running from top to bottom, albeit following different branches.
+
+Rather than just running through a set of instructions once, it’s often useful to repeat tasks.
+
+Computer programming is just as full of repetitive actions as your life is. The way you can accomplish them are by using loops. Dart, like many programming languages, has while loops and for loops. You’ll learn how to make them in the following sections.
+
+* While loops
+A while loop repeats a block of code as long as a Boolean condition is true. You create a while loop like so:
+    while (condition) {
+        // loop code
+    }
+The loop checks the condition on every iteration. If the condition is true, then the loop executes and moves on to another iteration. If the condition is false, then the loop stops. Just like if statements, while loops introduce a scope because of their curly braces.
+
+The simplest while loop takes this form:
+    while (true) { }
+
+This is a while loop that never ends, because the condition is always true. Of course, you would never write such a while loop, because your program would spin forever! This situation is known as an infinite loop, and while it might not cause your program to crash, it will very likely cause your computer to freeze.
+
+Here’s a (somewhat) more useful example of a while loop:
+
+    var sum = 1;
+    while (sum < 10) {
+        sum += 4;
+        print(sum);
+    }
+Run that to see the result. The loop executes as follows:
+    - Before 1st iteration: sum = 1, loop condition = true
+    - After 1st iteration: sum = 5, loop condition = true
+    - After 2nd iteration: sum = 9, loop condition = true
+    - After 3rd iteration: sum = 13, loop condition = false
+After the third iteration, the sum variable is 13, and therefore the loop condition of sum < 10 becomes false. At this point, the loop stops.
+
+* Do-while loops
+A variant of the while loop is called the do-while loop. It differs from the while loop in that the condition is evaluated at the end of the loop rather than at the beginning. Thus, the body of a do-while loop is always executed at least once.
+
+You construct a do-while loop like this:
+    do {
+        // loop code
+    } while (condition)
+Whatever statements appear inside the braces will be executed. Finally, if the while condition after the closing brace is true, you jump back up to the beginning and repeat the loop.
+
+Here’s the example from the last section, but using a dowhile
+loop:
+    sum = 1;
+    do {
+        sum += 4;
+        print(sum);
+    } while (sum < 10)
+
+* Comparing while and do-while loops
+It isn’t always the case that while loops and do-while loops will give the same result. For example, here’s a while loop where sum starts at 11:
+    sum = 11;
+    while (sum < 10) {
+        sum += 4;
+    }
+    print(sum);
+Since the initial condition is false, the loop never executes. Run that code and you’ll see that sum remains 11.
+On the other hand, check out a similar do-while loop:
+    sum = 11;
+    do {
+        sum += 4;
+    } while (sum < 10);
+    print(sum);
+Run this and you’ll find the sum at the end to be 15. This is because the do-while loop executed the body of the loop before checking the condition.
+
+* Breaking out of a loop
+Sometimes you’ll need to break out of a loop early. You can do this using the break statement, just as you did from inside the switch statement earlier. This immediately stops the execution of the loop and continues on to the code that follows the loop.
+
+For example, consider the following while loop:
+
+    sum = 1;
+    while (true) {
+        sum += 4;
+        if (sum > 10) {
+            break;
+        }
+    }
+Here, the loop condition is true, so the loop would normally iterate forever. However, the break means the while loop will exit once the sum is greater than 10.
+
+You’ve now seen how to write the same loop in different ways. This demonstrates that in computer programming there are often many ways to achieve the same result. You should choose the method that’s easiest to read and that conveys your intent in the best way possible. This is an approach you’ll internalize with enough time and practice.
+
+* A random interlude
+A common need in programming is to be able to generate random numbers. And Dart provides this functionality in the dart:math library, which is pretty handy!
+
+As an example, imagine an application that needs to simulate rolling a die. You may want to do something in your code until a six is rolled, and then stop. Now that you know about while loops, you can do that with the Random feature.
+
+First import the dart:math library at the top of your Dart
+file:
+    import 'dart:math';
+Then create the while loop like so:
+    final random = Random();
+    while (random.nextInt(6) + 1 != 6) {
+        print('Not a six!');
+    }
+    print('Finally, you got a six!');
+
+Random is a class to help with random numbers, and nextInt is a method that generates a random integer between 0 and one less than the maximum value you give it, in this case, 6. Since you want a number between 1 and 6, not 0 to 5, you must add 1 to the random number in the while loop condition.
+
+* For loops
+In addition to while loops, Dart has another type of loop called a for loop. This is probably the most common loop you’ll see, and you use it to run a block of code a set number of times.
+
+Here’s a simple example
+
+    for (var i = 0; i < 5; i++) {
+        print(i);
+    }
+Here’s a summary of the three parts between the parentheses and separated by semicolons
+
+    - var i = 0 (initialization): Before the loop starts, you create a counter variable to keep track of how many times you’ve looped. You could call the variable anything, but i is commonly used as an abbreviation for index. You then initialize it with some value; in this case, 0.
+
+    - i < 5 (condition): This is the condition that the for loop will check before every iteration of the loop. If it’s true, then it will run the code inside the braces. But if it’s false, then the loop will end.
+
+    - i++ (action): The action runs at the end of every iteration, usually to update the loop index value. It’s common to increment by 1 using i++ but you could just as easily use i += 2 to increment by 2 or i-- to decrement by 1.
+
+The counter index i started at 0 and continued until it equaled 5. At that point the for loop condition i < 5 was no longer true, so the loop exited before running the print statement again.
+
+* The continue keyword
+Sometimes you want to skip an iteration only for a certain condition. You can do that using the continue keyword. Have a look at the following example:
+    for (var i = 0; i < 5; i++) {
+        if (i == 2) {
+            continue;
+        }
+        print(i);
+    }
+
+This example is similar to the last one, but this time, when i is 2, the continue keyword will tell the for loop to immediately go on to the next iteration. The rest of the code in the block won’t run on this iteration.
+
+* For-each loops
+There’s another type of for loop that has simpler syntax; it’s called a for-each loop. It doesn’t have any sort of index or counter variable associated with it, but it makes iterating over a collection very convenient.
+
+Even though you haven’t learned about Dart collections in depth yet, here’s another one for you:
+    const myNumbers = [1,2,3];
+This is a comma-separated list of integers surrounded by square brackets.
+
+Loop through each of the elements in that list by using forEach like so:
+    myNumbers.forEach((number) => print(number));
+
+The part inside the forEach parentheses is a function, where => is arrow syntax that points to the statement that the function runs.
+
+It has exactly the same meaning as the following, which uses { } braces instead of arrow syntax:
+    myNumbers.forEach((number) {
+        print(number);
+    });
+
+You might be wondering why number isn’t declared anywhere. That’s because Dart automatically gives number the type that’s inside the collection; in this case, int.
+
+Don’t worry if this still looks strange to you. You’ll learn all about functions in the next course.
+
+Mini-exercises
+    1. Create a variable named counter and set it equal to 0. Create a while loop with the condition counter < 10. The loop body should print out “counter is X” (where X is replaced with the value of counter) and then increment counter by 1.
+    2. Write a for loop starting at 1 and ending with 10 inclusive. Print the square of each number.
+    3. Write a for-each loop to iterate over the following collection of numbers. Print the square root of each number.
+        const numbers = [1, 2, 4, 7];
+    4. Repeat Mini-exercise 3 using a forEach loop.
