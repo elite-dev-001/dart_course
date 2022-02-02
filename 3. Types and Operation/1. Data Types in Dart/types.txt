@@ -1,0 +1,91 @@
+* Data types in Dart
+
+In Dart, a type is a way to tell the compiler how you plan to use some data. you’ve already seen the following types:
+
+    - int
+    - double
+    - String
+
+String is the type used for text like 'Hello, Dart!'.
+
+Just as you don’t brush your teeth with ice cream, Dart types keep you from trying to do silly things like dividing text or removing whitespace from a number.
+
+Dart has even more built-in types than just the ones listed above. The basic ones, such as int, double, and String will serve you adequately in a great variety of programming scenarios, but when working on projects with specific needs, it’ll be convenient to create custom types instead. A weather app, for example, may need a Weather type, while a social media app may need a User type.
+
+The root of all types is the Object type. This type defines a few core operations, such as testing for equality and describing the object in text. Every other type in Dart is a subtype of Object, and as a subtype, shares Object’s basic functionality.
+
+* Type inference
+In the previous course, you also got a sneak peak at type inference in Dart, but you’ll take some time to look at it in a little more depth now.
+
+* Annotating variables explicitly
+It’s fine to always explicitly add the type annotation when you declare a variable. This means writing the data type before the variable name.
+    int myInteger = 10;
+    double myDouble = 3.14
+
+You annotated the first variable with int and the second with double
+
+* Creating constants variables
+Declaring variables the way you did above makes them mutable. If you want to make them immutable, but still keep the type annotation, you can add const or final in front.
+
+These forms of declaration are fine with const:
+    const int myInteger = 10;
+    const double myDouble = 3.14
+They're also fine with final:
+    final int myInteger = 10;
+    final double myDouble = 3.14;
+
+* Letting the compiler infer the type
+While it’s permissible to include the type annotation as in the example above, it’s redundant. You’re smart enough to know that 10 is an int and 3.14 is a double, and it turns out the Dart compiler can deduce this as well.
+
+The compiler doesn’t need you to explicitly tell it the type every time — it can figure the type out on its own through a process called type inference.
+
+You can simply drop the type in most instances. For example, here are the constants from above without the type annotations:
+    const myInteger = 10;
+    const myDouble = 3.14;
+In the absence of type annotation, Dart figures out the correct type for each constant above.
+
+* Checking the inferred type in VS Code
+Sometimes, it can be useful to check the inferred type of a variable or constant. You can do this in VS Code by hovering your mouse pointer over the variable name.
+
+* Checking the type at runtime
+Your code can’t hover a mouse pointer over a variable to check the type, but Dart does have a programmatic way of doing the same thing: the is keyword.
+
+    var myNumber = 3.14;
+    print(myNumber is double);
+    print(myNumber is int);
+
+Another option to see the type at runtime is to use the runtimeType property that is available to all types.
+    print(myNumber.runtimeType);
+
+* Type conversion
+Sometimes, you’ll have data in one type, but need to convert it to another.
+
+Remember, computers rely on programmers to tell them what to do. In Dart, that includes being explicit about type conversions. If you want the conversion to happen, you have to say so!
+
+you need to explicitly say that you want Dart to convert the type. You can convert this double to an int like so:
+    integer = decimal.toInt();
+The assignment now tells Dart, unequivocally, that you want to convert from the original type, double, to the new type, int.
+
+* Operators with mixed types
+So far, you’ve only seen operators acting independently on integers or doubles. But what if you have an integer that you want to multiply with a double?
+
+    const hourlyRate = 19.5;
+    const hoursWorked = 10;
+    const totalCost = hourlyRate * hoursWorked;
+hourlyRate is a double and hoursWorked is an int. What will the type of totalCost be? It turns out that Dart will make totalCost a double. This is the safest choice, since making it an int could cause a loss of precision.
+
+If you actually do want an int as the result, then you need to perform the conversion explicitly:
+
+    const totalCost = (hourlyRate * hoursWorked).toInt();
+
+The parentheses tell Dart to do the multiplication first, and after that, to take the result and convert it to an integer value. However, the compiler complains about this:
+
+The problem is that toInt is a runtime method. This means that totalCost can’t be determined at compile time, so making it const isn’t valid. No problem; there’s an easy fix. Just change const to final:
+
+    final totalCost = (hourlyRate * hoursWorked).toInt();
+Now totalCost is an int.
+
+* Mini-exercises
+1. Create a constant called age1 and set it equal to 42. Create another constant called age2 and set it equal to 21. Check that the type for both constants has been inferred correctly as int by hovering your mouse pointer over the variable names in VS Code.
+
+2. Create a constant called averageAge and set it equal to the average of age1 and age2 using the operation (age1+ age2) / 2. Hover your mouse pointer over averageAge to check the type. Then check the result of averageAge. Why is it a double if the components are all int?

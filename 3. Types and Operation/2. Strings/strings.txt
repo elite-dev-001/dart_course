@@ -1,0 +1,66 @@
+* Strings
+
+Numbers are essential in programming, but they aren’t the only type of data you need to work with in your apps. Text is also a common data type, representing things such as people’s names, their addresses, or even the complete biography of the person. All of these are examples of text that an app might have to handle.
+
+Most computer programming languages store text in a data type called a string.
+
+* Working with strings in Dart
+Dart, like any good programming language, can work directly with strings. It does so through the String data type.
+
+Strings and characters
+You've already seen a Dart string back in the previous topics.
+
+    print('Hello, Dart');
+You can extract that same string as a named variable:
+    var greeting = 'Hello, Dart!';
+    print(greeting);
+The right-hand side of this expression is known as a string literal. Due to type inference, Dart knows that greeting is of type String. Since you used the var keyword, you’re allowed to reassign the value of greeting as long as the new value is still a string.
+
+    var greeting = 'Hello, Dart!';
+    greeting = 'Hello, Flutter';
+
+Even though you changed the value of greeting here, you didn’t modify the string itself. That’s because strings are immutable in Dart. It’s not like you replaced Dart in the first string with Flutter. No, you completely discarded the string 'Hello, Dart!' and replaced it with a whole new string whose value was 'Hello, Flutter!'.
+
+* Single quotes vs. double-quotes
+Dart allows you to use either single-quotes or double-quotes for string literals. Both of these are fine:
+    'I like cats'
+    "I like cats"
+You might want to use double-quotes, though, if your stringincludes any apostrophes.
+    "my cat's food"
+Otherwise you would need to use the backslash \ as an escape character so that Dart knows that the string isn’t ending early:
+    'my cat\'s food'
+
+* Concatenation
+You can do much more than create simple strings. Sometimes you need to manipulate a string, and one common way to do so is to combine it with another string. This is called concatenation...
+
+In Dart, you can concatenate strings simply by using the addition operator. Just as you can add numbers, you can add strings:
+    var message = 'Hello' + ' my name is ';
+    const name = 'Ray';
+    message += name;
+You need to declare message as a variable, rather than a constant, because you want to modify it. You can add string literals together, as in the first line, and you can add string variables or constants together, as in the third line.
+
+* Interpolation
+You can also build up a string by using interpolation, which is a special Dart syntax that lets you build a string in a manner that’s easy for other people reading your code to understand:
+
+    const name = 'Ray';
+    const introduction = 'Hello my name is $name ';
+
+This is much more readable than the example in the previous section. It’s an extension of the string literal syntax, in which you replace certain parts of the string with other values. You add a dollar sign ($) in front of the value that you want to insert.
+
+The syntax works in the same way to build a string from other data types such as numbers:
+
+    const oneThird = 1 / 3;
+    const sentence = 'One third is $oneThired.';
+
+Of course, it would actually take an infinite number of characters to represent one-third as a decimal, because it’s a repeating decimal. You can control the number of decimal places shown on a double by using toStringAsFixed along with the number of decimal places to show:
+
+    final sentence = 'One third is ${oneThird.toStringAsFixed(3)}.';
+There are a few items of interest here:
+    - You’re requesting the string to show only three decimal places.
+    - Since you’re performing an operation on oneThird, you need to surround the expression with curly braces after the dollar sign. This lets Dart know that the dot (.) after oneThird isn’t just a regular period.
+    - The sentence variable needs to be final now instead of const because toStringAsFixed(3) is calculated at runtime.
+
+* Mini-exercises
+    1. Create a string constant called firstName and initialize it to your first name. Also create a string constant called lastName and initialize it to your last name.
+    2. Create a string constant called fullName by adding the firstName and lastName constants together, separated by a space.
+    3. Using interpolation, create a string constant called myDetails that uses the fullName constant to create a string introducing yourself. For example, Chinedu Wilson’s string would read: Hello, my name is Chinedu Wilson.
