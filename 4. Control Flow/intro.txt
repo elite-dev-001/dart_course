@@ -10,4 +10,4 @@ Topics to Cover
 3. Switch statements
 4. Loops
 5. Challenges
-6. Assignment
+6. Assignment 
