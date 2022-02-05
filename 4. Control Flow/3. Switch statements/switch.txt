@@ -86,5 +86,5 @@ A switch statement also works with strings. Try the following example:
 In this example, the 'cloudy' case was completely empty, with no break statement. Therefore, the code “falls through” to the 'rainy' case. This means that if the value is equal to either 'cloudy' or 'rainy', then the switch statement will execute the same case.
 
 Mini-exercises
-    1. Make an enum called AudioState and give it values to represent playing, paused and stopped states.
-    2. Create a constant called audioState and give it an AudioState value. Write a switch statement that prints a message based on the value.
+    
+    1. Create a constant called audioState and give it an AudioState value. Write a switch statement that prints a message based on the value.
