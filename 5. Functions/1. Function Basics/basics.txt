@@ -1,0 +1,225 @@
+* Function basics
+You can think of functions like machines; they take something you provide to them (the input), and produce something different (the output).
+
+There are many examples of this in daily life. With an apple juicer, you put in apples and you get out apple juice. The input is apples; the output is juice. A dishwasher is another example. The input is dirty dishes, and the output is clean dishes. Blenders, coffee makers, microwaves and ovens are all like real-world functions that accept an input and produce an output.
+
+* Don’t repeat yourself
+
+Assume you have a small, useful piece of code that you’ve repeated in multiple places throughout your program:
+
+    // one place
+    if (fruit == 'banana') {
+        peelBanana();
+        eatBanana();
+    }
+    // another place
+    if (fruit == 'banana') {
+        peelBanana();
+        eatBanana();
+    }
+    // some other place
+    if (fruit == 'banana') {
+        peelBanana();
+        eatBanana();
+    }
+
+Now, that code works rather well, but repeating that code in multiple spots presents at least two problems. The first problem is that you’re duplicating effort by having this code in multiple places in your program. The second, and more troubling problem, is that if you need to change the logic in that bit of code later on, you’ll have to track down all of those instances of the code and change them in the same way. That creates a high possibility that you’ll make a mistake somewhere, or even miss changing one of the instances because you didn’t see it.
+
+Functions are one of the main solutions to the duplication problem in the example above. Instead of repeating blocks of code in multiple places, you can simply package that code into a function and call that function from wherever you need to.
+
+Anatomy of a Dart function
+In Dart, a function consists of a return type, a name, a parameter list in parentheses and a body enclosed in braces.
+
+    String compliment(int number) {
+        return '$number is a very nice number.';
+    }
+Here is a short summary of the labeled parts of the function:
+    - Return type: This comes first; it tells you immediately what the type will be of the function output. This particular function will return a String, but your functions can return any type you like. If the function won’t return anything, that is, if it performs some work but doesn’t produce an output value, you can use void as return type.
+
+    - Function name: You can name functions almost anything you like, but you should follow the lowerCamelCase naming convention.
+
+    - Parameters: Parameters are the input to the function; they go inside the parentheses after the function name. This example has only one parameter, but if you had more than one, you would separate them with commas. For each parameter, you write the type first, followed by the name. Just as with variable names, you should use lowerCamelCase for your parameter names.
+
+    - Return value: This is the function’s output, and it should match the return type. In the example above, the function returns a String value by using the return keyword. If the return type is void, though, then you don’t return anything.
+
+The return type, function name and parameters are collectively known as the function signature. The code between the braces is known as the function body.
+
+This is what the function above looks like in the context of a program:
+    void main() {
+        const input = 12;
+        final output = compliment(input);
+        print(output);
+    }
+    String compliment(int number) {
+        return '$number is a very nice number.';
+    }
+
+Notice that the compliment function is outside of main. Dart supports top-level functions, which are functions that aren’t inside a class or another function. Conversely, you may nest one function inside another. And when a function is inside a class, it’s called a method.
+
+You call a function by writing its name, and providing the argument, which is the value you provide inside the parentheses as the parameter to the function.
+
+* Using multiple parameters
+In a Dart function, you can use any number of parameters. If you have more than one parameter for your function, simply separate them with commas. Here’s a function with two parameters:
+    void helloPersonAndPet (String person, String pet) {
+        print('Hello, $person, and your furry friend, $pet!');
+    }
+Parameters like the ones above are called positional parameters, because you have to supply the arguments in the same order that you defined the parameters when you wrote the function. If you call the function with the parameters in the wrong order, you'll get something obviously wrong:
+    helloPersonAndPet('Fluffy', 'Chris');
+
+* Making parameters optional
+The function above was very nice, but it was a little rigid. For example, try the following:
+    helloPersonAndPet();
+If you don’t have exactly the right number of parameters, the compiler will complain to you:
+    2 positional argument(s) expected, but 0 found.
+You defined helloPersonAndPet to take two arguments, but in this case, you didn’t pass in any. It would be nice if the code could detect this, and just say, “Hello, you two!” if no names are provided. Thankfully, it’s possible to have optional parameters in a Dart function!
+
+Imagine you want a function that takes a first name, a last name and a title, and returns a single string with the various pieces of the person’s name strung together:
+
+    String fullName (String first, String last, String title) {
+        return '$title $first $last';
+    }
+
+The thing is, not everyone has a title, or wants to use their title, so your function needs to treat the title as optional. To indicate that a parameter is optional, you surround the parameter with square brackets and add a question mark after the type, like so:
+    String fullName(String first, String last, [String? title]) {
+        if (title != null) {
+            return '$title $first $last';
+    } else {
+            return '$first $last';
+    }
+}
+Writing [String? title] makes title optional. If you don’t pass in a value for title, then it will have the value of null, which means “no value”. The updated code checks for null to decide how to format the return string.
+    print(fullName('Ray', 'Wenderlich'));
+    print(fullName('Albert', 'Einstein', 'Professor' ));
+The function correctly handles the optional title.
+
+* Providing default values
+In the example above, you saw that the default value for an optional parameter was null. This isn’t always the best value for a default, though. That’s why Dart also gives you the power to change the default value of any parameter in your function by using the assignment operator.
+    bool withinTolerance(int value, [int min = 0, int max = 10]) {
+        return min <= value && value <= max;
+    }
+There are three parameters here, two of which are optional: min and max. If you don’t specify a value for them, then min will be 0 and max will be 10.
+    withinTolerance(5) 
+    withinTolerance(15)
+
+Since 5 is between 0 and 10, this evaluates to true; but since 15 is greater than the default max of 10, it evaluates to false.
+If you want to specify values other than the defaults, you can do that as well:
+    withinTolerance(9, 7, 11)
+Look at that function call again: withinTolerance(9, 7, 11). Imagine that you’re reading through your code for the first time in a month. What do those three numbers even mean? If you’ve got a good memory, you might recall that one of them is value, but which one? The first one? Or was it the second one? Or maybe it was the last one.
+
+If that wasn’t bad enough, the following function call also returns true:
+    withinTolerance(9, 7)
+Since the function uses positional parameters, the provided arguments must follow the order you defined the parameters. That means value is 9, min is 7 and max has the default of 10. But who could ever remember that?
+
+* Naming parameters
+Dart allows you to use named parameters to make the meaning of the parameters more clear in function calls.
+
+To create a named parameter, you surround it with curly braces instead of square brackets. Here’s the same function as above, but using named parameters instead:
+    bool withinTolerance(int value, {int min = 0, int max = 10}) {
+        return min <= value && value <= max;
+    }
+Note the following:
+    - min and max are surrounded by braces, which means you must use the parameter names when you provide their argument values to the function.
+    - Like square brackets, curly braces make the parameters inside optional. Since value isn’t inside the braces, though, it’s still required.
+To provide an argument, you use the parameter name, followed by a colon and then the argument value. Here is how you call the function now:
+    withinTolerance(9, min: 7, max: 11)
+
+That’s a lot clearer, isn’t it? The names min and max make it obvious where the tolerance limits are now.
+
+An additional benefit of named parameters is that you don’t have to use them in the exact order in which they were defined. These are both equivalent ways to call the function:
+    withinTolerance(9, min: 7, max: 11)
+    withinTolerance(9, max: 11, min: 7)
+
+And since named parameters are optional, that means the following function calls are also valid:
+    withinTolerance(5) 
+    withinTolerance(15)
+
+    withinTolerance(5, min: 7)
+    withinTolerance(15, max: 20)
+
+In the first two lines, since min is 0 and max is 10 by default, values of 5 and 15 evaluate to true and false respectively. In the last two lines, the min and max defaults were changed, which also changed the outcomes of the evaluations.
+
+* Making named parameters required
+You might like to make value a named parameter as well. That way you could call the function like so:
+    withinTolerance(value: 9, min: 7, max: 11)
+However, this brings up a problem. Named parameters are optional by default, but value can’t be optional. If it were, someone might try to use your function like this:
+    withinTolerance()
+Should that return true or false? It doesn’t make sense to return anything if you don’t give the function a value. This is just a bug waiting to happen.
+
+What you want is to make value required instead of optional, while still keeping it as a named parameter. You can achieve this by including value inside the curly braces and adding the required keyword in front:
+    bool withinTolerance({
+        required int value,
+        int min = 0,
+        int max = 10,
+    }) {
+        return min <= value && value <= max;
+    }
+With the required keyword in place, VS Code will warn you if you don’t provide a value for value when you call the function:
+
+Using named parameters makes your code more readable and is an important part of writing clean code when you have multiple inputs to a function.
+
+* Writing good functions
+People have been writing code for decades. Along the way, they’ve designed some good practices to improve code quality and prevent errors. One of those practices is writing DRY code as you saw earlier. Here are a few more things to pay attention to as you learn about writing good functions.
+
+* Avoiding side effects
+When you take medicine to cure a medical problem, but that medicine makes you fat, that’s known as a side effect. If you put some bread in a toaster to make toast, but the toaster burns your house down, that’s also a side effect.
+
+When you write a function, you know what the inputs are: the parameters. You also know what the output is: the return value. Anything beyond that, that is, anything that affects the world outside of the function, is a side effect.
+
+Have a look at this function:
+    void hello() {
+        print('Hello!');
+    }
+Printing something to the console is a side effect, because it’s affecting the world outside of the function. If you wanted to rewrite your function so that there were no side effects, you could write it like this:
+    String hello() {
+        return 'Hello!';
+    }
+
+Now, there’s nothing inside the function body that affects the outside world. You’ll have to write the string to the console somewhere outside of the function.
+
+It’s fine, and even necessary, for some functions to have side effects. But as a general rule, functions without side effects are easier to deal with and reason about. You can rely on them to do exactly what you expect because they always return the same output for any given input. These kinds of functions are also called pure functions.
+
+Here is another function with side effects to further illustrate the point:
+    var myPreciousData = 5782;
+    String anInnocentLookingFunction(String name) {
+        myPreciousData = -1;
+        return 'Hello, $name. Heh, heh, heh.';
+    }
+
+Unless you took the time to study the code inside of anInnocentLookingFunction, you’d have no idea that calling this innocent-looking function would also change your precious data. That’s because the function had an unknown side effect. This is also a good reminder about the dangers of using global variables like myPreciousData, as you never know who might change it.
+
+Make it your ambition to maximize your use of pure functions, and minimize your use of functions with side effects.
+
+* Doings only one thing
+Proponents of “clean code” recommend keeping your functions small and logically coherent. Small here means only a handful of lines of code. If a function is too big, or contains unrelated parts, consider breaking it into smaller functions. 
+
+Write your functions so that each one has only a single job to do. If you find yourself adding comments to describe different sections of a complex function, that’s usually a good clue that you should break your function up into smaller functions. In clean coding, this is known as the Single Responsibility Principle. In addition to functions, this principle also applies to classes and libraries.
+
+* Choosing good names
+You should always give your functions names that describe exactly what they do. If your code sounds like well-written prose, it’ll be faster to read and easier to understand. This naming advice applies to almost every programming language. However, there are a few additional naming conventions that Dart programmers like to follow. These are recommendations, not requirements, but keep them in mind as you code:
+    - Use noun phrases for pure functions; that is, ones without side effects. For example, use averageTemperature instead of getAverageTemperature and studentNames instead of extractStudentNames.
+
+    - Use verb phrases for functions with side effects. For example, updateDatabase or printHello.
+
+    - Also use verb phases if you want to emphasize that the function does a lot of work. For example, calculateFibonacci or parseJson.
+
+    - Don’t repeat parameter names in the function name. For example, use cube(int number) instead of cubeNumber(int number), or printStudent(String name) instead of printStudentName(String name).
+
+Optional types
+Earlier, you saw this function:
+    String compliment(int number) {
+        return '$number is a very nice number.';
+    }
+
+The return type is String, and the parameter type is int. Dart is an optionally-typed language, so it’s possible to omit the types from your function declaration. In that case, the function would look like this:
+    compliment(number) {
+        return '$number is a very nice number.';
+    }
+Dart can infer that the return type here is String, but it has to fall back on dynamic for the unknown parameter type. The following function is the equivalent of what Dart sees:
+    String compliment(dynamic number) {
+        return '$number is a very nice number.';
+    }
+
+Mini-exercises
+1. Write a function named youAreWonderful, with a String parameter called name. It should return a string using name, and say something like “You’re wonderful, Wilson.”
+2. Add another int parameter to that function called numberPeople so that the function returns something like “You’re wonderful, Wilson. 10 people think so.”
+3. Make both inputs named parameters. Make name required and set numberPeople to have a default of 30.
