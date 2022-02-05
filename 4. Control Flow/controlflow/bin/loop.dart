@@ -29,10 +29,8 @@ void main() {
   // for (var i = 0; i < 5; i++) {
   // print(i);
   //}
-  for (var i = 0; i < 5; i++) {
-    if (i == 2) {
-      continue;
-    }
-    print(i);
-  }
+
+  //FOR EACH STATEMENT
+  const myNumbers = [1, 2, 3];
+  myNumbers.forEach((number) => print(number));
 }
