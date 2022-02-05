@@ -1,15 +1,27 @@
 void main() {
-  const attendance = 0.2;
-  const homework = 0.3;
-  const exam = 0.5;
+  // const myAge = 26;
+  // String message;
 
-  const attendancePoints = 90;
-  const homeWorkPoints = 80;
-  const examPoints = 94;
+  // if (myAge >= 13 && myAge <= 19) {
+  //   message = "Tennager";
+  // } else {
+  //   message = "Not a teenager";
+  // }
+  // const command = (myAge >= 13) ? 'Tennager' : 'Not a teeager';
+  // print(command);
 
-  const attendancepoints = attendance * attendancePoints;
-  const homeworkpoints = homework * homeWorkPoints;
-  const exampoints = exam * examPoints;
-  final totalgrade = attendancepoints + homeworkpoints + exampoints;
-  print(totalgrade.toInt());
+  // const number = 3;
+  // if (number == 0) {
+  //   print('zero');
+  // } else if (number == 1) {
+  //   print('one');
+  // } else if (number == 2) {
+  //   print('two');
+  // } else if (number == 3) {
+  //   print('three');
+  // } else if (number == 4) {
+  //   print('four');
+  // } else {
+  //   print('something else');
+  // }
 }
