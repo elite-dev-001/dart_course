@@ -8,4 +8,8 @@ void main() {
     message = 'Not a Teenager';
     print(message);
   }
+// tenary operator
+
+  // const message = (myAge >= 13 && myAge <= 19) ? 'Teenager' : 'Not a teenager';
+  //print(message);
 }
