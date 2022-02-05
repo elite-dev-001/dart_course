@@ -1,0 +1,90 @@
+* Switch statements
+An alternate way to handle control flow, especially for multiple conditions, is with a switch statement. The switch statement takes the following form:
+
+switch (variable) {
+    case value1:
+        //code
+        break;
+    case value2:
+        //code
+        break;
+
+        ...
+        default;
+            //code
+    }
+
+There are a few different keywords, so here are what they mean:
+    - switch: Based on the value of the variable in parentheses, which can be an int, String or compiletime constant, switch will redirect the program control to one of the case values that follow.
+    - case: Each case keyword takes a value and compares that value using == to the variable after the switch keyword. You add as many case statements as there are values to check. When there’s a match Dart will run the code that follows the colon.
+    - break: The break keyword tells Dart to exit the switch statement because the code in the case block is finished.
+    - break: The break keyword tells Dart to exit the switch statement because the code in the case block is finished.
+The following sections will provide more detailed examples of switch statements.
+
+* Replacing else-if chains
+Using if statements are convenient when you have one or two conditions, but the syntax can be a little verbose when you have a lot of conditions. Check out the following example:
+    const number = 3;
+    if (number == 0) {
+        print('zero');
+    } else if (number == 1) {
+        print('one');
+    } else if (number == 2) {
+        print('two');
+    } else if (number == 3) {
+        print('three');
+    } else if (number == 4) {
+        print('four');
+    } else {
+        print('something else');
+    }
+Run that code and you’ll see that it gets the job done — it prints three as expected. The wordiness of the else-if lines make the code kind of hard to read, though.
+
+Rewrite the code above using a switch statement:
+    const number = 3;
+    switch (number) {
+        case 0:
+            print('zero');
+            break;
+        case 1:
+            print('one');
+            break;
+        case 2:
+            print('two');
+            break;
+        case 3:
+            print('three');
+            break;
+        case 4:
+            print('four');
+            break;
+        default:
+            print('something else');
+    }
+Execute this code and you’ll get the same result of three again. However, the code looks cleaner than the else-if chain because you didn’t need to include the explicit condition check for every case.
+    Execute this code and you’ll get the same result of three again. However, the code looks cleaner than the else-if chain because you didn’t need to include the explicit condition check for every case.
+
+* Switching on strings
+A switch statement also works with strings. Try the following example:
+    const weather = 'cloudy';
+    switch (weather) {
+        case 'sunny':
+            print('Put on sunscreen.');
+            break;
+        case 'snowy':
+            print('Get your skis.');
+            break;
+        case 'cloudy':
+        case 'rainy':
+            print('Bring an umbrella.');
+            break;
+        default:
+            print("I'm not familiar with that weather."
+);
+}
+
+
+In this example, the 'cloudy' case was completely empty, with no break statement. Therefore, the code “falls through” to the 'rainy' case. This means that if the value is equal to either 'cloudy' or 'rainy', then the switch statement will execute the same case.
+
+Mini-exercises
+    
+    1. Create a constant called audioState and give it an AudioState value. Write a switch statement that prints a message based on the value.

@@ -1,0 +1,166 @@
+* Anonymous functions
+All the functions you’ve seen previously in this course, such as main, hello, and withinTolerance are named functions, which means, well, they have a name.
+
+But not every function needs a name. If you remove the return type and the function name, then what you have left is an anonymous function:
+
+The return type will be inferred from the return value of the function body, String in this case.
+
+So, why all the stealth by being anonymous, you ask? Are functions concerned about their online privacy, too? Well, that’s not quite it. Sometimes you only need functions in one specific spot in your code, for one specific reason, and there’s no reason to give that function a name. You’ll see some examples of this soon.
+
+* First-class citizens
+In Dart, functions are first-class citizens. That means you can treat them like any other other type, assigning functions as values to variables and even passing functions around as parameters or returning them from other functions.
+
+* Assigning functions to variables
+When assigning a value to a variable, functions behave just like other types:
+    int number = 4;
+    String greeting = 'hello';
+    bool isHungry = true;
+    Function multiply = (int a, int b) {
+        return a * b;
+    };
+
+The type of multiply is Function, the same way that number is int, greeting is String and isHungry is bool. On the right hand side of each assignment, you have literal values: 4 is an integer literal, 'hello' is a string literal, true is a Boolean literal, and the anonymous function you see above is a function literal.
+
+One reason that you need anonymous functions is that you can’t assign a named function to a variable:
+
+* Passing functions to functions
+Just as you can write a function to take int or String as a parameter, you can also have Function as a parameter:
+    void namedFunction(Function anonymousFunction) {
+        // function body
+    }
+Here, namedFunction takes an anonymous function as a parameter.
+
+* Returning functions from functions
+Just as you can pass in functions as input parameters, you can also return them as output:
+
+    Function namedFunction() {
+        return () {
+            print('hello');
+        };
+    }
+
+The return value is an anonymous function of type Function.
+
+Functions that return functions, or that accept them as parameters, are called higher order functions.
+
+* Using anonymous functions
+Now that you know where you can use anonymous functions, try a hand at doing it yourself. Take the multiply function again:
+
+    final multiply = (int a, int b) {
+        return a * b;
+    };
+
+To call the function that the variable multiply refers to, simply use the variable name followed by the arguments in parentheses:
+    print(multiply(2, 3));
+This will print 6 just as if you were calling the named function multiply.
+
+* Returning a function
+Have a look at a different example:
+
+    Function applyMultiplier(num multiplier) {
+        return (num value) {
+            return value * multiplier;
+        };
+    }
+
+This one looks a little crazy at first. There are two return statements! To make sense of a function like this, look at it this way: applyMultiplier is a named function that returns an anonymous function. It’s like a machine that makes a machine. That second return statement belongs to the anonymous function and won’t get called when applyMultiplier is called.
+
+Now write the following line:
+    final triple = applyMultiplier(3);
+triple is a constant variable of type Function; that is, the anonymous function that applyMultiplier returned. You haven’t run that anonymous function yet. You’re simply storing it in a variable named triple.
+
+Run it now:
+
+    print(triple(6));
+    print(triple(14.0));
+
+Passing arguments to the variable runs the function. Because the parameter type was num, it can accept both int and double inputs. 
+
+Going back to the machine-that-makes-a-machine analogy, passing 3 into applyMultiplier was like setting a dial on the first machine. You set it to “make tripling machines.” So what you got out was a machine that triples everything you give it. If you had set the dial on the first machine to 4, then you would have gotten quadrupling machines, if 2, then doubling machines.
+
+* Anonymous functions in forEach loops
+Our last course introduced you to forEach loops, which iterate over a collection. Although you may not have realized it, that was an example of using an anonymous function.
+
+So if you have a list of numbers, like so:
+    const numbers = [1, 2, 3];
+
+You can call forEach on the list and pass in an anonymous function that triples each number in the list and prints out that value.
+
+    numbers.forEach((number) {
+        final tripled = number * 3;
+        print(tripled);
+    });
+
+The parameter type of number is inferred from the list element types; in this case, int. 
+
+Earlier in this course you learned how functions are a way to package reusable code that you can call in multiple places. The example here shows one of the main benefits of anonymous functions, which is packaging up logic that you don’t need in multiple places, so you don’t need to make it a named function. You simply need to pass the logic around either as input to, or as output from, another function.
+
+* Closures and scope
+Anonymous functions in Dart act as what are known as closures. The term closure means that the code “closes around” the surrounding scope, and therefore has access to variables and functions defined within that scope.
+    {
+        var age = 42;
+        (parameters) {
+            // have access to age
+            age = 43;
+        }
+    }
+A scope in Dart is defined by a pair of curly braces. All the code within these braces is a scope. You can even have nested scopes within other scopes. Examples of scopes are function bodies and the bodies of loops.
+
+The return value of the applyMultiplier function from before is an example of a closure.
+
+    Function applyMultiplier(num multiplier) {
+        return (num value) {
+            return value * multiplier;
+        };
+    }
+
+The anonymous function it returns closes over the multiplier value that’s passed in as a parameter to applyMultiplier.
+
+As another example, if you have a variable counter and then define an anonymous function below it, that anonymous function acts like a closure and has access to counter, and so can change it.
+
+    var counter = 0;
+    final incrementCounter = () {
+        counter += 1;
+    };
+
+The anonymous function that defines incrementCounter can access counter, even though counter is not a parameter to the anonymous function, nor is it defined in the function body.
+
+Call incrementCounter five times and print counter:
+
+    incrementCounter();
+    incrementCounter();
+    incrementCounter();
+    incrementCounter();
+    incrementCounter();
+    print(counter); // 5
+
+You’ll see that counter now has a value of 5.
+
+You can use a closure as a function return value, and, as in this example, count the number of times a given function has been called.
+
+    Function countingFunction() {
+        var counter = 0;
+        final incrementCounter = () {
+            counter += 1;
+            return counter;
+        };
+        return incrementCounter;
+    }
+
+Each function returned by countingFunction will have its own version of counter. So if you were to generate two functions with countingFunction, like so:
+
+    final counter1 = countingFunction();
+    final counter2 = countingFunction();
+
+...then each call to those functions will increment its own counter independently:
+
+    print(counter1()); // 1
+    print(counter2()); // 1
+    print(counter1()); // 2
+    print(counter1()); // 3
+    print(counter2()); // 2
+
+Mini-exercises
+1. Change the youAreWonderful function in the first miniexercise of this course into an anonymous function. Assign it to a variable called wonderful.
+2. Using forEach, print a message telling the people in the following list that they’re wonderful.
+    const people = ['Chris', 'Tiffani', 'Pablo'];

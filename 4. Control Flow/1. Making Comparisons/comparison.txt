@@ -1,0 +1,125 @@
+* Making comparisons
+
+You’ve already encountered a few different Dart types, such as int, double and String. Each of those types is a data structure which is designed to hold a particular type of data. The int type is for whole numbers while the double type is for decimal numbers. String, by comparison, is useful for storing textual information.
+
+A new way of structuring information, though, requires a new data type. Consider the answers to the following questions:
+    - Is the door open?
+    - Do pigs fly?
+    - Is that the same shirt you were wearing yesterday?
+    - Is the traffic light red?
+    - Are you older than your grandmother
+These are all yes-no questions. If you want to store the answers in a variable, you could use strings like 'yes' and 'no'. You could even use integers where 0 means no and 1 means yes. The problem with that, though, is what happens when you get 42 or 'celery'? It would be better to avoid any ambiguity and have a type in which the only possible values are yes and no.
+
+* Boolean values
+Dart has a data type just for this. It’s called bool, which is short for Boolean. A Boolean value can have one of two states. While in general you could refer to the states as yes and no, on and off, or 1 and 0, most programming languages, Dart included, call them true and false.
+
+When programming in a high level language like Dart, you don’t need to understand all of the Boolean logic that’s happening at the circuit level, but there’s still a lot about Boolean math you can apply to decision making in your own code.
+
+To start your exploration of Booleans in Dart, create some Boolean variables like so:
+    const bool yes = true;
+    const bool no = false;
+Because of Dart’s type inference, you can leave off the type annotation:
+    const yes = true;
+    const no = false;
+
+In the code above, you use the keywords true and false to set the state of each Boolean constant.
+
+* Boolean opeartors
+Booleans are commonly used to compare values. For example, you may have two values and you want to know if they’re equal. Either they are equal, which would be true, or they aren’t equal, which would be false.
+
+* Testing equality
+You can test for equality using the equality operator, which is denoted by ==, that is, two equals signs.
+Write the following line:
+    const doesOneEqualTwo = (1 == 2);
+Dart infers that doesOneEqualTwo is a bool. Clearly, 1 does not equal 2, and therefore doesOneEqualTwo will be false. Confirm that result by printing the value:
+
+* Testing inequality
+You can also find out if two values are not equal using the != operator:
+    const doesOneNotEqualTwo = (1 != 2);
+This time, the result of the comparison is true because 1 does not equal 2, so doesOneNotEqualTwo will be true.
+
+The prefix ! operator, also called the not-operator or bang operator, toggles true to false and false to true. Another way to write the above is:
+    const alsoTrue = !(1 == 2);
+Because 1 does not equal 2, (1 == 2) is false, and then ! flips it to true.
+
+* Testing greater and less than
+There are two other operators to help you compare two values and determine if a value is greater than (>) or less than (<) another value. You know these from mathematics:
+    const isOneGreaterThanTwo = (1 > 2);
+    const isOneLessThanTwo = (1 < 2);
+The <= operator lets you test if a value is less than or equal to another value. It’s a combination of < and ==, and will therefore return true if the first value is less than, or equal to, the second value.
+    print(1 <= 2);
+    print(2 <= 2);
+Similarly, the >= operator lets you test if a value is greater than or equal to another value.
+    print(2 >= 1);
+    print(2 >= 2);
+
+* Boolean logic
+Each of the examples above tests just one condition. When George Boole invented the Boolean, he had much more planned for it than these humble beginnings. He invented Boolean logic, which lets you combine multiple conditions to form a result.
+
+* AND operator
+When two conditions need to be true in order for the result to be true, this is an example of a Boolean AND operation. If both input Booleans are true, then the result is true. Otherwise, the result is false. If it rains, Ray won’t go cycling with Vicki. Or if Vicki doesn’t finish her work, they won’t go cycling, either.
+
+In Dart, the operator for Boolean AND is written &&, used like so:
+    const isSunny = true;
+    const isFinished = true;
+    const willGoCycling = isSunny && isFinished;
+
+* OR operator
+When only one of two conditions need to be true in order for the result to be true, this is an example of a Boolean OR operation. The only instance where the result would be false is if both input Booleans were false.
+
+In Dart, the operator for Boolean OR is written ||, used like so:
+    const willTravelToAustralia = true;
+    const canFindPhoto = false;
+    const canDrawPlatypus = willTravelToAustralia || canFindPhoto;
+Print canDrawPlatypus to see that its value is true. If both values on the right were false, then canDrawPlatypus would be false. If both were true, then canDrawPlatypus would still be true.
+
+* Operator precedence
+Boolean logic is usually applied to multiple conditions. When you want to determine if two conditions are true, you use AND, while if you only care whether one of the two conditions is true, you use OR.
+
+Here are a few more examples:
+    const andTrue = 1 < 2 && 4 > 3;
+    const andFalse = 1 < 2 && 3 > 4;
+    const orTrue = 1 < 2 || 3 > 4;
+    const orFalse = 1 == 2 || 3 == 4;
+
+Each of these tests two separate conditions, combining them with either AND or OR.
+
+It’s also possible to use Boolean logic to combine more than two comparisons. For example, you can form a complex comparison like so:
+    3 > 4 && 1 < 2 || 1 < 4
+But now it gets a little confusing. You have three conditions with two different logical operators. With the comparisons simplified, you have the following form:
+
+    false && true || true
+Depending on the order you perform the AND and OR operations, you get different results. If you evaluate AND first, the whole expression is true, while if you evaluate OR first, the whole expression is false.
+    - !
+    - >= > <= <
+    - == !=
+    - &&
+    - ||
+Operators higher in the list are executed before operators lower in the list. You can see that && has a higher precedence than ||. So back to case from before:
+
+First Dart will evaluate false && true, which is false. Then Dart will take that false to evaluate false || true, which is true. Thus the whole expression evaluates to true.
+
+* Overriding precedence with parentheses
+If you want to override the default operator precedence, you can put parentheses around the parts Dart should evaluate first.
+Compare the following two expressions:
+    3 > 4 && (1 < 2 || 1 < 4) 
+    (3 > 4 && 1 < 2) || 1 < 4
+The parentheses in the first line force Dart to do the OR operation before the AND operation, even though that isn’t the default order. This results in the entire expression evaluating to false instead of true, as it would have if you
+hadn’t used parentheses.
+Even when parentheses are not strictly required, as in the second of the two expressions above, they can still help to make the code more readable. For this reason, it’s usually a good idea to use parentheses when you’re performing a logical operation on more than two conditions.
+
+* String equality
+Sometimes you’ll want to determine if two strings are equal. For example, a children’s game of naming an animal in a photo would need to determine if the player answered correctly.
+
+In Dart, you can compare strings using the standard equality operator, ==, in exactly the same way as you compare numbers. For example:
+    const guess = 'dog';
+    const dogEqualsCat = guess == 'cat';
+Here, dogEqualsCat is a Boolean, which in this case is false
+because the string 'dog' does not equal the string 'cat'.
+
+* Mini-exercises
+1. Create a constant called myAge and set it to your age. Then, create a constant named isTeenager that uses Boolean logic to determine if the age denotes someone in the age range of 13 to 19.
+
+2. Create another constant named maryAge and set it to 30. Then, create a constant named bothTeenagers that uses Boolean logic to determine if both you and Mary are teenagers.
+
+3. Create a String constant named developer and set it to your name. Create another String constant named tutor and set it to 'Wilson Chinedu'. Create a Boolean constant named willIsTutor that uses string equality to determine if developer and tutor are equal.

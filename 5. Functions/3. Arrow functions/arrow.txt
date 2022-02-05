@@ -1,0 +1,56 @@
+* Arrow functions
+Dart has a special syntax for functions whose body is only one line. Consider the following named function add that adds two numbers together:
+    int add(int a, int b) {
+        return a + b;
+    }
+
+Since the body is only one line, you can convert it to thefollowing form:
+    int add(int a, int b) => a + b;
+
+You replaced the function’s braces and body with an arrow (=>) and left off the return keyword. The return value is whatever the value of the expression is. Writing a function in this way is known as arrow syntax or arrow notation.
+
+You can also use arrow syntax with anonymous functions. You’re simply left with the parameter list, the arrow, and a single expression:
+(parameters) => expression;
+
+In the following examples, you’re going to refactor, or rewrite, some of the anonymous functions you saw earlier in the course.
+
+* Refactoring example 1
+The body of the anonymous function you assigned to multiply has one line:
+    final multiply = (int a, int b) {
+        return a * b;
+    };
+
+You can convert it to use arrow syntax as follows:
+    final multiply = (int a, int b) => a * b;
+
+You can call it just as you did before, with the same result:
+    print(multiply(2, 3)); // 6
+
+* Refactoring example 2
+You can also use arrow syntax for the anonymous function returned by applyMultiplier:
+
+    Function applyMultiplier(num multiplier) {
+        return (num value) {
+            return value * multiplier;
+        };
+    }
+
+With arrow syntax, the function becomes:
+
+    Function applyMultiplier(num multiplier) {
+        return (num value) => value * multiplier;
+    }
+The result of the function is the same as before.
+
+* Refactoring example 3
+You can’t use arrow syntax on the forEach example, though:
+    numbers.forEach((number) {
+        final tripled = number * 3;
+        print(tripled);
+    });
+
+That’s because there’s more than one line in the function body. However, if you rewrote it to fit on line, that would work:
+    numbers.forEach((number) => print(number * 3));
+
+Mini-exercise
+Change the forEach loop in the previous “You’re wonderful” mini-exercise to use arrow syntax.
