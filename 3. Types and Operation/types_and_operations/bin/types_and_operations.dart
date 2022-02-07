@@ -48,7 +48,6 @@ void main() {
   //       print('something else');
   //   }
 
-
   //   switch (number) {
   //       case 0:
   //           print('zero');
@@ -69,19 +68,18 @@ void main() {
   //           print('something else');
   //   }
   const weather = 'cloudy';
-    switch (weather) {
-        case 'sunny':
-            print('Put on sunscreen.');
-            break;
-        case 'snowy':
-            print('Get your skis.');
-            break;
-        case 'cloudy':
-        case 'rainy':
-            print('Bring an umbrella.');
-            break;
-        default:
-            print("I'm not familiar with that weather."
-);
-}
+  switch (weather) {
+    case 'sunny':
+      print('Put on sunscreen.');
+      break;
+    case 'snowy':
+      print('Get your skis.');
+      break;
+    case 'cloudy':
+    case 'rainy':
+      print('Bring an umbrella.');
+      break;
+    default:
+      print("I'm not familiar with that weather.");
+  }
 }
