@@ -46,7 +46,7 @@ loop:
     do {
         sum += 4;
         print(sum);
-    } while (sum < 10)
+    } while (sum < 10);
 
 * Comparing while and do-while loops
 It isn’t always the case that while loops and do-while loops will give the same result. For example, here’s a while loop where sum starts at 11:
