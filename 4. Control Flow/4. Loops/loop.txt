@@ -59,10 +59,8 @@ Since the initial condition is false, the loop never executes. Run that code and
 On the other hand, check out a similar do-while loop:
     sum = 11;
     do {
-        sum += 4;
-    } while (sum < 10);
-    print(sum);
-Run this and you’ll find the sum at the end to be 15. This is because the do-while loop executed the body of the loop before checking the condition.
+        sum += 
+        Run this and you’ll find the sum at the end to be 15. This is because the do-while loop executed the body of the loop before checking the condition.
 
 * Breaking out of a loop
 Sometimes you’ll need to break out of a loop early. You can do this using the break statement, just as you did from inside the switch statement earlier. This immediately stops the execution of the loop and continues on to the code that follows the loop.

@@ -1,0 +1,103 @@
+* Static members
+There is just one more thing to cover for your well-rounded foundation in Dart classes. That’s the static keyword.
+
+If you put static in front of a member variable or method, that causes the variable or method to belong to the class rather than the instance:
+
+    class SomeClass {
+        static int myProperty = 0;
+        static void myMethod() {
+            print('Hello, Dart!');
+        }
+    }
+And you access them like so:
+    final value = SomeClass.myProperty;
+    SomeClass.myMethod();
+
+In this case, you didn’t have to instantiate an object to access myProperty or to call myMethod. Instead, you were able to use the class name directly to get the value and call the method.
+
+The following sections will cover a few common use cases for static members.
+
+* Static variables
+Static variables are often used for constants and in the singleton pattern.
+
+* Constants
+You can define class constants by combining static and const. For example:
+    static const myConstant = '42';
+
+Doing so in the User class would improve readability for the default user ID and name. Add the following two lines to the class body below the properties:
+
+    static const _anonymousId = 0;
+    static const _anonymousName = 'anonymous';
+Replace the unnamed constructor with the following:
+
+const User({
+    this.id = _anonymousId,
+    this.name = _anonymousName,
+}) : assert(id >= 0);
+
+While anonymous was already pretty readable, _anonymousId is much more meaningful than 0.
+
+Singleton pattern
+A second use of static variables is to create a singleton class. Singletons are a common design pattern where there is only ever one instance of an object. While some people debate their benefits, they do make certain tasks more convenient.
+
+It’s easy to create a singleton in Dart. You wouldn’t want User to be a singleton, since you’ll likely have lots of distinct users, requiring lots of distinct instances of User. However, you might want to create a singleton class as a database helper so that you can ensure that you don’t open multiple connections to the database.
+
+Here is what a basic singleton class would look like:
+
+    class MySingleton {
+        MySingleton._();
+    static final MySingleton instance = MySingleton._();
+    }
+
+The MySingleton._() part is a private named constructor. Some people like to call it _internal to emphasize that it can’t be called from the outside. The underscore makes it impossible to instantiate the class normally. However, the static property, which is only initialized once, provides a reference to the instantiated object.
+
+You would access the singleton like so:
+    final mySingleton = MySingleton.instance;
+
+Since factory constructors don’t need to return new instances of an object, you can also implement the singleton pattern with a factory constructor:
+
+    class MySingleton {
+        MySingleton._();
+        static final MySingleton _instance = MySingleton._();
+        factory MySingleton() => _instance;
+    }
+
+The advantage here is that you can hide the fact that it’s a singleton from whoever uses it:
+
+final mySingleton = MySingleton();
+
+From the outside, this looks exactly like a normal object. This gives you the freedom to change it back into a generative constructor later without affecting the code in other parts of your project.
+
+The last two sections have been about static variables. Next, you’ll take a look at static methods.
+
+* Static methods
+There are a few interesting things you can do with static methods.
+
+* Utility methods
+One use for a static method is to create a utility or helper method that’s associated with the class, but not associated with any particular instance.
+
+In other languages, some developers like to group related static utility methods in classes to keep them organized. However, in Dart it’s usually better to just put these utility methods in their own file as top-level functions. You can then import that file as a library wherever you need the utility methods contained within.
+
+* Creating new objects
+You can also use static methods to create new instances of a
+class based on some input passed in. For example, you could
+use a static method to achieve precisely the same result as you did earlier with the fromJson factory constructor. Here’s the static method version:
+    static User fromJson(Map<String, Object> json) {
+        final userId = json['id'] as int;
+        final userName = json['name'] as String;
+        return User(id: userId, name: userName);
+    }
+
+From the outside as well, you use it as you did with the factory version:
+
+    final map = {'id': 10, 'name': 'Manda'};
+    final manda = User.fromJson(map);
+
+All this goes to show that there are often multiple ways of accomplishing the same thing.
+
+* Comparing static methods with factory constructors
+Factory constructors in many ways are just like static methods, but there are a few differences:
+
+    - A factory constructor can only return an instance of theclass type or subtype, while a static method can return anything. For example, a static method can be asynchronous and return a Future, which you’ll learn about in Chapter 10, but a factory constructor can’t do this.
+    - A factory constructor can be unnamed so that, from the caller’s perspective, it looks exactly like calling a generative constructor. The singleton example above is an example of this. A static method, on the other hand, must have a name.
+    - A factory constructor can be const if it’s a forwarding constructor, but a static method can’t.

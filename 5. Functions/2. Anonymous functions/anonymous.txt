@@ -23,6 +23,7 @@ The type of multiply is Function, the same way that number is int, greeting is S
 
 One reason that you need anonymous functions is that you can’t assign a named function to a variable:
 
+
 * Passing functions to functions
 Just as you can write a function to take int or String as a parameter, you can also have Function as a parameter:
     void namedFunction(Function anonymousFunction) {
