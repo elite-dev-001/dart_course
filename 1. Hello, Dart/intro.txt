@@ -1,6 +1,6 @@
 Course 1: Hello, Dart
 
-Name: Wilson Chinedu
+Name: Uche Emmanuel
 
 This first chapter is designed to help you set up your development environment so that you can get the most out
 of the following courses.
