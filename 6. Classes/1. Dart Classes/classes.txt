@@ -1,0 +1,142 @@
+* Dart classes
+
+Classes are like architectural blueprints that tell the system how to make an object, where an object is the actual data that’s stored in the computer’s memory. If a class is the blueprint, then you could say the object is like the house that the blueprint represents.
+
+All values in Dart are objects that are built from a class. This includes the values of basic types like int, double and bool.
+
+That’s different from other languages like Java, where basic types are primitive. For example, if you have x = 10 in Java, the value of x is 10 itself. However, Dart doesn’t have primitive types. Even for a simple int, the value is an object that wraps the integer.
+
+Classes are a core component of object-oriented programming. They’re used to combine data and functions inside a single structure.
+
+    class MyClass {
+        var myProperty = 'Hello, Dart!';
+
+        // constructor
+        MyClass();
+
+        void myMethod() {
+            print(myProperty);
+        }
+    }
+
+The functions exist to transform the data. Functions inside of a class are known as methods, while constructors are special methods you use to create objects from the class.
+
+* Defining a class
+To get started creating your own types, you’ll make a simple User class that has id and name properties. This is just the kind of class that you’re highly likely to create in the future for an app that requires users to log in.
+
+Write the following simple class at the top level of your Dart file. Your class should be outside of the main function, either above or below it.
+
+    class User {
+        int id = 0;
+        String name = '';
+    }
+
+This creates a class named User. It has two properties; id is an int with a default value of 0, and name is a String with the default value of an empty string.
+
+* Creating an object from a class
+As mentioned above, the value you create from a class is called an object. Another name for an object is instance, so creating an object is sometimes called instantiating a class.
+
+Since coding the class in your Dart file as you did above simply creates the blueprint, a User object doesn’t exist yet. You can create one by calling the class name as you would call a function. Add the following line inside the main function:
+    final user = User();
+This creates an instance of your User class and stores that instance, or object, in user. Notice the empty parentheses after User. It looks like you’re calling a function without any parameters. In fact, you are calling a type of function called a constructor method.
+
+* Assigning values to properties
+Now that you have an instance of User stored in user, you can assign new values to this object’s properties by using dot notation. To access the name property, type user dot name, and then give it a value:
+    user.name = 'Ray';
+Now, set the ID in a similar way:
+    user.id = 42;
+Your code should look like the following:
+    void main() {
+        final user = User();
+        user.name = 'Ray';
+        user.id = 42;
+    }
+
+    class User {
+        int id = 0;
+        String name = '';
+    }
+
+You’ll notice that you have both a function and a class together. Dart allows you to put multiple classes, top-level functions and even top-level variables all together in the same file. Their order in the file isn’t important. User is located below main here, but if you put it above main, that’s fine as well.
+
+You’ve defined a User data type with a class, created an object from it and assigned values to its parameters. Run the code now, though, and you won’t see anything special happen. The next section will show you how to display data from an object.
+
+* Printing an object
+You can print any object in Dart. However, if you try to print user now, you won’t get quite what you hoped for. Add the following line at the bottom of the main function and run the code:
+    print(user);
+All classes in Dart (well, except for Null) are derived from Object, which has a toString method. In this case, your object doesn’t tell Dart how to write its internal data when you call toString on it, so Dart gives you this generic, default output instead. However, you can override the Object class’s version of toString by writing your own implementation of toString, and thus customize how your own object will print out.
+
+Add the following method to the User class:
+
+    @override
+    String toString() {
+        return 'User(id: $id, name: $name) ';
+    }
+Words that start with @ are called annotations. Including them is optional and doesn’t change how the code executes. However, annotations do give the compiler more information so that it can help you out at compile time. Here, the @override annotation is telling both you and the compiler that toString is a method in Object that you want to override with your own customized version, so if you accidentally wrote the toString method signature incorrectly, the compiler would warn you about it because of the @override annotation.
+
+Since methods have access to the class properties, you simply use that data to output a more meaningful message when someone prints your object. Run the code now, and you’ll see the following result:
+    User(id: 42, name: Ray)
+That’s far more useful!
+
+* Adding methods
+Now that you’ve learned to override methods, you’re going to move on and add your own methods to the User class. But before you do, there’s a little background information that you should know.
+
+* Understanding object serialization
+Being able to organize related data into a class is super useful, especially when you want to pass that data around as a unit within your app. One disadvantage, though, shows up when you’re saving the object or sending it over the network. Files, databases and networks only know how to handle simple data types, such as numbers and strings. They don’t know how to handle anything more complex, like your User data type.
+
+Serialization is the process of converting a complex data object into a string. Once the object has been serialized, it’s easy to save that data or transfer it across the network because everything from your app to the network and beyond knows how to deal with strings. Later, when you want to read that data back in, you can do so by way of deserialization, which is simply the process of converting a string back into an object of your data type.
+
+You didn’t realize it, but you actually serialized your User object in the toString method above. The code you wrote was good enough to get the job done, but you didn’t really follow any standardized format. You simply wrote it out in a way that looked nice to the human eye. If you gave that string to someone else, though, they might have some difficulty understanding how to deserialize it, that is, convert it back into a User object.
+
+It turns out that serialization and deserialization are such common tasks that people have devised a number of standardized formats for serializing data. One of the most common is called JSON: JavaScript Object Notation. Despite the name, it’s used far and wide outside the world of JavaScript.
+
+JSON isn’t difficult to learn, but this topic will only show you enough JSON to serialize your User object into a more portable format.
+
+* Adding a JSON serialization method
+You’re going to add another method to your class now that will convert a User object to JSON format. It’ll be similar to what you did in toString.
+
+Add the following method to the User class, putting it above the toString method:
+    String toJson() {
+        return '{"id":$id,"name":"$name"}';
+    }
+Here are a few things to note:
+    - Since this is your own custom method and you’re not overriding a method that belongs to another class, you don’t add the @override annotation.
+    - In Dart naming conventions, acronyms are treated as words. Thus, toJson is a better name than toJSON.
+
+    - There’s nothing magic about serialization in this case. You simply used string interpolation to insert the property values in the correct locations in the JSON formatted string.
+
+    - In JSON, objects are surrounded by curly braces, properties are separated by commas, property names are separated from property values by colons, and strings are surrounded by double-quotes. If a string needs to include a double-quote inside itself, you escape it with a backslash like so: \"
+
+    - JSON is very similar to a Dart data type called Map. Infact, Dart even has built-in functions in the dart:convert library to serialize and deserialize JSON maps. And that’s actually what most people use to serialize objects. However, we haven't treated maps yet, so this example is going to be low-tech. You’ll see a little preview of Map, though, in the fromJson example later in this course.
+
+To test out your new function, add the following line to the bottom of the main method:
+    print(user.toJson());
+This code calls the custom toJson method on your user object using dot notation. The dot goes between the object name and method name just like you saw earlier for accessing a property name.
+
+Run the code and you’ll see the following:
+    {"id":42,"name":"Ray"}
+
+It’s very similar to what toString gave you, but this time it’s in standard JSON format, so a computer on the other side of the world could easily convert that back into a Dart object.
+
+Cascade notation
+When you created your User object above, you set its parameters like so:
+
+    final user = User();
+    user.name = 'Ray';
+    user.id = 42;
+
+However, Dart offers a cascade operator (..) that allows you to chain together multiple assignments on the same object without having to repeat the object name. The following code is equivalent:
+    final user = User()
+        ..name = 'Ray'
+        ..id = 42;
+Note that the semicolon only appears on the last line.
+
+Cascade notation isn’t strictly necessary, but it does makesyour code just a little tidier when you have to assign a long list of properties or repeatedly call a method that modifies your object.
+
+Mini-exercises
+1. Create a class called Password and give it a string
+property called value.
+2. Override the toString method of Password so that it
+prints value.
+3. Add a method to Password called isValid that returns
+true only if the length of value is greater than 8.

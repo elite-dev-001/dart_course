@@ -1,0 +1,135 @@
+* Dart objects
+Objects act as references to the instances of the class in memory. That means if you assign one object to another, the other object simply holds a reference to the same object in memory — not a new instance.
+
+So if you have a class like this:
+
+    class MyClass {
+        var myProperty = 1;
+    }
+
+And you instantiate it like so:
+    final myObject = MyClass();
+    final anotherObject = myObject;
+
+Then myObject and anotherObject both reference the same place in memory. Changing myProperty in either object will affect the other, since they both reference the same instance:
+    print(myObject.myProperty); // 1
+    anotherObject.myProperty = 2;
+    print(myObject.myProperty); // 2
+
+As you can see, changing the value of the property on anotherObject also changed it in myObject, as they are really just two names for the same object.
+
+If that still doesn’t make sense, you can look forward to sitting down by the fire and listening to the story of The House on Wenderlich Way in Chapter 8, which will make this all clear, or at least help you see it from a different perspective.
+
+For now, though, there are a few more improvements you can make to the User class.
+
+* Getters
+Right now the User class fields are private:
+    class User {
+        // ...
+        final int _id;
+        final String _name;
+        // ...
+    }
+
+That means there’s no way to access the user ID and name outside of the class, which makes your object kind of useless. You can solve this problem by adding a getter, which is a special method that uses the get keyword before a property name and returns a value. This gives you, as the class author, some control over how people access and modify properties, instead of giving people raw and unfettered access.
+
+In the User class, near the _id and _name properties, add the following lines:
+    int get id => _id;
+    String get name => _name;
+
+The get keyword provides a public-facing property name; in this case, id and name. When you call the getter using its name, the get method returns a value. The two getter methods here are simply returning the _id and _name field values.
+
+Now that the properties are exposed, you can use them likeso:
+    const ray = User(id: 42, name: 'Ray');
+    print(ray.id); // 42
+    print(ray.name); // Ray
+
+* Calculated properties
+You can even create getters that aren’t backed by a dedicated field value, but instead are calculated when called. Here’s an example:
+    bool get isBigId => _id > 1000;
+
+There’s no internal variable named isBigId or _isBigId. Rather, the return value of isBigId is calculated when necessary.
+
+All of the getters above use arrow syntax, but you could also use brace syntax with a return statement if you wanted to use more than a single line of code to calculate the return value.
+
+* Setters
+If you need mutable data in a class, there’s a special set method to go along with get.
+
+Rather than modifying any of the existing fields of User to have a setter, here’s a simple new class called Email:
+
+    class Email {
+        var _address = '';
+
+        String get value => _address;
+        set value(String address) => _address = address;
+    }
+
+The last line in the body is the setter, which starts with the set keyword. The name value is the same name that’s used by the getter above it. The set method takes a parameter, which you can use to set some value. In this case, you’re setting the email address.
+
+You can now assign and retrieve the value of _address like this:
+    final email = Email();
+    email.value = 'ray@example.com';
+    final emailString = email.value;
+
+The second line sets the internal _address field, and the third line gets it.
+
+You can see how this could give you some extra control over what’s assigned to your properties; for instance, you could sanitize input, check for properly formatted email addresses, and more.
+
+* Refactoring
+You don’t always need to use getters and setters explicitly. In fact, if all you’re doing is shadowing some internal field variable, then you’re better off just using a public variable.
+
+* Refactoring the Email class
+Refactoring the Email class from above to use a public variable would look like this:
+    class Email {
+        var value = '';
+    }
+
+Dart implicitly generates the needed getters and setters for you. That’s quite a bit more readable and it still works exactly the same:
+    final email = Email();
+    email.value = 'ray@example.com';
+    final emailString = email.value;
+
+That’s the beauty of how Dart handles class properties. You can change the internal implementation, without the external world being any the wiser.
+
+If you only want a getter but not a setter, then just make the property final, which will also require adding a constructor to initialize the property:
+    class Email {
+        Email(this.value);
+        final value;
+    }
+
+Since you added a constructor, that does affect the outside world when instantiating the object, but it’s nothing different than what you’ve seen previously:
+    final email = Email('ray@example.com');
+    final emailString = email.value;
+
+Retrieving value is still the same as before.
+
+* Refactoring User
+You can use these same principles to refactor the User class. Replace the entire class with the following code:
+    class User {
+        const User({this.id = 0, this.name = 'anonymous'})
+        : assert(id >= 0);
+
+    const User.anonymous() : this();
+
+    final String name;
+    final int id;
+
+    String toJson() {
+        return '{"id":$id,"name":"$name"}';
+    }
+
+    @override
+    String toString() {
+        return 'User(id: $id, name: $name)';
+    }
+}
+Here’s what changed:
+    - Since the getters were only shadowing internal private fields, it was cleaner to remove the fields and just use a final property. If you ever need to use hidden fields again later, you can do so without affecting how the class is used from the outside.
+
+    - Since you removed the private fields, setting them in the initializer list is no longer necessary.
+
+    - Because the properties are now public variables, you can use this.id and this.name to initialize them in the short-form constructor style.
+    
+“Why all the runaround?” you ask. “I could have done all this
+in the beginning.”
+True, true. But then you wouldn’t have learned so much! :]

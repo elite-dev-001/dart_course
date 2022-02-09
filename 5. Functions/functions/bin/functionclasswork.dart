@@ -17,14 +17,14 @@ void helloPersonAndPet(String person, String pet) {
 }
 
 String fullName(String first, String last, [String? title]) {
-  // if (title != null) {
-  //   return '$title $first $last';
-  // } else {
-  //   return '$first $last';
-  // }
+  if (title != null) {
+    return '$title $first $last';
+  } else {
+    return '$first $last';
+  }
 
   //USING TENARY OPERATORS
-  return title != null ? '$title $first $last' : '$first $last';
+  //return title != null ? '$title $first $last' : '$first $last';
 }
 
 bool withinTolerance(int value, {int min = 0, int max = 10}) {
