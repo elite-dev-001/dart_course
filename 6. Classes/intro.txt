@@ -1,8 +1,7 @@
 Course 6: Classes
 
 So far in this course, you’ve used built-in types such as int,
-String and bool. You’ve also seen one way to make custom
-types using enum. In this topic, you’ll learn a more flexible
+String and bool.  In this topic, you’ll learn a more flexible
 way to create your own types by using classes.
 
 Topics to Cover
