@@ -94,5 +94,11 @@ Also, note how the names above are written. In Dart, it’s standard to use lowe
 
 Mini-exrcises
 1. Declare a constant of type int called myAge and set it to your age.
-2. Declare a variable of type double called averageAge. Initially, set the variable to your own age. Then, set it to the average of your age and your best friend’s age.
-3. Create a constant called testNumber and initialize it with whatever integer you’d like. Next, create another constant called evenOdd and set it equal to testNumber modulo 2. Now change testNumber to various numbers. What do you notice about evenOdd?
+2. Declare a variable of type double called averageAge. 
+Initially, set the variable to your own age. 
+Then, set it to the average of your age and your best 
+friend’s age.
+3. Create a constant called testNumber and initialize it with whatever 
+integer you’d like. Next, create another constant called evenOdd and set it 
+equal to testNumber modulo 2. Now change testNumber to various numbers. 
+What do you notice about evenOdd?

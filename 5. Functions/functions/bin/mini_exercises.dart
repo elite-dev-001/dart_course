@@ -15,16 +15,14 @@
 void main() {
   // ignore: prefer_function_declarations_over_variables
   Function wonderful = ({required String name, int numberPeople = 30}) {
-  return 'You\'re wonderful, $name. $numberPeople people think so';
-};
-  print(wonderful(name: 'Wilson', numberPeople: 10));
+    return 'You\'re wonderful, $name. $numberPeople people think so';
+  };
+  print(wonderful(_name: 'Wilson', numberPeople: 10));
 
   const people = ['Chris', 'Tiffani', 'Pablo'];
   // ignore: avoid_function_literals_in_foreach_calls
-  people.forEach((person){
+  people.forEach((person) {
     final message = '$person is a wonderful fellow';
     print(message);
   });
 }
-
-

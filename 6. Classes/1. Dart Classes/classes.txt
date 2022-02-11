@@ -1,10 +1,14 @@
 * Dart classes
 
-Classes are like architectural blueprints that tell the system how to make an object, where an object is the actual data that’s stored in the computer’s memory. If a class is the blueprint, then you could say the object is like the house that the blueprint represents.
+Classes are like architectural blueprints that tell the system how to make an object, where an object is the actual data that’s 
+stored in the computer’s memory. If a class is the blueprint, then you could say the object is like the house that the blueprint 
+represents.
 
 All values in Dart are objects that are built from a class. This includes the values of basic types like int, double and bool.
 
-That’s different from other languages like Java, where basic types are primitive. For example, if you have x = 10 in Java, the value of x is 10 itself. However, Dart doesn’t have primitive types. Even for a simple int, the value is an object that wraps the integer.
+That’s different from other languages like Java, where basic types are primitive. For example, if you have x = 10 in Java, 
+the value of x is 10 itself. However, Dart doesn’t have primitive types. Even for a simple int, the value is an object that 
+wraps the integer.
 
 Classes are a core component of object-oriented programming. They’re used to combine data and functions inside a single structure.
 
@@ -19,22 +23,27 @@ Classes are a core component of object-oriented programming. They’re used to c
         }
     }
 
-The functions exist to transform the data. Functions inside of a class are known as methods, while constructors are special methods you use to create objects from the class.
+The functions exist to transform the data. Functions inside of a class are known as methods, 
+while constructors are special methods you use to create objects from the class.
 
 * Defining a class
-To get started creating your own types, you’ll make a simple User class that has id and name properties. This is just the kind of class that you’re highly likely to create in the future for an app that requires users to log in.
+To get started creating your own types, you’ll make a simple User class that has id and name properties. 
+This is just the kind of class that you’re highly likely to create in the future for an app that requires users to log in.
 
-Write the following simple class at the top level of your Dart file. Your class should be outside of the main function, either above or below it.
+Write the following simple class at the top level of your Dart file. Your class should be outside of the main function, 
+either above or below it.
 
     class User {
         int id = 0;
         String name = '';
     }
 
-This creates a class named User. It has two properties; id is an int with a default value of 0, and name is a String with the default value of an empty string.
+This creates a class named User. It has two properties; id is an int with a default value of 0, 
+and name is a String with the default value of an empty string.
 
 * Creating an object from a class
-As mentioned above, the value you create from a class is called an object. Another name for an object is instance, so creating an object is sometimes called instantiating a class.
+As mentioned above, the value you create from a class is called an object. Another name for an object is instance, 
+so creating an object is sometimes called instantiating a class.
 
 Since coding the class in your Dart file as you did above simply creates the blueprint, a User object doesn’t exist yet. You can create one by calling the class name as you would call a function. Add the following line inside the main function:
     final user = User();
@@ -74,26 +83,50 @@ Add the following method to the User class:
     }
 Words that start with @ are called annotations. Including them is optional and doesn’t change how the code executes. However, annotations do give the compiler more information so that it can help you out at compile time. Here, the @override annotation is telling both you and the compiler that toString is a method in Object that you want to override with your own customized version, so if you accidentally wrote the toString method signature incorrectly, the compiler would warn you about it because of the @override annotation.
 
-Since methods have access to the class properties, you simply use that data to output a more meaningful message when someone prints your object. Run the code now, and you’ll see the following result:
+Since methods have access to the class properties, you simply use that data to output a more 
+meaningful message when someone prints your object. 
+Run the code now, and you’ll see the following result:
     User(id: 42, name: Ray)
 That’s far more useful!
 
 * Adding methods
-Now that you’ve learned to override methods, you’re going to move on and add your own methods to the User class. But before you do, there’s a little background information that you should know.
+Now that you’ve learned to override methods, 
+you’re going to move on and add your own methods to the User class. 
+But before you do, there’s a little background information that you should know.
 
 * Understanding object serialization
-Being able to organize related data into a class is super useful, especially when you want to pass that data around as a unit within your app. One disadvantage, though, shows up when you’re saving the object or sending it over the network. Files, databases and networks only know how to handle simple data types, such as numbers and strings. They don’t know how to handle anything more complex, like your User data type.
+Being able to organize related data into a class is super useful, 
+especially when you want to pass that data around as a unit within your app. 
+One disadvantage, though, shows up when you’re saving the object or sending it over the network. 
+Files, databases and networks only know how to handle simple data types, such as numbers and 
+strings. They don’t know how to handle anything more complex, like your User data type.
 
-Serialization is the process of converting a complex data object into a string. Once the object has been serialized, it’s easy to save that data or transfer it across the network because everything from your app to the network and beyond knows how to deal with strings. Later, when you want to read that data back in, you can do so by way of deserialization, which is simply the process of converting a string back into an object of your data type.
+Serialization is the process of converting a complex data object into a string. 
+Once the object has been serialized, 
+it’s easy to save that data or transfer it across the network because everything from your app to 
+the network and beyond knows how to deal with strings. 
+Later, when you want to read that data back in, you can do so by way of deserialization, 
+which is simply the process of converting a string back into an object of your data type.
 
-You didn’t realize it, but you actually serialized your User object in the toString method above. The code you wrote was good enough to get the job done, but you didn’t really follow any standardized format. You simply wrote it out in a way that looked nice to the human eye. If you gave that string to someone else, though, they might have some difficulty understanding how to deserialize it, that is, convert it back into a User object.
+You didn’t realize it, but you actually serialized your User object in the toString method above. 
+The code you wrote was good enough to get the job done, 
+but you didn’t really follow any standardized format. 
+You simply wrote it out in a way that looked nice to the human eye. 
+If you gave that string to someone else, 
+though, they might have some difficulty understanding how to deserialize it, 
+that is, convert it back into a User object.
 
-It turns out that serialization and deserialization are such common tasks that people have devised a number of standardized formats for serializing data. One of the most common is called JSON: JavaScript Object Notation. Despite the name, it’s used far and wide outside the world of JavaScript.
+It turns out that serialization and deserialization are such common tasks that people have devised 
+a number of standardized formats for serializing data. 
+One of the most common is called JSON: JavaScript Object Notation. 
+Despite the name, it’s used far and wide outside the world of JavaScript.
 
-JSON isn’t difficult to learn, but this topic will only show you enough JSON to serialize your User object into a more portable format.
+JSON isn’t difficult to learn, but this topic will only show you enough JSON to serialize your 
+User object into a more portable format.
 
 * Adding a JSON serialization method
-You’re going to add another method to your class now that will convert a User object to JSON format. It’ll be similar to what you did in toString.
+You’re going to add another method to your class now that will convert a User object to JSON format. 
+It’ll be similar to what you did in toString.
 
 Add the following method to the User class, putting it above the toString method:
     String toJson() {

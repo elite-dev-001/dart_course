@@ -1,9 +1,14 @@
 * Constructors
 
-Constructors are methods that create, or construct, instances of a class. That is to say, constructors build new objects. Constructors have the same name as the class, and the implicit return type of the constructor method is also the same type as the class itself.
+Constructors are methods that create, or construct, 
+instances of a class. That is to say, constructors build new objects. 
+Constructors have the same name as the class, and the implicit return type of the constructor 
+method is also the same type as the class itself.
 
 * Default constructor
-As it stands, your User class doesn’t have an explicit constructor. In cases like this, Dart provides a default constructor that takes no parameters and just returns an instance of the class. For example, defining a class like this:
+As it stands, your User class doesn’t have an explicit constructor. 
+In cases like this, Dart provides a default constructor that takes no parameters and just 
+returns an instance of the class. For example, defining a class like this:
     class Address {
         var value = '';
     }
@@ -15,10 +20,16 @@ is equivalent to writing it like this:
     }
 Including the default Address() constructor is optional.
 
-Sometimes you don’t want the default constructor, though. You’d like to initialize the data in an object at the same time that you create the object. The next section shows how to do just that.
+Sometimes you don’t want the default constructor, though. 
+You’d like to initialize the data in an object at the same time that you create the object. 
+The next section shows how to do just that.
 
 * Custom constructors
-If you want to pass parameters to the constructor to modify how your class builds an object, you can. It’s similar to how you wrote functions with parameters in Chapter 5. Like the default constructor above, the constructor name should be the same as the class name. This type of constructor is called a generative constructor because it directly generates an object of the same type.
+If you want to pass parameters to the constructor to modify how your class builds an object, you can. 
+It’s similar to how you wrote functions with parameters in Chapter 5. 
+Like the default constructor above, the constructor name should be the same as the class name. 
+This type of constructor is called a generative constructor because it directly generates an 
+object of the same type.
 
 * Long-form constructor
 In Dart the convention is to put the constructor before the property variables. Add the following generative constructor method at the top of the class body:
@@ -77,14 +88,17 @@ The class should now look like this:
 Run the code again. You’ll see the short-form constructor works just like the longer form you replaced, but it’s just a little tidier now.
 
 * Named constructors
-Dart also has a second type of generative constructor called a named constructor, which you create by adding an identifier on to the class name. It takes the following pattern:
+Dart also has a second type of generative constructor called a named constructor, 
+which you create by adding an identifier on to the class name. It takes the following pattern:
     ClassName.identifierName()
 
 From here on, this course will refer to a constructor without the identifier, that is, one which only uses the class name, as an unnamed constructor.
 
 Why would you want a named constructor instead of the nice, tidy default one? Well, sometimes you have some common cases that you want to provide a convenience constructor for. Or maybe you have some special edge cases for constructing certain classes that need a slightly different approach.
 
-Say, for example, that you want to have an anonymous user with a preset ID and name. You can do that by creating a named constructor. Add the following named constructor below the short-form constructor:
+Say, for example, that you want to have an anonymous user with a preset ID and name. 
+You can do that by creating a named constructor. 
+Add the following named constructor below the short-form constructor:
     User.anonymous() {
         id = 0;
         name = 'anonymous';
@@ -99,9 +113,16 @@ Run that and you’ll see the expected output:
     User(id: 0, name: anonymous)
 
 * Forwarding constructors
-In the named constructor example above, you set the class properties directly in the constructor body. However, this doesn’t follow the DRY principle you learned earlier. You’re repeating yourself by having two different locations where you can set the properties. It’s not a huge deal, but imagine that you have five different constructors instead of two. It would be easy to forget to update all five if you had to make a change, and if the constructor logic were complicated, it would be easy to make a mistake.
+In the named constructor example above, 
+you set the class properties directly in the constructor body. 
+However, this doesn’t follow the DRY principle you learned earlier. 
+You’re repeating yourself by having two different locations where you can set the properties. 
+It’s not a huge deal, but imagine that you have five different constructors instead of two. 
+It would be easy to forget to update all five if you had to make a change, 
+and if the constructor logic were complicated, it would be easy to make a mistake.
 
-One way to solve this issue is by calling the main constructor from the named constructor. This is called forwarding or redirecting. To do that, you use the keyword this again.
+One way to solve this issue is by calling the main constructor from the named constructor. 
+This is called forwarding or redirecting. To do that, you use the keyword this again.
 
 Delete the anonymous named constructor that you created above and replace it with the following:
     User.anonymous() : this(0, 'anonymous');
@@ -121,7 +142,8 @@ You call the named constructor exactly like you did before:
 The results are the same as well.
 
 * Optional and named parameters
-Everything you learned about function parameters in Functions course also applies to constructor method parameters. That means you can make parameters optional using square brackets:
+Everything you learned about function parameters in Functions course also applies to constructor 
+method parameters. That means you can make parameters optional using square brackets:
     MyClass([this.myProperty]);
 Or you can make them optional and named using curly braces:
     MyClass({this.myProperty});
@@ -131,13 +153,20 @@ Or named and required using curly braces and the required keyword:
 * Adding named parameters for User
 Earlier when you instantiated a User object, you did this:
     final user = User(42, 'Ray');
-For someone not familiar with your User class, they might think 42 is Ray’s age, or his password, or how many pet cats he has. Using named parameters here would help a lot with readability.
+For someone not familiar with your User class, 
+they might think 42 is Ray’s age, or his password, or how many pet cats he has. 
+Using named parameters here would help a lot with readability.
 
-Refactor the unnamed constructor in User by adding braces around the parameters. Since that makes the parameters optional, you could use the required keyword as you saw in our last class, but this time simply give them default values:
+Refactor the unnamed constructor in User by adding braces around the parameters. 
+Since that makes the parameters optional, 
+you could use the required keyword as you saw in our last class, 
+but this time simply give them default values:
     User({this.id = 0, this.name = 'anonymous'});
-The compiler will complain at this, because that change also requires refactoring the anonymous named constructor to use the parameter names in the redirect.
+The compiler will complain at this, because that change also requires refactoring the anonymous named
+constructor to use the parameter names in the redirect.
 
-However, since the parameter defaults are now just what the anonymous constructor was doing before, you can delete the anonymous constructor and replace it with the following:
+However, since the parameter defaults are now just what the anonymous constructor was doing before, 
+you can delete the anonymous constructor and replace it with the following:
     User.anonymous() : this();
 Using the named constructor will now forward to the unnamed constructor with no arguments.
 
@@ -158,7 +187,8 @@ In case you’ve gotten lost, here’s what things look like now:
         // ...  
     }
 * Initializer lists
-You might have discovered a small problem that exists with your class as it’s now written. Take a look at the following way that an unscrupulous person could use this class:
+You might have discovered a small problem that exists with your class as it’s now written. 
+Take a look at the following way that an unscrupulous person could use this class:
     final vicki = User(id: 24, name: 'Vicki');
     vicki.name = 'Nefarious Hacker';
     print(vicki);
@@ -201,7 +231,12 @@ It turns out that your nefarious hacker can still access the “private” field
     final vicki = User(id: 24, name: 'Vicki');
     vicki._name = 'Nefarious Hacker';
     
-What’s that all about? Well, using an underscore before a variable or method name makes it library private, not class private. For your purposes in this chapter, a library is simply a file. Since the main function and the User class are in the same file, nothing in User is hidden from main. To see private variables in action, you’ll need to make another file so that you aren’t using your class in the same file in which it’s defined.
+What’s that all about? 
+
+Well, using an underscore before a variable or method name makes it library private, 
+not class private. For your purposes in this chapter, a library is simply a file. 
+Since the main function and the User class are in the same file, 
+nothing in User is hidden from main. To see private variables in action, you’ll need to make another file so that you aren’t using your class in the same file in which it’s defined.
 
 Create a new file called user.dart in the same folder as the file you’ve been working with. In VS Code, you can click on the current file in the Explorer panel and then press the New File button.
 
@@ -222,7 +257,10 @@ Great! Now it’s no longer possible to change the properties after the object h
 Before leaving this section on initializer lists, there’s one more thing to talk about: errors.
 
 * Checking for errors
-Initializer lists are a great place to check for errors in the constructor parameters, which you can do by adding assert statements. Think of asserts like sanity checks that make sure you aren’t doing anything silly, by checking that a condition is in fact true.
+Initializer lists are a great place to check for errors in the constructor parameters, 
+which you can do by adding assert statements. 
+Think of asserts like sanity checks that make sure you aren’t doing anything silly, 
+by checking that a condition is in fact true.
 
 An assert statement takes a condition, and if the condition is false, terminates the app. This only happens during debugging, though. The compiler completely ignores assert statements in release builds.
 
@@ -245,12 +283,17 @@ Since id must be greater than or equal to zero, either comment out the line or c
     // final jb = User(id: 100, name: 'JB Lorenzo');
 
 * Constant constructors
-You’ve already learned how to keep people from modifying the properties of a class by making them private. Another thing you can do is to make the properties immutable, that is, unchangeable. By using immutable properties, you don’t even have to make them private.
+You’ve already learned how to keep people from modifying the properties of a class 
+by making them private. Another thing you can do is to make the properties immutable, 
+that is, unchangeable. By using immutable properties, you don’t even have to make them private.
 
 * Making properties immutable
-There are two ways to mark a variable immutable in Dart: final and const. However, since the compiler won’t know what the properties are until runtime, your only choice here is to use final.
+There are two ways to mark a variable immutable in Dart: final and const. 
+However, since the compiler won’t know what the properties are until runtime, 
+your only choice here is to use final.
 
-In the User class in user.dart, add the final keyword before both property declarations. Your code should look like this:
+In the User class in user.dart, add the final keyword before both property declarations. 
+Your code should look like this:
     final String _name;
     final int _id;
 
