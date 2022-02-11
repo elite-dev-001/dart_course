@@ -18,7 +18,6 @@ Then myObject and anotherObject both reference the same place in memory. Changin
 
 As you can see, changing the value of the property on anotherObject also changed it in myObject, as they are really just two names for the same object.
 
-If that still doesn’t make sense, you can look forward to sitting down by the fire and listening to the story of The House on Wenderlich Way in Chapter 8, which will make this all clear, or at least help you see it from a different perspective.
 
 For now, though, there are a few more improvements you can make to the User class.
 

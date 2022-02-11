@@ -431,7 +431,7 @@ Here’s what that would look like:
 
 The method doHeavyCalculation is only run after you access value the first time. And if you never access it, you never do the work.
 
-Well, that wraps up this chapter. Sound null safety has made Dart an even stronger language than it already was. Aren’t you glad you chose to learn Dart?
+Well, that wraps up this course. Sound null safety has made Dart an even stronger language than it already was. Aren’t you glad you chose to learn Dart?
 
 Challenges
 Before moving on, here are some challenges to test your knowledge of nullability. It’s best if you try to solve them yourself.
