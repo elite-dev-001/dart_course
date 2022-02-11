@@ -185,7 +185,7 @@ Fix that by deleting the unnamed constructor and replacing it with the following
     User({int id = 0, String name = 'anonymous'})
         :   _id = id,
             _name = name;
-Do you see the colon that precedes _id? The commaseparated list that comes after it is called the initializer list. One use for this list is exactly what you’ve done here. Externally, the parameters have one name, while internally, you’re using private variable names.
+Do you see the colon that precedes _id? The comma separated list that comes after it is called the initializer list. One use for this list is exactly what you’ve done here. Externally, the parameters have one name, while internally, you’re using private variable names.
 
 The initializer list is always executed before the body of the constructor, if the body exists. You don’t need a body for this constructor, but if you wanted to add one, it would look like this:
     User({int id = 0, String name = 'anonymous'})

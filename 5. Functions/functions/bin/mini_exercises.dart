@@ -17,7 +17,7 @@ void main() {
   Function wonderful = ({required String name, int numberPeople = 30}) {
   return 'You\'re wonderful, $name. $numberPeople people think so';
 };
-  print(wonderful(name: 'Wilson', numberPeople: 10));
+  print(wonderful(_name: 'Wilson', numberPeople: 10));
 
   const people = ['Chris', 'Tiffani', 'Pablo'];
   // ignore: avoid_function_literals_in_foreach_calls

@@ -1,0 +1,137 @@
+* Null Overview
+
+As out of place as null looks in that list of integers, many computer languages actually include it. In the past Dart did, too, but as of version 2.12, Dart decided to take null out of the list and only put it back if you allow Dart to do so. This feature is called sound null safety, but to find out what was so dangerous about null in the first place, let's proceed.
+
+* What null means
+Null means “no value” or “absence of a value”. It’s quite useful to have such a concept. Imagine not having null at all. Say you ask a user for their postal code so that you can save it as an integer in your program:
+    int postalCode = 12345;
+
+Everything will go fine until you get a user who doesn’t have a postal code. Your program requires some value, though, so what do you give it? Maybe 0 or -1?
+    int postalCode = -1;
+
+Choosing a number like -1, though, is somewhat arbitrary. You have to define it yourself to mean “no value” and then tell other people that’s what it means.
+    // Hey everybody, -1 means that the user
+    // doesn't have a postal code. Don't forget!
+    int postalCode = -1;
+
+On the other hand, if you can have a dedicated value called null, which everyone already understands to mean “no value”, then you don’t need to add comments explaining what it means.
+    int postalCode = null;
+
+It’s obvious here that there’s no postal code. In versions of Dart prior to 2.12 that line of code worked just fine. However, now it’s no longer allowed. You get the following error:
+    A value of type 'Null' can't be assigned to a va riable of type 'int'.
+
+What’s wrong? Null is a useful concept to have! Why not
+allow it, Dart?
+
+* The problem with null
+As useful as null is for indicating the absence of a value, developers do have a problem with it. The problem is that they tend to forget that it exists. And when developers forget about null, they don’t handle it in their code. Those nulls are like little ticking time bombs ready to explode the code.
+
+To see that in action, how about taking a trip back in time. Open pubspec.yaml and set the minimum Dart SDK version to 2.10:
+    environment:
+        sdk: '>=2.10.0 <3.0.0'
+Save the file and run dart pub get if needed.
+
+Dart 2.10 was the version before sound null safety was introduced in Dart. This will allow you to see first hand what a rogue null can do.
+
+Now open starter.dart or whatever file you have your main function in, and replace the contents of the file with the following code:
+    void main() {
+        print(isPositive(3)); // true
+        print(isPositive(-1)); // false
+    }
+
+    bool isPositive(int anInteger) {
+        return !anInteger.isNegative;
+    }
+
+Run that code and you’ll get a result of true and false as expected. The isPositive method works fine as long as you give it integers. But what if you give it null?
+
+Add the following line to the bottom of the main function:
+    print(isPositive(null));
+
+Run that and your program will crash with the following error:
+    NoSuchMethodError: The getter 'isNegative' was c alled on null.
+
+You learned above that null means “no value”, which is true, semantically. However, the Dart keyword null actually is a value in the sense that it’s an object. That is, the object null is the sole instance of the Null class. Because the Null class doesn’t have a method called isNegative, you get a NoSuchMethodError when you try to call null.isNegative.
+
+Now go back to pubspec.yaml and change the minimum Dart SDK version to 2.12, the first version that supported sound null safety:
+    environment:
+        sdk: '>=2.12.0 <3.0.0'
+Save the file and again run dart pub get if needed.
+
+Now all of a sudden you have an error where you tried to call your function with null:
+
+With the advent of Dart’s sound null safety, you can’t assign
+a null value to an int even if you wanted to. Eliminating the possibility of being surprised by null prevents a whole host of errors.
+
+Delete that line with the null error. Problem solved.
+But wait? Isn’t null useful? What about a missing postal code?
+
+Yes, null is useful and Dart has a solution.
+
+
+* Nullable vs. non-nullable types
+Starting with version 2.12, Dart separated its types into nullable and non-nullable. Nullable types end with a question mark (?) while non-nullable types do not.
+
+* Non-nullable types
+Dart types are non-nullable by default. That means they’re guaranteed to never contain the value null, which is the essence of the meaning of sound in the phrase “sound null safety”. These types are easy to recognize because, unlike nullable types, they don’t have a question mark at the end.
+
+Here are some example values that non-nullable types could contain:
+    - int: 3, 1, 7, 4, 5
+    - double: 3.14159265, 0.001, 100.5
+    - bool: true, false
+    - String: 'a', 'hello', 'Would you like fries with
+    - that?'
+    - User: ray, vicki, anonymous
+
+These are all acceptable ways to set the values:
+    - int myInt = 1;
+    - double myDouble = 3.14159265;
+    - bool myBool = true;
+    - String myString = 'Hello, Dart!';
+    - User myUser = User(id: 42, name: 'Ray');
+
+As you saw earlier, trying to set a non-nullable type to null is a compile-time error:
+
+    int postalCode = null; // error
+
+Since only types that end in a question mark can potentially have a null value, every time you see a type without a question mark, you can be absolutely positive that it won’t ever be null.
+
+
+* Nullable types
+A nullable type can contain the null value in addition to its own data type. You can easily tell the type is nullable because it ends with a question mark (?), which is like saying, “Maybe you’ve got the data you want or maybe you’ve got null. That’s the question.” Here are some example values that nullable types could contain:
+
+    int?: 3, null, 1, 7, 4, 5
+    double?: 3.14159265, 0.001, 100.5, null
+    bool?: true, false, null
+    String?: 'a', 'hello', 'Would you like fries with that?', null
+    User?: ray, vicki, anonymous, null
+
+That means you can set any of them to null:
+    int? myInt = null;
+    double? myDouble = null;
+    bool? myBool = null;
+    String? myString = null;
+    User? myUser = null;
+The question mark at the end of String? isn’t an operator acting on the String type. Rather, String? is a whole new type separate from String. String? means that the variable can either contain a String or it can be null.
+
+Every non-nullable type in Dart has a corresponding nullable type: int and int?, bool and bool?, User and User?, Object and Object?. By choosing the type, you get to choose when you want to allow null values and when you don’t.
+
+For any nullable variable in Dart, if you don’t initialize it with a value, it’ll be given the default value of null.
+
+Create three variables of different nullable types:
+    int? age;
+    double? height;
+    String? message;
+
+Then print them:
+
+    print(age);
+    print(height);
+    print(message);
+
+You’ll see null for each value.
+Mini-exercises
+1. Create a String? variable called profession, but don’t give it a value. Then you’ll have profession null. :]
+2. Give profession a value of “basketball player”.
+3. Write the following line and then hover your cursor over the variable name. What type does Dart infer iLove to be?
+    const iLove = 'Dart';

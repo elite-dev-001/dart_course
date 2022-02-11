@@ -1,0 +1,448 @@
+* Handling nullable types
+The big problem with the old nullable types in the past was how easy it was to forget to add code to handle null values. That’s no longer true. Dart now makes it impossible to forget because you really can’t do much at all with a nullable value until you’ve dealt with the possibility of null.
+
+Try out this example:
+    String? name;
+    print(name.length);
+
+Dart doesn’t let you run that code, so there isn’t even an opportunity to get a runtime NoSuchMethodError like before. Instead, Dart gives you a compile-time error:
+
+    The property 'length' can't be unconditionally a ccessed because the receiver can be 'null'.
+
+Compile-time errors are your friends because they’re easy to fix. In the next few sections you’ll see how to use the many tools Dart has to deal with null values.
+
+* Type promotion
+The Dart analyzer, which is the tool that tells you what the compile-time errors and warning are, is smart enough to tell in a wide range of situations if a nullable variable is guaranteed to contain a non-null value or not.
+
+Take the last example, but this time assign name a string literal on the line after declaring it:
+
+    String? name;
+    name = 'Ray';
+    print(name.length);
+
+Even though the type is still nullable, Dart can see that name can’t possibly be null because you assigned it a non-null value right before you used it. There’s no need for you to explicitly “unwrap” name to get at its String value. Dart does this for you automatically. This is known as type promotion. Dart promotes the nullable and largely unusable String? type to a non-nullable String with no extra work from you! Your code stays clean and beautiful. Take some time right now to send the Dart team a thank you letter.
+
+* Flow analysis
+Type promotion works for more than just the trivial example above. Dart uses sophisticated flow analysis to check every possible route the code could take. As long as none of the routes come up with the possibility of null, it’s promotion time!
+
+Take the following slightly less trivial example:
+    bool isPositive(int? anInteger) {
+        if (anInteger == null) {
+            return false;
+        }
+        return !anInteger.isNegative;
+    }
+
+In this case, you can see that by the time you get to the anInteger.isNegative line, anInteger can’t possibly be null because you’ve already checked for that. Dart’s flow analysis could also see that, so Dart promoted anInteger to its non-nullable form, that is, to int instead of int?.
+
+Even if you had a much longer and nested if-else chain, Dart’s flow analysis would still be able to determine whether to promote a nullable type or not.
+
+* Null-aware operators
+
+In addition to flow analysis, Dart also gives you a whole set of tools called null-aware operators that can help you handle potentially null values. Here they are in brief:
+
+    - If-null operator (??)
+    - Null-aware assignment operator (??=)
+    - Null-aware access operator (?.)
+    - Null-aware method invocation operator (?.)
+    - Null assertion operator (!)
+    - Null-aware cascade operator (?..)
+    - Null-aware index operator (?[])
+    - Null-aware spread operator (...?)
+
+The following sections describe in more detail how these operators work.
+
+* If-null operator (??)
+One very convenient way to handle null values is to use the double question mark (??), also known as the if-null operator. This operator says, “If the value on the left isn’t null, then use it; otherwise, go with the value on the right.”
+
+Take a look at the following example:
+    String? message;
+    final text = message ?? 'Error';
+
+Here are a couple points to note:
+
+    - Since message is null, ?? will set text equal to the right-hand value: 'Error'.
+    - Using ?? ensures that text can never be null, thus Dart infers the variable type of text to be String and not String?.
+
+Print text to confirm that Dart assigned it the 'Error' string rather than null.
+
+Using the ?? operator in this example is equivalent to the following:
+    String text;
+    if (message == null) {
+        text = 'Error';
+    } else {
+        text = message;
+    }
+
+That’s six lines of code instead of one when you use the ?? operator. You know which one to choose.
+
+* Null-aware assignment operator (??=)
+In the example above, you had two variables: message and text. However, another common situation is when you have a single variable that you want to update if its value is null.
+
+For example, say you have an optional font size setting in your app:
+    double? fontSize;
+When it’s time to apply the font size to the text, your first choice is to go with the user selected size. If they haven’t chosen one, then you’ll fall back on a default size of 20.0. One way to achieve that is by using the if-null operator like so:
+    fontSize = fontSize ?? 20.0;
+
+However, there’s an even more compact way to do it. In the same way that the following two forms are equivalent,
+    x = x + 1;
+    x += 1;
+
+there’s also a null-aware assignment operator (??=) to simplify if-null statements that have a single variable:
+    fontSize ??= 20.0;
+
+If fontSize is null then it will be assigned 20.0, but otherwise it retains its value. The ??= operator combines the null check with the assignment.
+
+Both ?? and ??= are useful for initializing variables when you want to guarantee a non-null value.
+
+* Null-aware access operator (?.)
+Earlier with anInteger.isNegative, you saw that trying to access the isNegative property when anInteger was null caused a NoSuchMethodError. There’s also an operator for null safety when accessing object members. The null-aware access operator returns null if the left-hand side is null. Otherwise, it returns the property on the right-hand side.
+
+Look at the following example:
+
+    int? age;
+    print(age?.isNegative);
+
+Since age is null, the ?. operator prevents that code from crashing. Instead, it just returns null for the whole expression inside the print statement. Run that and you’ll see the following:
+    null
+
+Internally, a property is just a getter method on an object, so the ?. operator works the same way to call methods as it does to access properties.
+
+Therefore, another name for ?. is the null-aware method invocation operator. As you can see, invoking the toDouble() method works the same way as accessing the isNegative property:
+
+    print(age?.toDouble());
+
+Run that and it’ll again print “null” without an error.
+
+The ?. operator is useful if you want to only perform an action when the value is non-null. This allows you to gracefully proceed without crashing the app.
+
+* Null assertion operator (!)
+Sometimes Dart isn’t sure whether a nullable variable is null or not, but you know it’s not. Dart is smart and all, but machines don’t rule the world yet.
+
+So if you’re absolutely sure that a variable isn’t null, you can turn it into a non-nullable type by using the null assertion operator (!), or sometimes more generally referred to as the bang operator.
+
+    String nonNullableString = myNullableString!;
+
+Note the ! at the end of myNullableString.
+
+Here’s an example to see the assertion operator at work. In your project, add the following function that returns a nullable Boolean:
+
+    bool? isBeautiful(String? item) {
+        if (item == 'flower') {
+            return true;
+        } else if (item == 'garbage') {
+            return false;
+        }
+        return null;
+    }
+
+Now in main, write this line:
+
+    bool flowerIsBeautiful = isBeautiful('flower');
+You’ll see this error:
+    A value of type 'bool?' can't be assigned to a v ariable of type bool
+
+The isBeautiful function returned a nullable type of bool?, but you’re trying to assign it to flowerIsBeautiful, which has a non-nullable type of bool. The types are different, so you can’t do that. However, you know that 'flower' is beautiful, that is, the function won’t return null. So you can use the null assertion operator to tell Dart that.
+
+Add the postfix ! operator to the end of the function call:
+    bool flowerIsBeautiful = isBeautiful('flower')!;
+
+Now there are no more errors.
+
+Alternatively, since bool is a subtype of bool?, you could also cast bool? down using the as keyword that you learned about in previous class.
+    bool flowerIsBeautiful = isBeautiful('flower') as bool;
+
+This is equivalent to using the assertion operator. The advantage of ! is that it’s shorter.
+
+Beware, though. Using the assertion operator (or casting down to a non-nullable type) will crash your app with a runtime error if the value actually does turn out to be null, so don’t use the assertion operator unless you can guarantee that the variable isn’t null.
+
+It’s not really safe to trust the isBeautiful function. Who knows but that one day you’ll hire someone who hates flowers and changes the internal workings of the function. That scenario isn’t as far-fetched as you might think. Imagine that instead of working with a local function, you’re returning data from a web server using a REST API. Someone on the server end changes a value and then your app breaks.
+
+Here’s an alternative to the assertion operator that won’t ever crash the app:
+    bool flowerIsBeautiful = isBeautiful('flower') ?? true;
+
+You’re leaving the decision up to the function, but giving it a default value by using the ?? operator if the function doesn’t know what it should be.
+
+Think of the ! assertion operator as a dangerous option and one to be used sparingly. By using the assertion operator, you’re telling Dart that you want to opt-out of null safety, that you can handle it yourself. This is something akin to using dynamic to tell Dart that you want to opt-out of type safety.
+
+* Null-aware cascade operator (?..)
+In our last class(Classes) you learned about the cascade operator (..), which allows you to call multiple methods or set multiple properties on the same object.
+
+Give a class like this:
+
+    class User {
+        String? name;
+        int? id;
+    }
+If you know the object isn’t nullable, you can use the cascade operator like so:
+    User user = User()
+        ..name = 'Ray'
+        ..id = 42;
+However, if your object is nullable, like in the following example:
+    User? user;
+Then you can use the null-aware cascade operator (?..):
+    user
+        ?..name = 'Ray'
+        ..id = 42;
+
+You only need to use ?.. for the first item in the chain. If user is null, then the chain will be short-circuited, that is, terminated, without calling the other items in the cascade chain.
+
+This is similar for the null-aware access operator (?.) as well. Look at this example:
+    String? lengthString = user?.name?.length.toString();
+
+Since user might be null, it needs the ?. operator to access name. Since name also might be null, it needs the ?. operator to access length. However, as long as name isn’t null, length will never be null, so you only use the . dot operator to call toString. If either user or name is null, then the entire chain is immediately short-circuited and lengthString is assigned null.
+
+* Null-aware index operator (?[])
+The null-aware index operator (?[]) is used for accessing the elements of a list when the list itself might be null. We’ve used lists already a couple of times in this course, but since we won’t cover them in depth until our next class, this section will just give a simple explanation of how the ?[] operator is used.
+
+This is an example of a nullable list:
+    List<int>? myList = [1, 2, 3];
+
+What you have here is a list of integers. The list itself can be set to null, indicated by the question mark at the end of List<int>?. However, the members of the list can’t be null, indicated by the lack of a question mark after int. That is, the type is List<int>? instead of List<int?>?.
+
+In the example above, myList isn’t null because you assigned it the value [1, 2, 3]. Now set myList to null:
+    myList = null;
+Try to get the value of one of the items in the list:
+    int? myItem = myList?[2];
+
+Print myItem and you’ll see null.
+
+If you had tried to retrieve a value from a null list in the days before null safety, you would have crashed your app. However, the ?[] operator gracefully passes a null value on to myItem.
+
+In Our next class you’ll learn more about collections, including the null-aware spread operator (...?), which is used to expand one non-null collection inside another.
+
+* Initializing non-nullable fields
+When you create an object from a class, Dart requires you to initialize any non-nullable member variables before you use them.
+
+Say you have a User class like this:
+    class User {
+        String name;
+    }
+
+Since name is String and not String?, you must initialize it somehow. If you recall what you learned in our last class (Classes), there are a few different ways to do that.
+
+* Using initializers
+One way to initialize a property is to use an initializer value:
+    class User {
+        String name = 'anonymous';
+    }
+
+In this example, the value is 'anonymous', so Dart knows that name will always get a non-null value when an object is created from this class.
+
+* Using initializing formals
+Another way to initialize a property is to use an initializing formal, that is, by using this in front of the field name:
+
+    class User {
+        User(this.name);
+        String name;
+    }
+
+Having this.name as a required parameter ensures that name will have a non-null value.
+
+* Using an initializer list
+You can also use an initializer list to set a field variable:
+
+    class User {
+        User(String name)
+            : _name = name;
+        String _name;
+    }
+
+The private _name field is guaranteed to get a value when the constructor is called.
+
+* Using default parameter values
+
+Optional parameters default to null if you don’t set them, so for non-nullable types, that means you must provide a default value.
+
+You can set a default value for ordered parameters like so:
+
+    class User {
+        User([this.name = 'anonymous']);
+        String name;
+    }
+Or like this for named parameters:
+    class User {
+        User({this.name = 'anonymous'});
+        String name;
+    }
+
+Now even when creating an object without any parameters, name will still at least have a default value.
+
+Required named parameters
+
+As you learned in previous course (Functions), if you want to make a named parameter required, use the required keyword.
+
+    class User {
+        User({required this.name});
+        String name;
+    }
+
+Since name is required, there’s no need to provide a default value.
+
+* Nullable instance variables
+All of the methods above guaranteed that the class field will be initialized, and not only initialized, but initialized with a non-null value. Since the field is non-nullable, it’s not even possible to make the following mistake:
+
+    final user = User(name: null);
+
+Dart won’t let you do that. You’ll get the following compiletime error:
+    The argument type 'Null' can't be assigned to the parameter type 'String'
+
+Of course, if you want the property to be nullable, then you can use a nullable type, and then there’s no need to initialize the value.
+
+    class User {
+        User({this.name});
+        String? name;
+    }
+
+String? makes name nullable. Now it’s your responsibility to handle any null values it may contain.
+
+* No promotion for non-local variables
+One topic that people often get confused about is the lack of type promotion for nullable instance variables.
+
+As you recall from earlier, Dart promotes nullable variables
+in a method to their non-nullable counterpart if Dart’s flow
+analysis can guarantee the variable will never be null:
+    bool isLong(String? text) {
+        if (text == null) {
+            return false;
+        }
+        return text.length > 100;
+    }
+
+In this example, the local variable text is guaranteed to be non-null if the line with text.length is ever reached, so Dart promotes text from String? to String.
+
+However, take a look at this modified example:
+    class TextWidget {
+        String? text;
+        bool isLong() {
+            if (text == null) {
+                return false;
+            }
+            return text.length > 100; // error
+        }
+    }
+
+The line with text.length now gives an error:
+
+    The property 'length' can't be unconditionally accessed because the receiver can be 'null'.
+Why is that? You just checked for null after all.
+
+The reason is that the Dart compiler can’t guarantee that other methods or subclasses won’t change the value of a non-local variable before it’s used.
+
+Since Dart has gone the path of sound null safety, this guarantee is essential before type promotion can happen.
+
+You do have options, however. One is to use the ! operator:
+    bool isLong() {
+    if (text == null) {
+        return false;
+    }
+    return text!.length > 100;
+    }
+
+Even if the compiler don’t know that text isn’t null, you know it’s not, so you apply that knowledge with text!.
+
+Another option is to shadow the non-local variable with a local one:
+    class TextWidget {
+        String? text;
+
+        bool isLong() {
+            final text = this.text; // shadowing
+            if (text == null) {
+                return false;
+            }
+            return text.length > 100;
+        }
+    }
+The local variable text shadows the instance variable this.text and the compiler is happy.
+
+* The late keyword
+Sometimes you want to use a non-nullable type, but you can’t initialize it in any of the ways you learned above.
+
+Here’s an example:
+    class User {
+        User(this.name);
+
+        final String name;
+        final int _secretNumber = _calculateSecret();
+
+        int _calculateSecret() {
+            return name.length + 42;
+        }
+    }
+
+You have this non-nullable field named _secretNumber. You want to initialize it based on the return value from a complex algorithm in the _calculateSecret instance method. You have a problem, though, because Dart doesn’t let you access instance methods during initialization.
+
+    The instance member '_calculateSecret' can't be accessed in an initializer.
+
+To solve this problem, you can use the late keyword. Add late to the start of the line initializing _secretNumber:
+
+    late final int _secretNumber = _calculateSecret();
+
+Dart accepts it now, and there are no more errors.
+
+Using late means that Dart doesn’t initialize the variable right away. It only initializes it when you access it the first time. This is also known as lazy initialization. It’s like procrastination for variables.
+
+It’s also common to use late to initialize a field variable in the constructor body. Here’s an alternate version of the example above:
+    class User {
+        User(this.name) {
+            _secretNumber = _calculateSecret();
+        }
+        late final int _secretNumber;
+        // ...
+    }
+
+Initializing a final variable in the constructor body wouldn’t have been allowed if it weren’t marked as late.
+
+* Dangers of being late
+The example above was for initializing a final variable, but you can also use late with non-final variables. You have to be careful with this, though. Take a look at the following example:
+
+    class User {
+        late String name;
+    }
+
+Dart doesn’t complain at you, because using late means that you’re promising Dart that you’ll initialize the field before it’s ever used. This moves checking from compiletime to runtime.
+
+Now add the following code to main and run it:
+
+    final user = User();
+    print(user.name);
+
+You broke your word and never initialized name before you used it. Dart is disappointed with you, and complains accordingly:
+    LateInitializationError: Field 'name' has not be en initialized.
+
+For this reason, it’s somewhat dangerous to use late when you’re not initializing it either in the constructor body or in the same line that you declare it.
+
+Like with the null assertion operator (!), using late sacrifices the assurances of sound null safety and puts the responsibility of handling null into your hands. If you mess up, that’s on you.
+
+* Benefits of being lazy
+Who knew that it pays to be lazy sometimes? Dart knows this, though, and uses it to great advantage.
+
+There are times when it might take some heavy calculations to initialize a variable. If you never end up using the variable, then all that initialization work was a waste. Since lazy initialization is never done until you actually use the variable, though, this kind of work will never be wasted.
+
+Top-level and static variables have always been lazy in Dart. As you learned above, the late keyword makes other variables lazy, too. That means even if your variable is nullable, you can still use late to get the benefit of making it lazy.
+
+Here’s what that would look like:
+    class SomeClass {
+            late String? value = doHeavyCalculation();
+            String? doHeavyCalculation() {
+            // do heavy calculation
+        }
+    }
+
+The method doHeavyCalculation is only run after you access value the first time. And if you never access it, you never do the work.
+
+Well, that wraps up this chapter. Sound null safety has made Dart an even stronger language than it already was. Aren’t you glad you chose to learn Dart?
+
+Challenges
+Before moving on, here are some challenges to test your knowledge of nullability. It’s best if you try to solve them yourself.
+
+Challenge 1: Random nothings
+Write a function that randomly returns 42 or null. Assign the return value of the function to a variable named result that will never be null. Give result a default of 0 if the function returns null.
+
+Challenge 2: Naming customs
+People around the world have different customs for giving names to children. It would be difficult to create a data class to accurately represent them all, but try it like this:
+
+    - Create a class called Name with givenName and surname properties.
+    - Some people write their surname last and some write it first. Add a Boolean property called surnameIsFirst to keep track of this.
+    - Not everyone in the world has a surname.
+    - Add a toString method that prints the full name.
