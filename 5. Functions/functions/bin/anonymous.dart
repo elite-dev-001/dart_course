@@ -1,4 +1,4 @@
-void main() {
+//void main() {
 //   int number = 4;
 //   String greeting = 'hello';
 //   bool isHungry = true;
@@ -29,15 +29,35 @@ void main() {
 //     return value * multiplier;
 //   };
 
-  var counter = 0;
-  final incrementCounter = () {
-    return counter += 1;
-  };
 
-  incrementCounter();
-  incrementCounter();
-  incrementCounter();
-  incrementCounter();
-  incrementCounter();
-  print(counter);
-}
+  // Function testing = namedFunction();
+  // print(testing());
+
+  // final triple = applyMultiplier(3);
+  // print(triple(6));
+
+  // const appDevNames = ['Smith', 'Covenant', 'Precious'];
+
+  // appDevNames.forEach((name) {
+  //   final message = '$name is in Flutter App dev Class';
+  //   print(message);
+  // });
+
+
+  // var counter = 0;
+  // final incrementCounter = () {
+  //   return counter += 1;
+  // };
+
+
+  // incrementCounter();
+  // incrementCounter();
+  // incrementCounter();
+  // incrementCounter();
+  // incrementCounter();
+  // print(counter);
+
+ 
+
+
+//}

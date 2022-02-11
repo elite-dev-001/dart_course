@@ -118,7 +118,7 @@ Run the code and you’ll see the following:
 
 It’s very similar to what toString gave you, but this time it’s in standard JSON format, so a computer on the other side of the world could easily convert that back into a Dart object.
 
-Cascade notation
+* Cascade notation
 When you created your User object above, you set its parameters like so:
 
     final user = User();
