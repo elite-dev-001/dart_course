@@ -98,6 +98,6 @@ All this goes to show that there are often multiple ways of accomplishing the sa
 * Comparing static methods with factory constructors
 Factory constructors in many ways are just like static methods, but there are a few differences:
 
-    - A factory constructor can only return an instance of theclass type or subtype, while a static method can return anything. For example, a static method can be asynchronous and return a Future, which you’ll learn about in Chapter 10, but a factory constructor can’t do this.
+    - A factory constructor can only return an instance of theclass type or subtype, while a static method can return anything. For example, a static method can be asynchronous and return a Future, which you’ll learn about in future class, but a factory constructor can’t do this.
     - A factory constructor can be unnamed so that, from the caller’s perspective, it looks exactly like calling a generative constructor. The singleton example above is an example of this. A static method, on the other hand, must have a name.
     - A factory constructor can be const if it’s a forwarding constructor, but a static method can’t.

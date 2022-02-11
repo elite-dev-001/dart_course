@@ -1,40 +1,47 @@
 void main() {
-  const name = '';
-  const pin = '1234';
-  print(checkName(name));
-  print(checkPin(pin));
-  final user = User();
+  // const name = '';
+  // const pin = '1234';
+  // print(checkName(name));
+  // print(checkPin(pin));
+  // final user = User();
 
-  user.name = 'Covenant';
-  user.id = 19;
-  print(user);
+  // user.name = 'Covenant';
+  // user.id = 19;
+  // print(user);
 
-  print(user.toJson());
-}
+  // const name = '';
+  // const pin = '12345';
+  // print(checkName(name));
+  // print(checkPin(pin));
+  // final user = User()
+  // ..name = 'Wilson'
+  //..id = 42;
 
-class User {
-  int id = 0;
-  String name = '';
+//   print(user);
+//   print(user.toJson());
+// }
 
-  User(); //constructor
+// class User {
+//   int id = 0;
+//   String name = '';
 
-  String toJson() {
-    return '{"id":$id,"name":"$name"}';
-  }
+//   String toJson() {
+//     return '{"id":$id,"name":"$name"}';
+//   }
 
-  @override
-  String toString() {
-    return 'User(id: $id, name: $name) ';
-  }
-}
+//   @override
+//   String toString() {
+//     return 'User(id: $id, name: $name) ';
+//   }
+// }
 
-String checkName(String name) => name.isNotEmpty
-    ? 'Name submitted successfully'
-    : 'Error, please input a valid name';
-String checkPin(String pin) {
-  return pin.isEmpty
-      ? 'input valid pin'
-      : (pin.length < 4 || pin.length > 4)
-          ? ' Error input a valid pin'
-          : 'Pin activated';
+// String checkName(String name) => name.isNotEmpty
+//     ? 'Name submitted succesfully'
+//     : 'Error, Please input a valid name';
+
+// String checkPin(String pin) => pin.isEmpty
+//     ? 'Input a vali pin'
+//     : (pin.length < 4 || pin.length > 4)
+//         ? 'Error, pin should be just 4 digits'
+//         : 'Pin activated scuccesfully';
 }
