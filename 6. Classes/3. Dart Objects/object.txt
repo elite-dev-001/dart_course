@@ -1,7 +1,7 @@
 * Dart objects
 Objects act as references to the instances of the class in memory. That means if you assign one object to another, the other object simply holds a reference to the same object in memory — not a new instance.
 
-So if you h                                                         ave a class like this:
+So if you have a class like this: 
 
     class MyClass {
         var myProperty = 1;

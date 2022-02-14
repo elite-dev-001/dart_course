@@ -10,6 +10,8 @@ void main() {
   print(vicki);
   final jb = User(id: 1, name: 'JB Lorenzo');
   print(jb);
+
+  final covy = User(id: 25, name: 'Covenant');
 }
 
 class Address {
