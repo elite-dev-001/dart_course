@@ -1,21 +1,19 @@
-class User {
-  User({int id = 0, String name = 'anonymous'})
-        :   assert(id >= 0),
-            assert(name.isNotEmpty),
-            _id = id,
-            _name = name;
+void main() {
+  var student = Student();
+  student.name = "Peter"; // Calling default Setter to set value
+  print(student.name); //  Calling default Getter to get value
 
-  User.anonymous() : this();
+  student.percentage = 438.2; // calling custom setter to set value
+  print(student.percentage); // calling custom gettingn to get value
+}
 
-  int _id;
-  String _name;
+class Student {
+  late String name; //iNSTANCE VARIABLE
 
-  String toJson() {
-    return '{"id":$_id,"name":"$_name"}';
-  }
+  late double _percent;
 
-  @override
-  String toString() {
-    return 'User(id: $_id, name: $_name) ';
-  }
+  void set percentage(double marksSecured) =>
+      _percent = (marksSecured / 500) * 100;
+
+  double get percentage => _percent;
 }
