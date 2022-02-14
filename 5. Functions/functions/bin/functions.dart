@@ -12,12 +12,6 @@ void main() {
   print(withinTolerance(value: 9));
 }
 
-
-
-
-
-
-
 compliment(number) {
   return '${number * 2} is a very nice number because we multiplied by 2.';
 }

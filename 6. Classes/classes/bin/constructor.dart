@@ -10,6 +10,9 @@ void main() {
   print(vicki);
   final jb = User(id: 1, name: 'JB Lorenzo');
   print(jb);
+
+  final wilson = User(id: 32, name: 'Wilson');
+  const anonymousUser = User.anonymous();
 }
 
 class Address {

@@ -37,7 +37,7 @@ const User({
 
 While anonymous was already pretty readable, _anonymousId is much more meaningful than 0.
 
-Singleton pattern
+* Singleton pattern
 A second use of static variables is to create a singleton class. Singletons are a common design pattern where there is only ever one instance of an object. While some people debate their benefits, they do make certain tasks more convenient.
 
 It’s easy to create a singleton in Dart. You wouldn’t want User to be a singleton, since you’ll likely have lots of distinct users, requiring lots of distinct instances of User. However, you might want to create a singleton class as a database helper so that you can ensure that you don’t open multiple connections to the database.
