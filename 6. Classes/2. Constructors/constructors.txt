@@ -288,7 +288,7 @@ by making them private. Another thing you can do is to make the properties immut
 that is, unchangeable. By using immutable properties, you don’t even have to make them private.
 
 * Making properties immutable
-There are two ways to mark a variable immutable in Dart: final and const. 
+There are two ways to make a variable immutable in Dart: final and const. 
 However, since the compiler won’t know what the properties are until runtime, 
 your only choice here is to use final.
 
@@ -300,9 +300,14 @@ Your code should look like this:
 Adding final means that _name and _id can only be given a value once, that is, when the constructor is called. After the object has been created, those properties will be immutable. You should keep the String and int type annotations, because removing them would cause the compiler to fall back to dynamic.
 
 * Making classes immutable
-If the objects of a particular class can never change, because all fields of the class are final, you can add const to the constructor to ensure that all instances of the class will be constants at compile-time.
+If the objects of a particular class can never change, 
+because all fields of the class are final, 
+you can add const to the constructor to ensure 
+that all instances of the class will be constants at 
+compile-time.
 
-Since both the fields of your User class are now final, this class is a good candidate for a compile-time constant.
+Since both the fields of your User class are now final, 
+this class is a good candidate for a compile-time constant.
 
 Replace both constructors with the following:
 
@@ -312,22 +317,44 @@ Replace both constructors with the following:
         _name = name;
     const User.anonymous() : this();
 
-Note the const keyword in front of both constructors. In the first constructor, there used to be an assert statement for name.isNotEmpty, but unfortunately, this is a runtime check and not allowed for a compile-time constant, so that had to be removed.
+Note the const keyword in front of both constructors. 
+In the first constructor, there used to be an assert 
+statement for name.isNotEmpty, but unfortunately, 
+this is a runtime check and not allowed for a compile-time 
+constant, so that had to be removed.
 
-Now you can declare your User objects as compile-time constants like so:
+Now you can declare your User objects as compile-time 
+constants like so:
     const user = User(id: 42, name: 'Ray');
     const anonymousUser = User.anonymous();
 
 * Benefits of using const
-In addition to being immutable, another benefit of const variables is that they’re canonical instances, which means that no matter how many instances you create, as long as the properties used to create them are the same, Dart will only see a single instance. You could instantiate User.anonymous() a thousand times across your app without incurring the performance hit of having a thousand different objects.
+In addition to being immutable, another benefit of 
+const variables is that they’re canonical instances, 
+which means that no matter how many instances you create, 
+as long as the properties used to create them are the same,
+Dart will only see a single instance. 
+You could instantiate User.anonymous() a thousand 
+times across your app without incurring the performance hit
+of having a thousand different objects.
 
 
-Make it your goal to use const objects and constructors as much as possible. It’s a performance win!
+Make it your goal to use const objects and constructors as 
+much as possible. It’s a performance win!
 
 * Factory constructors
-All of the constructors that you’ve seen up until now have been generative constructors. Dart also provides another type of constructor called a factory constructor.
+All of the constructors that you’ve seen up until now have 
+been generative constructors. Dart also provides another 
+type of constructor called a factory constructor.
 
-A factory constructor provides more flexibility in how you create your objects. A generative constructor can only create a new instance of the class itself. However, factory constructors can return existing instances of the class, or even subclasses of it. (You’ll learn about subclasses in our future class) This is useful when you want to hide the implementation details of a class from the code that uses it.
+A factory constructor provides more flexibility in how you 
+create your objects. A generative constructor can only 
+create a new instance of the class itself. 
+However, factory constructors can return existing instances
+of the class, or even subclasses of it. 
+(You’ll learn about subclasses in our future class) 
+This is useful when you want to hide the implementation 
+details of a class from the code that uses it.
 
 The factory constructor is basically a special method that starts with the factory keyword and returns an object of the class type. For example, you could add the following factory constructor to your User class:
     factory User.ray() {

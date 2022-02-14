@@ -1,19 +1,27 @@
 class User {
-  User({int id = 42, String name = 'anonymous'})
-      : assert(id >= 0),
-        assert(name.isNotEmpty),
-        _id = id,
-        _name = name;
+  const User({this.id = 42, this.name = 'anonymous'}) : assert(id >= 0);
+  // _id = id,
+  // _name = name;
 
-  int _id = 0;
-  String _name = '';
+  const User.anonymous() : this();
+
+  final int id;
+  final String name;
+
+  // int get id => _id;
+  // String get name => _name;
+  // bool get isBigId => _id > 1000;
 
   String toJson() {
-    return '{"id":$_id,"name":"$_name"}';
+    return '{"id":$id,"name":"$name"}';
   }
 
   @override
   String toString() {
-    return 'User(id: $_id, name: $_name)';
+    return 'User(id: $id, name: $name)';
+  }
+
+  factory User.ray() {
+    return User(id: 42, name: 'Ray');
   }
 }

@@ -13,6 +13,13 @@ void main(List<String> args) {
   // vicki._name = 'Nefarious Hacker';
   print(vicki);
 
+  final wilson = User(id: 32, name: 'Wilson');
+
+  const ray = User(id: 42, name: 'Ray');
+  print(ray.id);
+  print(ray.name);
+  // print(ray.isBigId);
+
   // final jb = User(id: -1, name: 'JB Lorenzo');
   // print(jb.toJson());
 }
