@@ -248,7 +248,7 @@ Since id must be greater than or equal to zero, either comment out the line or c
 You’ve already learned how to keep people from modifying the properties of a class by making them private. Another thing you can do is to make the properties immutable, that is, unchangeable. By using immutable properties, you don’t even have to make them private.
 
 * Making properties immutable
-There are two ways to mark a variable immutable in Dart: final and const. However, since the compiler won’t know what the properties are until runtime, your only choice here is to use final.
+There are two ways to make a variable immutable in Dart: final and const. However, since the compiler won’t know what the properties are until runtime, your only choice here is to use final.
 
 In the User class in user.dart, add the final keyword before both property declarations. Your code should look like this:
     final String _name;

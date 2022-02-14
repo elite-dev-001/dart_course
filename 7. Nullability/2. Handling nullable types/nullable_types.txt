@@ -20,7 +20,7 @@ Take the last example, but this time assign name a string literal on the line af
     name = 'Ray';
     print(name.length);
 
-Even though the type is still nullable, Dart can see that name can’t possibly be null because you assigned it a non-null value right before you used it. There’s no need for you to explicitly “unwrap” name to get at its String value. Dart does this for you automatically. This is known as type promotion. Dart promotes the nullable and largely unusable String? type to a non-nullable String with no extra work from you! Your code stays clean and beautiful. Take some time right now to send the Dart team a thank you letter.
+Even though the type is still nullable, Dart can see that name can’t possibly be null because you assigned it a non-null value right before you used it. There’s no need for you to explicitly “unwrap” name to get at its String value. Dart does this for you automatically. This is known as type promotion. Dart promotes the nullable and largely unusable String? type to a non-nullable String with no extra work from you! Your code stays clean and beautiful. 
 
 * Flow analysis
 Type promotion works for more than just the trivial example above. Dart uses sophisticated flow analysis to check every possible route the code could take. As long as none of the routes come up with the possibility of null, it’s promotion time!

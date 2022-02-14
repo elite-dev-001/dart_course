@@ -26,6 +26,7 @@
 //   String toString() {
 //     return 'User(id: $_id, name: $_name) ';
 //   }
+<<<<<<< HEAD
 //}
 
 class User {
@@ -45,3 +46,28 @@ class User {
     return 'User(id: $id, name: $name)';
   }
 }
+=======
+// }
+
+class User {
+        const User({this.id = _anonymousId, this.name = _anonymousName})
+        : assert(id >= 0);
+
+    const User.anonymous() : this();
+
+    final String name;
+    final int id;
+
+    static const _anonymousId = 0;
+    static const _anonymousName = 'anonymous';
+
+    String toJson() {
+        return '{"id":$id,"name":"$name"}';
+    }
+
+    @override
+    String toString() {
+        return 'User(id: $id, name: $name)';
+    }
+}
+>>>>>>> af7b3666ef2c95002bea245e6b551135c8f284a0
