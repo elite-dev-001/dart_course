@@ -25,11 +25,15 @@ You’d like to initialize the data in an object at the same time that you creat
 The next section shows how to do just that.
 
 * Custom constructors
+<<<<<<< HEAD
 If you want to pass parameters to the constructor to modify how your class builds an object, you can. 
 It’s similar to how you wrote functions with parameters in Chapter 5. 
 Like the default constructor above, the constructor name should be the same as the class name. 
 This type of constructor is called a generative constructor because it directly generates an 
 object of the same type.
+=======
+If you want to pass parameters to the constructor to modify how your class builds an object, you can. It’s similar to how you wrote functions with parameters in our last class . Like the default constructor above, the constructor name should be the same as the class name. This type of constructor is called a generative constructor because it directly generates an object of the same type.
+>>>>>>> af7b3666ef2c95002bea245e6b551135c8f284a0
 
 * Long-form constructor
 In Dart the convention is to put the constructor before the property variables. Add the following generative constructor method at the top of the class body:
@@ -215,7 +219,7 @@ Fix that by deleting the unnamed constructor and replacing it with the following
     User({int id = 0, String name = 'anonymous'})
         :   _id = id,
             _name = name;
-Do you see the colon that precedes _id? The commaseparated list that comes after it is called the initializer list. One use for this list is exactly what you’ve done here. Externally, the parameters have one name, while internally, you’re using private variable names.
+Do you see the colon that precedes _id? The comma separated list that comes after it is called the initializer list. One use for this list is exactly what you’ve done here. Externally, the parameters have one name, while internally, you’re using private variable names.
 
 The initializer list is always executed before the body of the constructor, if the body exists. You don’t need a body for this constructor, but if you wanted to add one, it would look like this:
     User({int id = 0, String name = 'anonymous'})
@@ -231,12 +235,16 @@ It turns out that your nefarious hacker can still access the “private” field
     final vicki = User(id: 24, name: 'Vicki');
     vicki._name = 'Nefarious Hacker';
     
+<<<<<<< HEAD
 What’s that all about? 
 
 Well, using an underscore before a variable or method name makes it library private, 
 not class private. For your purposes in this chapter, a library is simply a file. 
 Since the main function and the User class are in the same file, 
 nothing in User is hidden from main. To see private variables in action, you’ll need to make another file so that you aren’t using your class in the same file in which it’s defined.
+=======
+What’s that all about? Well, using an underscore before a variable or method name makes it library private, not class private. For your purposes in this course, a library is simply a file. Since the main function and the User class are in the same file, nothing in User is hidden from main. To see private variables in action, you’ll need to make another file so that you aren’t using your class in the same file in which it’s defined.
+>>>>>>> af7b3666ef2c95002bea245e6b551135c8f284a0
 
 Create a new file called user.dart in the same folder as the file you’ve been working with. In VS Code, you can click on the current file in the Explorer panel and then press the New File button.
 
@@ -288,9 +296,13 @@ by making them private. Another thing you can do is to make the properties immut
 that is, unchangeable. By using immutable properties, you don’t even have to make them private.
 
 * Making properties immutable
+<<<<<<< HEAD
 There are two ways to make a variable immutable in Dart: final and const. 
 However, since the compiler won’t know what the properties are until runtime, 
 your only choice here is to use final.
+=======
+There are two ways to make a variable immutable in Dart: final and const. However, since the compiler won’t know what the properties are until runtime, your only choice here is to use final.
+>>>>>>> af7b3666ef2c95002bea245e6b551135c8f284a0
 
 In the User class in user.dart, add the final keyword before both property declarations. 
 Your code should look like this:
