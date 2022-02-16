@@ -1,19 +1,53 @@
-void main() {
-  var student = Student();
-  student.name = "Peter"; // Calling default Setter to set value
-  print(student.name); //  Calling default Getter to get value
+void main() {}
 
-  student.percentage = 438.2; // calling custom setter to set value
-  print(student.percentage); // calling custom gettingn to get value
-}
+// class User {
+//   const User({int id = 0, String name = 'anonymous'})
+//       : assert(id >= 0),
+//         _id = id,
+//         _name = name;
 
-class Student {
-  late String name; //iNSTANCE VARIABLE
+//   const User.anonymous() : this();
 
-  late double _percent;
+//   factory User.ray() {
+//     return User(id: 42, name: 'Ray');
+//   }
 
-  void set percentage(double marksSecured) =>
-      _percent = (marksSecured / 500) * 100;
+//   final int _id;
+//   final String _name;
 
-  double get percentage => _percent;
+//   int get id => _id;
+//   String get name => _name;
+
+//   bool get isBigId => _id > 1000;
+
+//   String toJson() {
+//     return '{"id":$_id,"name":"$_name"}';
+//   }
+
+//   @override
+//   String toString() {
+//     return 'User(id: $_id, name: $_name) ';
+//   }
+// }
+
+class User {
+  const User({this.id = _anonymousId, this.name = _anonymousName})
+      : assert(id >= 0);
+
+  const User.anonymous() : this();
+
+  final String name;
+  final int id;
+
+  static const _anonymousId = 0;
+  static const _anonymousName = 'anonymous';
+
+  String toJson() {
+    return '{"id":$id,"name":"$name"}';
+  }
+
+  @override
+  String toString() {
+    return 'User(id: $id, name: $name)';
+  }
 }
