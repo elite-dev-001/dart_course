@@ -1,0 +1,177 @@
+* Maps
+Maps in Dart are the data structure used to hold key-value pairs. They’re similar to HashMaps and Dictionaries in other languages.
+
+If you’re not familiar with maps, though, you can think of them like a collection of variables that contain data. The key is the variable name and the value is the data that the variable holds. The way to find a particular value is to give the map the name of the key that is mapped to that value.
+
+The key and value in each pair are separated by colons, and consecutive key-value pairs are separated by commas.
+
+* Creating an empty map
+Like List and Set, Map is a generic type, but Map takes two type parameters: one for the key and one for the value. You can create an empty map variable using Map and specifying the type for both the key and value:
+    final Map<String, int> emptyMap = {};
+In this example, String is the type for the key, and int is the type for the value.
+
+A slightly shorter way to do the same thing is move the generic types to the right-hand side:
+    final emptyMap = <String, int>{};
+
+Notice that maps also use curly braces just as sets do. What do you think you’d get if you wrote this?
+    final emptySomething = {};
+Is emptySomething a set, or is it a map?
+
+Well, it turns out that map literals came before set literals in Dart’s history, so Dart infers the empty braces to be a Map of <dynamic, dynamic>; that is, the types of the key and value are both dynamic. If you want a set, and not a map, then you need to be explicit:
+    final mySet = <String>{};
+Like lists, maps have a length, which tells you the number of key-value pairs stored in the map.
+    final emptyMap = <String, int>{};
+    print(emptyMap.length);
+Since it’s an empty map, when you print that, you’ll get 0 for the length.
+
+* Initializing a Map with values
+You can create a non-empty map variable using braces, where Dart infers the key and value types. Dart knows it’s a map because each element is a pair separated by a colon.
+
+final inventory = {
+        'cakes': 20,
+        'pies': 14,
+        'donuts': 37,
+        'cookies': 141,
+    };
+
+In this case, inventory is a map of String to int, from bakery item to quantity in stock.
+
+The key doesn’t have to be a string. For example, here’s a map of int to String, from a digit to its English spelling:
+    final digitToWord = {
+            1: 'one',
+            2: 'two',
+            3: 'three',
+            4: 'four',
+        };
+Print both of those:
+    print(inventory);
+    print(digitToWord);
+You’ll see the output in horizontal format rather than the vertical format you had above:
+
+{cakes: 20, pies: 14, donuts: 37, cookies: 141}
+{1: one, 2: two, 3: three, 4: four}
+
+* Unique keys
+The keys of a map should be unique. A map like the following wouldn’t work:
+    final treasureMap = {
+        'garbage': 'in the dumpster',
+        'glasses': 'on your head',
+        'gold': 'in the cave',
+        'gold': 'under your mattress',
+    };
+There are two keys named gold. How are you going to know where to look? You’re probably thinking, “Hey, it’s gold. I’ll just look both places.” If you really wanted to set it up like that, then you could map String to List:
+
+final treasureMap = {
+    'garbage': ['in the dumpster'],
+    'glasses': ['on your head'],
+    'gold': ['in the cave', 'under your mattress'],
+    };
+
+Now every key contains a list of items, but the keys themselves are unique.
+Values don’t have that same restriction of being unique. This is fine:
+final myHouse = {
+    'bedroom': 'messy',
+    'kitchen': 'messy',
+    'living room': 'messy',
+    'code': 'clean',
+};
+
+* Operations on a map
+Interacting with a map to access, add, remove and update elements is very similar to what you’ve already seen.
+
+* Accessing elements from a map
+You access individual elements from a map by using a subscript notation similar to lists, except for maps you use the key rather than an index.
+
+final numberOfCakes = inventory['cakes'];
+
+If you recall from above, the key cakes is mapped to the integer 20, so print numberOfCakes to see 20.
+
+A map will return null if the key doesn’t exist. Because of this, accessing an element from a map always gives a nullable value. In the example above, Dart infers numberOfCakes to be of type int?. If you want to use numberOfCakes, then you need to treat it as you would any other nullable value.
+
+In this case you can use the null-aware access operator to check if the number of cakes is even:
+    print(numberOfCakes?.isEven);
+There were 20 so that’s true.
+
+* Adding elements to a map
+You can add new elements to a map simply by assigning to elements that are not yet in the map.
+    inventory['brownies'] = 3;
+Print inventory to see brownies and its value at the end of
+the map:
+{cakes: 20, pies: 14, donuts: 37, cookies: 141, brownies: 3}
+
+* Updating an element
+Remember that the keys of a map are unique, so if you assign a value to a key that already exists, you’ll overwrite the existing value.
+
+inventory['cakes'] = 1;
+
+Print inventory to confirm that cakes was 20 but now is 1:
+{cakes: 1, pies: 14, donuts: 37, cookies: 141, brownies: 3}
+
+* Removing elements from a map
+You can use remove to remove elements from a map by key.
+    inventory.remove('cookies');
+
+    {cakes: 1, pies: 14, donuts: 37, brownies: 3}
+No more cookies.
+
+* Map properties
+Maps have properties just as lists do. For example, the following properties indicate (using different metrics) whether or not the map is empty:
+    inventory.isEmpty // false
+    inventory.isNotEmpty // true
+    inventory.length // 4
+You can also access the keys and values separately using the keys and values properties.
+    print(inventory.keys);
+    print(inventory.values);
+When you print that out, you’ll see the following:
+    (cakes, pies, donuts, brownies)
+    (1, 14, 37, 3)
+
+* Checking for key or value existence
+To check whether a key is in a map, you can use the containsKey method:
+    print(inventory.containsKey('pies'));
+    // true
+You can do the same for values using containsValue.
+    print(inventory.containsValue(42));
+    // false
+
+* Looping over elements of a map
+Unlike lists, you can’t iterate over a map using a for-in loop.
+    for (var item in inventory) {
+        print(inventory[item]);
+    }
+This will produce the following error:
+    The type 'Map<String, int>' used in the 'for' loop must implement Iterable.
+
+Iterable is a type that knows how to move sequentially, or iterate, over its elements. List and Set both implement Iterable, but Map does not.
+
+Note: In Advanced Classes you’ll learn what “implement” means.
+
+There is a solution, though, for looping over a Map. The keys and values properties of a map are iterables, so you can loop over them. Here’s an example of iterating over the keys:
+
+    for (var item in inventory.keys) {
+        print(inventory[item]);
+    }
+
+You can also use forEach to iterate over the elements of a map, which gives you both the keys and the values.
+
+inventory.forEach((key, value) => print('$key ->
+$value'));
+And this for loop does the same thing:
+for (final entry in inventory.entries) {
+print('${entry.key} -> ${entry.value}');
+}
+Running either loop gives the following result:
+cakes -> 1
+pies -> 14
+donuts -> 37
+brownies -> 3
+Before going on, test your knowledge of maps with the
+following mini-exercises.
+Mini-exercises
+1. Create a map with the following keys: name, profession,
+country and city. For the values, add your own
+information.
+2. You suddenly decide to move to Toronto, Canada.
+Programmatically update the values for country and
+city.
+3. Iterate over the map and print all the values.
