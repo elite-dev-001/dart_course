@@ -1,0 +1,84 @@
+* Creating a set
+You can create an empty set in Dart using the Set type annotation like so:
+    final Set<int> someSet = {};
+
+The generic syntax with int in angle brackets tells Dart that only integers are allowed in the set. The following form is shorter but identical in result:
+
+    final someSet = <int>{};
+The curly braces are the same symbols used for sets in mathematics, so that should help you remember them. Be sure to distinguish curly braces in this context from their use for defining scopes, though.
+
+You can also use type inference with a set literal to let Dart determine the types of elements in the set.
+    final anotherSet = {1, 2, 3, 1};
+    print(anotherSet);
+
+Since the set literal contains only integers, Dart is able to infer the type as Set<int>.
+
+Additionally, you probably noticed that there are two 1s there. But because anotherSet is a set, it ends up with only one 1. Run that code to verify the contents of anotherSet has only one 1.
+    {1, 2, 3}
+
+* Operations on a set
+In this section you’ll see some general collection operations that also apply to sets.
+
+* Checking the contents
+To see if a set contains an item, you use the contains method, which returns a bool.
+Add the following two lines and run the code again:
+    print(anotherSet.contains(1)); // true
+    print(anotherSet.contains(99)); // false
+
+Since anotherSet does contains 1, the method returns true, while checking for 99 returns false.
+
+* Adding single elements
+Like growable lists, you can add and remove elements in a set. To add an element, use the add method.
+
+    final someSet = <int>{};
+    someSet.add(42);
+    someSet.add(2112);
+    someSet.add(42);
+    print(someSet);
+
+Run that to see the following set:
+    {42, 2112}
+You added 42 twice, but only one 42 shows up as expected.
+
+* Removing elements
+You can also remove elements using the remove method.
+    someSet.remove(2112);
+    Print someSet to reveal only a single element is left:
+
+* Adding multiple elements
+You can use addAll to add elements from a list into a set.
+    someSet.addAll([1, 2, 3, 4]);
+Print someSet again to show the new contents:
+    {42, 1, 2, 3, 4}
+
+* Intersections and Unions
+You’ll often have multiple sets of data and you’ll want to know how they fit together. You’ve probably seen your share of Venn diagrams;  They’re useful for showing the common elements between two sets.
+
+Intersections
+Like Venn diagrams and mathematical sets, you can find the intersection of two sets in Dart; that is, the common elements that occur in both sets.
+Given the following two sets:
+    final setA = {8, 2, 3, 1, 4};
+    final setB = {1, 6, 5, 4};
+You can find the intersection like so:
+    final intersection = setA.intersection(setB);
+Since both sets share the numbers 1 and 4, that’s the answer you’re expecting. Print intersection to see:
+    {1, 4}
+
+* Unions
+Finding all the unique values by combining both sets gives you the union, and that’s just as easy to find in Dart as the intersection.
+
+    final union = setA.union(setB);
+Print union to see the results:
+    {8, 2, 3, 1, 4, 6, 5}
+This union represents all the elements from both sets.
+Remember — sets have no requirement to be in order.
+
+* Other operations
+Almost everything that you learned earlier about lists also
+applies to sets. Specifically, you can perform any of the
+following operations with sets:
+    - collection if
+    - collection for
+    - for-in loops
+    - forEach loops
+    - spread operators

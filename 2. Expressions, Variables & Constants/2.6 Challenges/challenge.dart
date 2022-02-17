@@ -34,14 +34,24 @@ void main(List<String> args) {
   print(avergaRating);
 
   // Todo: Challenge Five
-  const double a = 1;
-  const double b = 3;
-  const double c = 2;
-  double x1;
+  var a = 1.0;
+  var b = 3.0;
+  var c = 2.0;
+  var xi;
+  var x2;
+  if (checkA(a)) {
+    if (checkComplex(a, b, c)) {
+    } else {
+      print('Cannot solve complex root');
+    }
+  } else {
+    print('Invalid Equation');
+  }
+}
 
-  // x = (-b   sqrt(b  - 4⋅a⋅c)) / (2⋅a).
-  x1 = (-b + sqrt(b - 4 * a * c)) / (2 * a);
-  print(x1);
+bool checkA(double a) => a != 0;
 
-  // print(x1);
+bool checkComplex(double a, double b, double c) {
+  final d = pow(b, 2) - (4 * a * c);
+  return d >= 0;
 }
