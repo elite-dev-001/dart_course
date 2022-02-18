@@ -1,0 +1,11 @@
+* Challenges
+Before moving on, here are some challenges to test your knowledge of collections. It’s best if you try to solve them yourself.
+
+Challenge 1: A unique request
+Write a function that takes a paragraph of text and returns a collection of unique String characters that the text contains.
+
+Challenge 2: Counting on you
+Repeat Challenge 1, but this time have the function return a collection that contains the frequency, or count, of every unique character.
+
+Challenge 3: Mapping users
+Create a class called User with properties for id and name. Make a List with three users, specifying any appropriate names and IDs you like. Then write a function that converts your user list to a list of maps whose keys are id and name.
