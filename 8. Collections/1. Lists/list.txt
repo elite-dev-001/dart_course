@@ -1,0 +1,212 @@
+Lists
+Whenever you have a very large collection of objects of a single type that have an ordering associated with them, you’ll likely want to use a list as the data structure for ordering the objects. Lists in Dart are similar to arrays in other languages.
+
+* Basic list operations
+You’ll start by learning how to create lists and modify elements.
+
+* Creating a list
+You can create a list by specifying the initial elements of the list within square brackets. This is called a list literal.
+    var desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+
+Since all of the elements in this list are strings, Dart infers this to be a list of String types.
+You can reassign desserts (but why would one ever want to reassign desserts?) with an empty list like so:
+    desserts = [];
+
+Dart still knows that desserts is a list of strings. However, if you were to initialize a new empty list like this:
+    var snacks = [];
+Dart wouldn’t have enough information to know what kind of objects the list should hold. In this case, Dart simply infers it to be a list of dynamic. This causes you to lose type safety, which you don’t want. If you’re starting with an empty list, you should specify the type like so:
+    List<String> snacks = [];
+
+There are a couple of details to note here:
+    List is the data type, or class name, as you learned in Classes
+
+The angle brackets < > here are the notation for generictypes in Dart. A generic list means you can have a list of anything; you just put the type you want inside the angle brackets. In this case, you have a list of strings, but you could replace String with any other type. For example, List<int> would make a list of integers, List<bool> would make a list of Booleans, and List<Grievance> would make a list of grievances — but you’d have to define that type yourself since Dart doesn’t come with any by default.
+
+A slightly nicer syntax for creating an empty list is to use var or final and move the generic type to the right:
+    var snacks = <String>[];
+
+Dart still has all the information it needs to know this is an empty list of type String.
+
+* Printing lists
+As you can do with any collection, you can print the contents of a list by using the print statement. Since desserts is currently empty, give it a list with elements again so that you have something interesting to show when you print it out.
+    desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+    print(desserts);
+
+Run that and you’ll see the following:
+    [cookies, cupcakes, donuts, pie]
+
+* Accessing elements
+To access the elements of a list, you reference its index via subscript notation, where the index number goes within square brackets after the list name.
+    final secondElement = desserts[1];
+    print(secondElement);
+
+
+If you know the value but don’t know the index, you can use the indexOf method to look it up:
+    final index = desserts.indexOf('pie');
+    final value = desserts[index];
+
+Since 'pie' is the fourth item in the zero-based list, index is 3 and value is pie.
+
+* Assigning values to list elements
+Just as you access elements, you also assign values to specific elements using subscript notation:
+    desserts[1] = 'cake';
+This changes the value at index 1 from cupcakes to cake.
+
+* Adding elements to a list
+Lists are growable by default in Dart, so you can use the add method to add an element.
+    desserts.add('brownies');
+    print(desserts);
+Run that and you’ll see:
+[cookies, cake, donuts, pie, brownies]
+Now desserts has five elements and the last one is brownies.
+
+* Removing elements from a list
+You can remove elements using the remove method. So if you’d gotten a little hungry and eaten the cake, you’d write:
+    desserts.remove('cake');
+    print(desserts);
+This leaves a list with four elements:
+    [cookies, donuts, pie, brownies]
+No worries, there’s still plenty for a midnight snack tonight!
+
+* Mutable and immutable lists
+In the examples above, you were able to reassign list literals to desserts like so:
+    var desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+    desserts = [];
+    desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+
+The reason you could do that is because you defined desserts using the var keyword. This has nothing to do with the list itself being immutable or not. It only means that you can swap out different lists in desserts.
+Now try the following using final:
+    final desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+    desserts = []; // not allowed
+    desserts = ['cake', 'ice cream']; // not allowed
+    desserts = someOtherList; // not allowed
+
+Unlike var, using final means that you’re not allowed to use
+the assignment operator to give desserts a new list. However, look at this:
+    final desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+    desserts.remove('cookies'); // OK
+    desserts.remove('cupcakes'); // OK
+    desserts.add('ice cream'); // OK
+Obviously, the final keyword isn’t keeping you from changing the contents of the list elements. What’s happening?
+
+
+* Creating deeply immutable lists
+The solution to creating an immutable list is to mark the variable name with the const keyword. This forces the list to be deeply immutable.
+
+That is, every element of the list must also be a compile-time constant.
+    const desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+    desserts.add('brownie'); // not allowed
+    desserts.remove('pie'); // not allowed
+    desserts[0] = 'fudge'; // not allowed
+
+Since const precedes desserts in the example above, you’re not allowed to add to, remove from, or update the list. If you aren’t able to use const for the variable itself, you can still make the value deeply immutable by adding the optional const keyword before the value.
+
+    final desserts = const ['cookies', 'cupcakes', 'donuts', 'pie'];
+
+Finally, if you want an immutable list but you won’t know the element values until runtime, then you can create one with the List.unmodifiable named constructor:
+
+    final modifiableList = [DateTime.now(), DateTime.now()];
+    final unmodifiableList = List.unmodifiable(modifiableList);
+
+DateTime.now() returns the date and time when it’s called. You’re obviously not going to know that until runtime, so this prevents the list from taking const. Passing that list into List.unmodifiable, however, makes the new list immutable. 
+
+Note: Unfortunately, inadvertently trying to modify an unmodifiable list will cause a runtime error — not a compile-time error. So while mutable data can be unsafe, so too can unmodifiable lists. A good practice is to write tests to ensure your code works as intended. That’s enough about mutability for now. 
+
+* List properties
+Collections such as List have a number of properties. To demonstrate them, use the following list of drinks.
+    const drinks = ['water', 'milk', 'juice', 'soda'];
+
+* Accessing first and last elements
+You can access the first and last element in a list:
+    drinks.first // water
+    drinks.last // soda
+* Checking if a list contains any elements
+You can also check whether a list is empty or not empty.
+    drinks.isEmpty // false
+    drinks.isNotEmpty // true
+This is equivalent to the following:
+    drinks.length == 0 // false
+    drinks.length > 0 // true
+
+For this section you can return to your list of desserts:
+const desserts = ['cookies', 'cupcakes', 'donuts', 'pie'];
+
+In Control Flow, you saw how to iterate over lists, so this is a review of the for-in loop.
+    for (var dessert in desserts) {
+        print(dessert);
+    }
+Each time through the loop, dessert is assigned an element from desserts.
+You also saw how to use forEach with an anonymous function.
+    desserts.forEach((dessert) => print(dessert));
+And since the input of print is the same as the output of the
+forEach function, Dart allows you to rephrase that like so:
+    desserts.forEach(print);
+This is known as a tear-off because you tear off the unnecessary syntax.
+Run any of the loops above and you’ll get the same result.
+cookies
+cupcakes
+donuts
+pie
+
+* Code as UI
+The Flutter framework chose Dart because of its unique characteristics. However, Flutter has also influenced the development of Dart. One area you can see this is with the addition of the spread operator, collection if and collection for.
+
+They make it easier for Flutter developers to compose user interface layouts completely in code, without the need for a separate markup language.
+
+Flutter UI code is composed of classes called widgets. Three common Flutter widgets are rows, columns and stacks, which all store their children as List collections. Being able to manipulate lists using the spread operator, collection if and collection for makes it easier to build the UI with code. The examples below use strings, but in a Flutter app you would see the same things with lists of Text, Icon, ElevatedButton and other Widget elements.
+
+* Spread operator
+Suppose you have two lists to start with.
+    const pastries = ['cookies', 'croissants'];
+    const candy = ['Junior Mints', 'Twizzlers', 'M&Ms'];
+
+You can use the spread operator (...) to expand those lists into another list.
+    const desserts = ['donuts', ...pastries, ...candy];
+    print(desserts);
+
+By using the ... operator, the second element of desserts is not pastries, but instead, the elements of pastries are themselves the elements of desserts. The same goes for candy. Run that code and you’ll see the following:
+
+    [donuts, cookies, croissants, Junior Mints, Twizzlers, M&Ms]
+There’s also a null spread operator (...?), which will omit a list if the list itself is null.
+    List<String>? coffees;
+    final hotDrinks = ['milk tea', ...?coffees];
+
+Here coffees has not been initialized and therefore is null. By using the ...? operator, you avoid an error that would come by trying to add a null list. The list hotDrinks will only include milk tea.
+
+* Collection if
+When creating a list, you can use a collection if to determine whether an element is included based on some condition.
+
+So if you had a peanut allergy, you’d want to avoid adding certain candy with peanut butter to a list of candy.
+    const peanutAllergy = true;
+    const candy = [
+    'Junior Mints',
+    'Twizzlers',
+    if (!peanutAllergy) 'Reeses',
+];
+    print(candy);
+
+It’s also interesting to note that collection if doesn’t prevent a list from being a compile-time constant, as demonstrated by the presence of the const keyword.
+
+* Collection for
+There’s also a collection for. So if you have a list, you can use a collection for to iterate over the list and generate another list.
+
+    const deserts = ['gobi', 'sahara', 'arctic'];
+    var bigDeserts = [
+        'ARABIAN',
+        for (var desert in deserts) desert.toUpperCase(),
+    ];
+    print(bigDeserts);
+
+Here you’ve created a new list where the final three elements are the uppercase version of the elements from the input list. The syntax is very much like a for-in loop but without the braces.
+
+
+Before moving on to learn about the Set collection type, test
+your knowledge so far with some mini-exercises.
+Mini-exercises
+1. Create an empty list of type String. Name it months.
+Use the add method to add the names of the twelve
+months.
+2. Make an immutable list with the same elements as in
+Mini-exercise 1.
+3. Use collection for to create a new list with the month
+names in all uppercase.
