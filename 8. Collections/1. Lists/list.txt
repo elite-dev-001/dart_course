@@ -155,7 +155,7 @@ They make it easier for Flutter developers to compose user interface layouts com
 
 Flutter UI code is composed of classes called widgets. Three common Flutter widgets are rows, columns and stacks, which all store their children as List collections. Being able to manipulate lists using the spread operator, collection if and collection for makes it easier to build the UI with code. The examples below use strings, but in a Flutter app you would see the same things with lists of Text, Icon, ElevatedButton and other Widget elements.
 
-Spread operator
+* Spread operator
 Suppose you have two lists to start with.
     const pastries = ['cookies', 'croissants'];
     const candy = ['Junior Mints', 'Twizzlers', 'M&Ms'];
@@ -203,10 +203,8 @@ Here you’ve created a new list where the final three elements are the uppercas
 Before moving on to learn about the Set collection type, test
 your knowledge so far with some mini-exercises.
 Mini-exercises
-1. Create an empty list of type String. Name it months.
-Use the add method to add the names of the twelve
-months.
-2. Make an immutable list with the same elements as in
-Mini-exercise 1.
-3. Use collection for to create a new list with the month
-names in all uppercase.
+1. Create an empty list of type String. Name it months. Use the add method to add the names of the twelve months.
+
+2. Make an immutable list with the same elements as in Mini-exercise 1.
+
+3. Use collection for to create a new list with the month names in all uppercase.

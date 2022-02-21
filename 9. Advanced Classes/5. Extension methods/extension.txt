@@ -1,0 +1,135 @@
+* Extension methods
+Up to this point in the course, you’ve been writing your own classes and methods. Often, though, you use other people’s classes when you’re programming. Those classes may be part of a core Dart library, or they may be from packages that you got off Pub. In either case, you don’t have the ability to modify them at will.
+
+However, Dart has a feature called extension methods that allow you to add functionality to existing classes. Even though they’re called extension methods, you can also add other members like getters, setters or even operators.
+
+* Extension syntax
+To make an extension, you use the following syntax:
+    extension on SomeClass {
+        // your custom code
+    }
+    
+This should be located at the top-level in a file; that is, not inside another class or function. Replace SomeClass with whatever class you want to add extra functionality to.
+
+You may give the extension itself a name if you like. In that case the syntax is as follows:
+    extension YourExtensionName on ClassName {
+        // your custom code
+    }
+
+You can use whatever name you like in place of YourExtensionName. The name is only used to show or hide the extension when importing it in another library.
+
+Have a look at a few of the following examples to see how extension methods work.
+
+* String extension example
+Did you ever make secret codes when you were a kid, like a=1, b=2, c=3, and so on? For this example, you’re going to make an extension that will convert a string into a secret coded message. Then you’ll add another extension method to decode it.
+
+In this secret code, each letter will be bumped up to the next one. So a will be b, b will be c, and so on. To accomplish that you’ll increase the Unicode value of each code point in the input string by 1. If the original message were “abc”, the encoded message should be “bcd”.
+
+* Solving in the normal way
+First, solve the problem as you would with a normal function.
+    String encode(String input) {
+        final output = StringBuffer();
+        for (final codePoint in input.runes) {
+            output.writeCharCode(codePoint + 1);
+        }
+        return output.toString();
+    }
+
+This function uses a StringBuffer for efficient string manipulation. A normal String is immutable, but a StringBuffer is mutable. That means your function doesn’t have to create a new string every time you append a character. You loop through each Unicode code point and increment it by 1 before writing it to output. Finally, you convert the StringBuffer back to a regular String and return it.
+
+Test it out:
+    final original = 'abc';
+    final secret = encode(original);
+    print(secret);
+
+The result is bcd. It works!
+
+* Converting to an extension
+The next step is to convert the encode function above to an extension so that you can use it like so:
+    final secret = 'abc'.encoded;
+Since this extension won’t mutate the original string itself, remember the naming convention of using an adjective rather than a commanding verb. That’s the reason for choosing encoded, rather than encode, for the extension name.
+
+Add the following code somewhere outside the main method:
+    extension on String {
+        String get encoded {
+            final output = StringBuffer();
+            for (final codePoint in runes) {
+                output.writeCharCode(codePoint + 1);
+            }
+            return output.toString();
+        }
+    }
+Look at what’s changed here: 
+    - The keywords extension on are what make this an extension. You can add whatever you want inside the body. It’s as if String were your own class now.
+
+    - Rather than making a normal method, you can use a getter method. This makes it so that you can call the extension using encoded, without the parentheses, rather than encoded().
+
+    - Since you’re inside String already, there’s no need to pass input as an argument. If you need a reference to the string object, you can use the this keyword. Thus, instead of input.runes, you could write this.runes. However, this is unnecessary and you can directly access runes. Remember that runes is a member of String and you’re inside String.
+
+Check that the extension works:
+    final secret = 'abc'.encoded;
+    print(secret);
+You should see bcd as the output. Nice! It still works.
+
+* Adding a decode extension
+Add the decoded method inside the body of the String extension as well:
+    String get decoded {
+        final output = StringBuffer();
+        for (final codePoint in runes) {
+            output.writeCharCode(codePoint - 1);
+        }
+        return output.toString();
+    }
+
+If you compare this to the encoded method, though, there’s a lot of code duplication. Whenever you see code duplication, you should think about how to make it DRY.
+
+* Refactoring to remove code duplication
+Refactor your String extension by replacing the entire extension with the following:
+
+    extension on String {
+        String get encoded {
+            return _code(1);
+        }
+        String get decoded {
+            return _code(-1);
+        }
+        String _code(int step) {
+            final output = StringBuffer();
+            for (final codePoint in runes) {
+                output.writeCharCode(codePoint + step);
+            }
+            return output.toString();
+        }
+    }
+
+Now the private _code method factors out all of the common parts of encoded and decoded. That’s better.
+
+* Testing the results
+To make sure that everything works, test both methods like so:
+
+    final original = 'I like extensions!';
+    final secret = original.encoded;
+    final revealed = secret.decoded;
+    print(secret);
+    print(revealed);
+
+This will display the following encoded and decoded messages:
+
+    J!mjlf!fyufotjpot
+    I like extensions!
+
+
+* int extension example
+Here’s an example for an extension on int.
+extension on int {
+int get cubed {
+return this * this * this;
+}
+}
+
+Notice the use of this to get a reference to the int object, which will be 5 in the example below.
+
+You use the extension like so:
+    print(5.cubed);
+The answer is 125.
+

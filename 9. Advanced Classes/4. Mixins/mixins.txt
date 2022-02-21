@@ -1,0 +1,92 @@
+* Mixins
+Mixins are an interesting feature of Dart that you might not be familiar with, even if you know other programming languages. They’re a way to reuse methods or variables among otherwise unrelated classes.
+
+Before showing you what mixins look like, first you’ll take a look at why you need them.
+
+* Problems with extending and implementing
+Think back to the Animal examples again. Say you’ve got a bunch of birds, so you’re carefully planning an abstract class to represent them. Here’s what you come up with:
+
+    abstract class Bird {
+        void fly();
+        void layEggs();
+    }
+
+“It’s looking good!” you think. “I’m getting the hang of this.”
+So you try it out on Robin:
+    class Robin extends Bird {
+    @override
+    void fly() {
+        print('Swoosh swoosh');
+    }
+
+    @override
+        void layEggs() {
+            print('Plop plop');
+        }
+    }
+
+“Perfect!” You smile contentedly at your handiwork.
+Then you hear a sound behind you.
+“Munch, munch. Glide, glide. Plop, plop. I’m a platypus.”
+Oh. Right. The platypus.
+
+Your layEggs code for Robin is exactly the same as it is for Platypus. That means you’re duplicating code, which violates the DRY principle. If there are any future changes to layEggs, you’ll have to remember to change both instances. Consider your options:
+
+    1. Platypus can’t extend Bird or Robin, because platypi can’t fly.
+
+    2. Birds probably shouldn’t extend Platypus, because who knows when you’re going to add the stingWithVenomSpur method?
+
+    3. You could create an EggLayer class and have Bird and Platypus both extend that. But then what about flying? Make a Flyer class, too? Dart only allows you to extend one class, so that won’t work.
+
+    4. You could have birds implement EggLayer and Flyer while Platypus implements only EggLayer. But then you’re back to code duplication, since implementing requires you to supply the implementation code for every class.
+
+The solution? Mixins!
+
+* Mixing in code
+To make a mixin, you take whatever concrete code you want to share with different classes, and package it in its own special mixin class.
+
+Write the following two mixins:
+    mixin EggLayer {
+        void layEggs() {
+            print('Plop plop');
+        }
+    }
+
+    mixin Flyer {
+        void fly() {
+            print('Swoosh swoosh');
+        }
+    }
+
+The mixin keyword indicates that these classes can only be used as mixins. You can use any class as a mixin, though, so if you wanted to use EggLayer as a normal class, then just replace the mixin keyword with class or abstract class. In fact, the mixin keyword is a fairly new addition to Dart, so you may still see legacy code that just uses regular classes as mixins even though those classes aren’t needed as standalone classes.
+
+Now refactor Robin as follows, using the with keyword to identify the mixins:
+    class Robin extends Bird with EggLayer, Flyer {}
+
+There are two mixins, so you separate them with a comma. Since those two mixins contain all the code that Bird needs, the class body is now empty.
+
+Refactor Platypus as well:
+    class Platypus extends Animal with EggLayer {
+        @override
+        void eat() {
+            print('Munch munch');
+        }
+
+        @override
+        void move() {
+            print('Glide glide');
+        }
+    }
+
+The layEggs logic has moved to the mixin. Now both Robin and Platypus share the code that the EggLayer mixin contains. Just to make sure it works, run the following code:
+    final platypus = Platypus();
+    final robin = Robin();
+    platypus.layEggs();
+    robin.layEggs();
+
+Four plops, and all is well.
+
+Mini-exercises
+1. Create a class called Calculator with a method called sum that prints the sum of any two integers you give it.
+2. Extract the logic in sum to a mixin called Adder.
+3. Use the mixin in Calculator.
