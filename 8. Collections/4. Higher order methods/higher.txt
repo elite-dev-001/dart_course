@@ -1,0 +1,135 @@
+* Higher order methods
+There are a number of collection operations common to many programming languages, including transforming, filtering and consolidating the elements of the collection. These operations are known as higher order methods, because they take functions as parameters. This is a great opportunity to apply what you learned in Function class about anonymous functions.
+
+In this section, you’ll learn about the higher order methods named map, where, reduce, fold and sort. There are many more methods than this small sampling, though. Don’t worry — you’ll discover them in time.
+
+* Mapping over a collection
+Mapping over a collection allows you to perform an action on each element of the collection as if you were running it through a loop. To do this, collections have a map method that takes an anonymous function as a parameter, and returns another collection based on what the function does to the elements.
+
+
+Write the following code:
+    const numbers = [1, 2, 3, 4];
+    final squares = numbers.map((number) => number * number);
+
+The map method is very similar to forEach in that it loops through every element of the list. It takes each element and passes it in as an argument to the anonymous function. In the example above, since numbers is a list of int values, number is inferred to be of type int. The first time through the loop, number is 1, the second time through, number is 2, and so on through 4.
+
+Inside the anonymous function body, you’re allowed to do whatever you want. In the case above, you square each input value. Next is where map and forEach differ. Instead of just performing some action, map takes each resulting value and inserts it as an element in a new collection, in this case one named squares.
+
+Print squares to see the result:
+    (1, 4, 9, 16)
+The numbers make sense. Those are all squares of the input list. Look at the parentheses, though. Set and Map use curly braces and List uses square brackets. Hover your cursor over squares to see the type.
+
+It’s actually an Iterable of int, rather than a List of int. That’s why when you print squares it has parentheses rather than square brackets. If you really want a List instead of an Iterable, you can call the toList method on the result.
+
+    print(squares.toList());
+Run that and now you’ll have square brackets:
+    [1, 4, 9, 16]
+It’s a common mistake to forget that map produces an Iterable rather than a List, but now you know what to do. There’s a similar method called toSet if you need a set instead of a list.
+
+* Filtering a collection
+You can filter an iterable collection like List and Set down to another shorter collection by using the where method.
+
+Add the following line below the code you already have:
+    final evens = squares.where((square) => square.isEven);
+Like map, the where method takes an anonymous function. The function’s input is also each element of the list, but unlike map, the value the function returns must be a Boolean. If the function returns true for a particular element, then that element is added to the resulting collection, but if false, then the element is excluded. Using isEven makes the condition true for even numbers, so you’ve filtered down squares to just the even values.
+
+Print evens and you’ll get:
+    (4, 16)
+These are indeed even squares. As you can see by the parentheses, where also returns an Iterable. You can use where with List and Set but not with Map, that is, unless you access the keys or values properties of Map.
+
+* Consolidating a collection
+Some higher order methods take all the elements of an iterable collection and consolidate them into a single value using the function you provide. You’ll learn two ways to do this.
+
+* Using reduce
+One way to combine all of the elements of a list into a single value is to use the reduce method. You can combine the elements in any way you like, but the example below shows how to find their sum.
+
+Given the following list of amounts, find the total value by passing in an anonymous function that adds each element to the sum of the previous ones:
+
+    const amounts = [199, 299, 299, 199, 499];
+    final total = amounts.reduce((sum, element) => sum + element);
+The first function parameter always contains the result of the previous function call, while the second parameter contains the current element in the collection. In this example, on each iteration sum stores the current total while element is the current integer in the list.
+
+Print total to see the final result of 1495.
+
+* Using fold
+If you try to call reduce on an empty list, you’ll get an error. For that reason, using fold may be more reliable when a collection has a possibility of containing zero elements. The fold method works like reduce, but it takes an extra parameter that provides the function with a starting value.
+
+Here is the same result as above, but this time using fold:
+
+    const amounts = [199, 299, 299, 199, 499];
+    final total = amounts.fold(
+        0,
+        (int sum, element) => sum + element,
+    );
+Notice that there are two arguments that you gave the fold method. The first argument 0 is the starting value. The second argument takes that 0, feeds it to sum, and keeps adding to it based on the value of each element in the list.
+
+* Sorting a list
+While where, reduce and fold all work equally well on lists or sets, you can only call sort on a list. That’s because sets are by definition unordered, so it wouldn’t make sense to sort them.
+
+Calling sort on a list sorts the elements based on their data type.
+    final desserts = ['cookies', 'pie', 'donuts', 'brownies'];
+    desserts.sort();
+Print desserts and you’ll see the following:
+    [brownies, cookies, donuts, pie]
+
+Since desserts holds strings, calling sort on the list arranges them in alphabetical order. The sorting is done in place, which means sort mutates the input list itself. This also means if you tried to sort a const list, you’d get an error.
+
+* Reversing a list
+You can use reversed to produce a list in reverse order.
+    var dessertsReversed = desserts.reversed;
+This produces the following result:
+    (pie, donuts, cookies, brownies)
+Mind you, using reversed doesn’t re-sort the list in reverse order. It just returns an Iterable that starts at the last element of the list and works forward. This will become clear if you look at an unsorted list:
+    final desserts = ['cookies', 'pie', 'donuts', 'brownies'];
+    final dessertsReversed = desserts.reversed;
+    print(desserts);
+    print(dessertsReversed);
+Run that to see the results:
+    [cookies, pie, donuts, brownies]
+    (brownies, donuts, pie, cookies)
+Neither collection is sorted, but the second one is in reverse order of the first.
+
+This also brings up a couple of important points about naming conventions in Dart:
+
+    - You should use a commanding verb for a method that produces a side effect. The sort() method mutates itself, which is a side effect. Also notice the parentheses on the sort() method; they clearly say that this is a method, not a property, and as such, may be doing some potentially expensive work.
+
+    - In comparison, reversed is a getter property, which you recognize because it doesn’t have any parentheses. This indicates that the work is lighter, usually because getters only return a value. Additionally, reversed is an adjective, not a commanding verb. That’s because there are no side effects as it doesn’t mutate the collection.
+
+You won’t always see these conventions followed, but they’re general guidelines that are helpful to consider in your own naming.
+
+* Performing a custom sort
+For the sort method, you can pass in a function as an argument to perform custom sorting. Say you want to sort strings by length and not alphabetically; you could give sort an anonymous function like so:
+
+desserts.sort((d1, d2) => d1.length.compareTo(d2.length));
+
+The names d1 and d2 aren’t going to win any good naming prizes, but they fit on the page of a book better than dessertOne and dessertTwo do. The compareTo method returns -1 if the first length is shorter, 1 if it’s longer, and 0 if both lengths are the same. This is all sort needs to do the custom sort.
+
+So now desserts is sorted by the size of each string element.
+    [pie, donuts, cookies, brownies]
+
+* Combining higher order methods
+You can chain together the higher order methods that you learned above. For example, if you wanted to take only the desserts that have a name length greater than 5 and then convert those names to uppercase, you would do it like so:
+    const desserts = ['cake', 'pie', 'donuts', 'brownies'];
+    final bigTallDesserts = desserts
+        .where((dessert) => dessert.length > 5)
+        .map((dessert) => dessert.toUpperCase());
+Wrapping that expression onto multiple lines makes it easier to read. First you filtered the list with where and then mapped the resulting iterable to get the final result.
+
+Printing bigTallDesserts reveals:
+    (DONUTS, BROWNIES)
+
+* When to use lists, sets or maps
+This particular topic will leave you with some advice about when to use which type of collection. Each type has its strengths.
+
+    - Choose lists if order matters. Try to insert at the end of lists wherever possible to keep things running smoothly. And be aware that searching can be slow with big collections.
+
+    - Choose sets if you are only concerned with whether something is in the collection or not. This is faster than searching a list.
+
+    - Choose maps if you frequently need to search for a value by a key. Searching by key is also fast.
+
+Mini-exercises
+Given the following exam scores:
+    final scores = [89, 77, 46, 93, 82, 67, 32, 88];
+1. Use sort to find the highest and lowest grades.
+2. Use where to find all the B grades, that is, all the scores
+between 80 and 90.

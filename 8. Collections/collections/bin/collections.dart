@@ -1,4 +1,4 @@
-void main() {
+//void main() {
   // final desserts = [
   //   'cookies',
   //   'cupcakes',
@@ -34,29 +34,29 @@ void main() {
   //for (var i in desserts) {
   //print('I love $i');
 
-  const pastries = ['cookies', 'croissants'];
-  const candy = ['Junior Mints', 'Twizzlers', 'M&Ms'];
+//   const pastries = ['cookies', 'croissants'];
+//   const candy = ['Junior Mints', 'Twizzlers', 'M&Ms'];
 
-  const desserts = ['donuts', ...pastries, ...candy];
-  print(desserts);
+//   const desserts = ['donuts', ...pastries, ...candy];
+//   print(desserts);
 
-  List<String>? coffees;
-  final hotDrinks = ['milk tea', ...?coffees];
-  print(hotDrinks);
+//   List<String>? coffees;
+//   final hotDrinks = ['milk tea', ...?coffees];
+//   print(hotDrinks);
 
-  const peanutAllergy = true;
-  const candies = [
-    'Junior Mints',
-    'Twizzlers',
-    if (peanutAllergy) 'Reeses',
-  ];
-  print(candies);
+//   const peanutAllergy = true;
+//   const candies = [
+//     'Junior Mints',
+//     'Twizzlers',
+//     if (peanutAllergy) 'Reeses',
+//   ];
+//   print(candies);
 
-  const deserts = ['gobi', 'sahara', 'arctic'];
-  var bigDeserts = [
-    'ARABIAN',
-    for (var desert in deserts) desert.toUpperCase(),
-  ];
-  print(bigDeserts);
-}
-//}
+//   const deserts = ['gobi', 'sahara', 'arctic'];
+//   var bigDeserts = [
+//     'ARABIAN',
+//     for (var desert in deserts) desert.toUpperCase(),
+//   ];
+//   print(bigDeserts);
+// }
+// //}

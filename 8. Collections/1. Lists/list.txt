@@ -203,10 +203,8 @@ Here you’ve created a new list where the final three elements are the uppercas
 Before moving on to learn about the Set collection type, test
 your knowledge so far with some mini-exercises.
 Mini-exercises
-1. Create an empty list of type String. Name it months.
-Use the add method to add the names of the twelve
-months.
-2. Make an immutable list with the same elements as in
-Mini-exercise 1.
-3. Use collection for to create a new list with the month
-names in all uppercase.
+1. Create an empty list of type String. Name it months. Use the add method to add the names of the twelve months.
+
+2. Make an immutable list with the same elements as in Mini-exercise 1.
+
+3. Use collection for to create a new list with the month names in all uppercase.
