@@ -17,7 +17,7 @@ Inside the anonymous function body, you’re allowed to do whatever you want. In
 
 Print squares to see the result:
     (1, 4, 9, 16)
-The numbers make sense. Those are all squares of the input list. Look at the parentheses, though. Set and Map use curly braces and List uses square brackets. Hover your cursor over squares to see the type.
+The numbersz make sense. Those are all squares of the input list. Look at the parentheses, though. Set and Map use curly braces and List uses square brackets. Hover your cursor over squares to see the type.
 
 It’s actually an Iterable of int, rather than a List of int. That’s why when you print squares it has parentheses rather than square brackets. If you really want a List instead of an Iterable, you can call the toList method on the result.
 
