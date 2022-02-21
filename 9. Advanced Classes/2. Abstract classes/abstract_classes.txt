@@ -1,0 +1,113 @@
+* Abstract classes
+The classes and subclasses you created in the last section were concrete classes. It’s not that they’re made of cement; it just means that you can make actual objects out of them. That’s in contrast to abstract classes, from which you can’t make objects.
+
+“What’s the use of a class you can’t make an object out of?” asks the pragmatist. “What are the use of ideas?” answers the philosopher. You deal with abstract concepts all the time, and you don’t think about them at all.
+
+Have you ever seen an animal? “Uh, are you seriously asking me that?” you answer. The question isn’t “have you ever seen a chicken or a platypus or a mouse.” Have you ever seen a generic animal, devoid of all features that are relevant to only one kind of animal — just the essence of “animal” itself? What would that even look like? It can’t have four legs because ducks are animals and they have two legs. It can’t have hair because rattlesnakes are animals and they don’t have hair. Worms are animals, too, right? So there go the eyes and bones.
+
+No one has seen an “animal” in the abstract sense, but everybody has seen concrete instances of things that fit the abstract animal category. Humans are good at generalizing and categorizing the observations they make, and honestly, these abstract ideas are very useful. They allow you to make short statements like “I saw a lot of animals at the zoo” instead of “I saw a lion, an elephant, a lemur, a shark, ...”
+
+The same thing applies in object oriented programming. After making lots of concrete classes, you begin to notice patterns and more generalized characteristics of the classes you’re writing. So when you come to the point of just wanting to describe the general characteristics and behavior of a class without specifying the exact way that class is implemented, you’re ready to write abstract classes. Don’t be put off by the word “abstract”. It’s no more difficult than the idea of an animal.
+
+* Creating your own abstract classes
+Have a go at working this out in Dart now. Without venturing too far into the fringes of how taxonomists make their decisions, create the following Animal class:
+    abstract class Animal {
+        bool isAlive = true;
+        void eat();
+        void move();
+
+        @override
+        String toString() {
+            return "I'm a $runtimeType";
+        }
+    }
+Here are a few important points about that code:
+
+    - The way you define an abstract class in Dart is to put the abstract keyword before class.
+
+    - In addition to the class itself being abstract, Animal also has two abstract methods: eat and move. You know they’re abstract because they don’t have curly braces; they just end with a semicolon.
+
+    - These abstract methods describe behavior that a subclass must implement but don’t tell how to implement. That’s up to the subclass. Leaving implementation details up to the subclass is a good thing because there are such a variety of ways to eat and move throughout the animal kingdom, so it would be almost impossible for Animal to specify anything meaningful here.
+
+    - Note that just because a class is abstract doesn’t mean that it can’t have concrete methods or data. You can see that Animal has a concrete isAlive field, with a default value of true. Animal also has a concrete implementation of the toString method, which belongs to the Object superclass. The runtimeType property also comes from Object and gives the object type at runtime.
+
+* Can’t instantiate abstract classes
+As mentioned, you can’t create an instance of an abstract class. See for yourself by writing the following line:
+    final animal = Animal();
+You’ll see the following error:
+    Abstract classes can’t be instantiated.
+    Try creating an instance of a concrete subtype.
+Isn’t that good advice! That’s what you’re going to do next.
+
+Concrete subclass
+Create a concrete Platypus now. Stop thinking about cement. Just add the following empty class to your IDE below your Animal class:
+    class Platypus extends Animal {}
+Immediately you’ll notice the wavy red line:
+
+The error is because when you extend an abstract class, you must provide an implementation of any abstract methods, which in this case are eat and move.
+
+* Adding the missing methods
+You could write the methods yourself, but VS Code gives you a shortcut. Put your cursor on Platypus and press Command+. on a Mac or Control+. on a PC. You’ll see the following popup:
+
+To quickly add the missing methods, choose Create 2 missing override(s).
+This will give you the following code:
+    class Platypus extends Animal {
+        @override
+        void eat() {
+            // TODO: implement eat
+        }
+
+        @override
+        void move() {
+            // TODO: implement move
+        }
+    }
+
+Starting a comment with TODO: is a common way to mark parts of your code where you need to do more work. Later, you can search your entire project in VS Code for the remaining TODOs by pressing Command+Shift+F on a Mac or Control+Shift+F on a PC and writing “TODO” in the search box. You’re going to complete these TODOs right now, though.
+
+Filling in the TODOs
+Since this is a concrete class, it needs to provide the actual implementation of the eat and move methods. In the eat method body, add the following line:
+    print('Munch munch');
+A platypus may not have teeth, but it should still be able to munch.
+In the move method add:
+    print('Glide glide');
+
+As was true with subclassing normal classes, abstract class subclasses can also have their own unique methods. Add the following method to Platypus:
+    void layEggs() {
+        print('Plop plop');
+    }
+
+* Testing the results
+Test your code out now in main:
+    final platypus = Platypus();
+    print(platypus.isAlive);
+    platypus.eat();
+    platypus.move();
+    platypus.layEggs();
+    print(platypus);
+Run the code to see the following:
+    true
+    Munch munch
+    Glide glide
+    Plop plop
+    I'm a Platypus
+Look at what this tells you:
+    - A concrete class has access to concrete data, like isAlive, from its abstract parent class.
+
+    - Dart recognized that the runtime type was Platypus, even though runtimeType comes from Object, and was accessed in the toString method of Animal.
+
+* Treating concrete classes as abstract
+There is one more interesting thing to do before moving on. In the line where you declared platypus, hover your cursor over the variable name:
+
+Dart infers platypus to be of type Platypus. That’s normal, but here’s the interesting part. Replace that line with the following one, adding the Animal type annotation:
+    Animal platypus = Platypus();
+Hover your cursor over platypus again:
+
+Now Dart sees platypus as merely an Animal with no more special ability to lay eggs. Comment out the line calling the layEggs method:
+
+    // platypus.layEggs();
+Run the code again paying special attention to the print(platypus) results:
+    I'm a Platypus
+So at compile time, Dart treats platypus like an Animal even though at runtime Dart knows it’s a Platypus. This is useful when you don’t care about about the concrete implementation of an abstract class, but you only care that it’s an Animal with Animal characteristics.
+
+Now, you’re probably thinking, “Making animal classes is very cute and all, but how does this help me save data on the awesome new social media app I’m making?” That’s where interfaces come in.

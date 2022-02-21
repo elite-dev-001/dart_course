@@ -54,7 +54,7 @@ Print someSet again to show the new contents:
 * Intersections and Unions
 You’ll often have multiple sets of data and you’ll want to know how they fit together. You’ve probably seen your share of Venn diagrams;  They’re useful for showing the common elements between two sets.
 
-Intersections
+* Intersections
 Like Venn diagrams and mathematical sets, you can find the intersection of two sets in Dart; that is, the common elements that occur in both sets.
 Given the following two sets:
     final setA = {8, 2, 3, 1, 4};

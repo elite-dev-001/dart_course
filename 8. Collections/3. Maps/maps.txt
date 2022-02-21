@@ -154,8 +154,8 @@ There is a solution, though, for looping over a Map. The keys and values propert
 
 You can also use forEach to iterate over the elements of a map, which gives you both the keys and the values.
 
-inventory.forEach((key, value) => print('$key ->
-$value'));
+inventory.forEach((key, value) => print('$key -> $value'));
+
 And this for loop does the same thing:
 for (final entry in inventory.entries) {
 print('${entry.key} -> ${entry.value}');
@@ -168,10 +168,8 @@ brownies -> 3
 Before going on, test your knowledge of maps with the
 following mini-exercises.
 Mini-exercises
-1. Create a map with the following keys: name, profession,
-country and city. For the values, add your own
-information.
-2. You suddenly decide to move to Toronto, Canada.
-Programmatically update the values for country and
-city.
+1. Create a map with the following keys: name, profession, country and city. For the values, add your own information.
+
+2. You suddenly decide to move to Toronto, Canada. Programmatically update the values for country and city.
+
 3. Iterate over the map and print all the values.
