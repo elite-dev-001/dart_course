@@ -1,0 +1,199 @@
+* Extending classes
+In many situations, you’ll need to create a hierarchy of classes that share some base functionality. You can create your own hierarchies by extending classes. This is also called inheritance, because the classes form a tree in which child classes inherit from parent classes. The parent and child classes are also called super classes and subclasses respectively. The Object class is the top superclass for all non-nullable types in Dart. All other classes (except Null) are subclasses of Object.
+
+* Creating your first subclass
+To see how inheritance works, you’ll create your own hierarchy of classes. In a little while, you’ll make a Student class which needs grades, so first make a Grade enum:
+    enum Grade { A, B, C, D, F }
+
+* Creating similar classes
+Next create two classes named Person and Student.
+Here’s Person:
+    class Person {
+        Person(this.givenName, this.surname);
+
+        String givenName;
+        String surname;
+        String get fullName => '$givenName $surname';
+
+        @override
+        String toString() => fullName;
+    }
+
+And this is Student:
+    class Student {
+        Student(this.givenName, this.surname);
+
+        String givenName;
+        String surname;
+        var grades = <Grade>[];
+        String get fullName => '$givenName $surname';
+
+        @override
+        String toString() => fullName;
+    }
+Naturally, the Person and Student classes are very similar, since students are in fact persons. The only difference at the moment is that a Student will have a list of grades.
+
+* Subclassing to remove code duplication
+You can remove the duplication between Student and Person by making Student extend Person. You do so by adding extends Person after the class name, and removing everything but the Student constructor and the grades list.
+
+Replace the Student class with the following code:
+    class Student extends Person {
+        Student(String givenName, String surname)
+            : super(givenName, surname);
+        var grades = <Grade>[];
+    }
+
+There are a few points to pay attention to:
+    - The constructor parameter names don’t refer to this anymore. Whenever you see the keyword this, you should remember that this refers to the current object, which in this case would be an instance of the Student class. Since Student no longer contains the field names givenName and surname, using this.givenName or this.surname would have nothing to reference.
+
+    - In contrast to this, the super keyword is used to refer one level up the hierarchy. Similar to the forwarding constructor that you learned about in Classes, using super(givenName, surname) passes the constructor parameters on to another constructor. However, since you’re using super instead of this, you’re forwarding the parameters to the parent class’s constructor, that is, to the constructor of Person.
+
+* Calling super last in an initializer list
+As a quick side note, if you use an initializer list, the call to super always goes last, that is, after assert statements and initializers. You can see the order in the following example:
+
+    class SomeChild extends SomeParent {
+        SomeChild(double height)
+            : assert(height != 0), // assert
+            _height = height, // initializer
+            super(); // super
+        final double _height;
+    }
+
+In this example, calling super() is actually unnecessary, because Dart always calls the default constructor for the super class if there are no arguments to pass. The reason that you or Dart always need to make the super call is to ensure that all of the field values have finished initializing.
+
+* Using the classes
+OK, back to the primary example. Create Person and Student objects like so:
+    final jon = Person('Jon', 'Snow');
+    final jane = Student('Jane', 'Snow');
+    print(jon.fullName);
+    print(jane.fullName);
+Run that and observe that both have full names:
+    Jon Snow
+    Jane Snow
+The fullName for Student is coming from the Person class.
+
+If you have a grade, you can only add that grade to the Student and not to the Person, because only the Student has grades. Add the following two lines to main:
+    final historyGrade = Grade.B;
+    jane.grades.add(historyGrade);
+The student jane now has one grade in the grades list.
+
+* Overriding parent methods
+Suppose you want the student’s full name to print out differently than the default way it’s printed in Person. You can do so by overriding the fullName getter. Add the following two lines to the bottom of the Student class:
+
+@override
+String get fullName => '$surname, $givenName';
+
+You’ve seen the @override annotation before in this course with the toString method. While using @override is technically optional in Dart, it does help in that the compiler will give you an error if you think you’re overriding something that doesn’t actually exist in the parent class.
+
+Run the code now and you’ll see the student’s full name printed differently than the parent’s.
+    Jon Snow
+    Snow, Jane
+
+* Calling super from an overridden method
+As another aside, sometimes you override methods of the parent class because you want to add functionality, rather than replace it, as you did above. In that case, you usually make a call to super either at the beginning or end of the overridden method.
+
+Have a look at the following example:
+
+    class SomeParent {
+        void doSomeWork() {
+            print('parent working');
+        }
+    }
+    class SomeChild extends SomeParent {
+        @override
+        void doSomeWork() {
+            super.doSomeWork();
+            print('child doing some other work');
+        }
+    }
+Since doSomeWork in the child class makes a call to super.doSomeWork, both the parent and the child methods run. So if you were to call the child method like so:
+    final child = SomeChild();
+    child.doSomeWork();
+You would see the following result:
+    parent working
+    child doing some other work
+
+The parent method’s work was done first, since you had the super call at the beginning of the overridden method in the child. If you wanted to do the child method’s work first, though, you would put the super call at the end of the method, like so:
+    @override
+    void doSomeWork() {
+        print('child doing some other work');
+        super.doSomeWork();
+    }
+
+* Multi-level hierarchy
+Back to the primary example again. Add more than one level to your class hierarchy by defining a class that extends from Student.
+    class SchoolBandMember extends Student {
+        SchoolBandMember(String givenName, String surname)
+        : super(givenName, surname);
+        static const minimumPracticeTime = 2;
+    }
+
+SchoolBandMember is a Student that has a minimumPracticeTime. The SchoolBandMember constructor calls the Student constructor with the super keyword. The Student constructor will, in turn, call the Person constructor.
+
+* Sibling classes
+Create a sibling class to SchoolBandMember named StudentAthlete that also derives from Student.
+    class StudentAthlete extends Student {
+        StudentAthlete(String givenName, String surname)
+        : super(givenName, surname);
+        bool get isEligible =>
+        grades.every((grade) => grade != Grade.F);
+    }
+
+In order to remain eligible for athletics, a student athlete has an isEligible getter that makes sure the athlete has not failed any classes. The higher order method every on the grades list only returns true if every element of the list passes the given condition, which, in this case, means that none of the grades are F.
+
+So now you can create band members and athletes.
+    final jessie = SchoolBandMember('Jessie', 'Jones');
+    final marty = StudentAthlete('Marty', 'McFly');
+
+* Visualizing the hierarchy
+
+You see that SchoolBandMember and StudentAthlete are both students, and all students are also persons.
+
+* Type inference in a mixed list
+Since Jane, Jessie and Marty are all students, you can put them into a list.
+    final students = [jane, jessie, marty];
+Recall that jane is a Student, jessie is a SchoolBandMember and marty is a StudentAthlete. Since they are all different types, what type is the list?
+
+Hover your cursor over students to find out. You can see that Dart has inferred the type of the list to be List<Student>. Dart used the most specific common ancestor as the type for the list. It couldn’t use SchoolBandMember or StudentAthlete, since that doesn’t hold true for all elements of the list.
+
+* Checking an object’s type at runtime
+You can use the is and is! keywords to check whether a given object is or is not within the direct hierarchy of a class. Write the following code:
+    print(jessie is Object);
+    print(jessie is Person);
+    print(jessie is Student);
+    print(jessie is SchoolBandMember);
+    print(jessie is! StudentAthlete);
+Knowing that jessie is a SchoolBandMember, first guess what Dart will show, and then run the code to see if you were right.
+
+Ready? All five will print true, since jessie is SchoolBandMember, which is a subclass of Student, which is a subclass of Person, which is a subclass of Object. The only type that jessie is not, is StudentAthlete — which you confirmed by using the is! keyword.
+
+Having an object be able to take multiple forms is known as polymorphism. This is a key part of object-oriented programming. You’ll learn to make polymorphic classes in an even more sophisticated way with abstract classes in just a bit.
+
+First, though, a word of caution.
+* Prefer composition over inheritance
+Now that you know about inheritance, you may feel ready to conquer the world. You can model anything as a hierarchy. Experience, though, will teach you that deep hierarchies are not always the best choice.
+
+You may have already noticed this fact in the code above. For example, when you’re overriding a method, do you need to call super? And if you do, should you call super at the beginning of the method, or at the end? Often the only way to know is to check the source code of the parent class. Jumping back and forth between levels of the hierarchy can make coding difficult.
+
+Another problem with hierarchies is that they’re tightly bound together. Changes to a parent class can break a child class. For example, say that you wanted to “fix” the Person class by removing givenName and replacing it with firstName and middleName.
+
+Doing this would also require you to update, or refactor, all of the code that uses the subclasses as well. Even if you didn’t remove givenName, but simply added middleName, users of classes like StudentBandMember would be affected without realizing it.
+
+Tight coupling isn’t the only problem. What if Jessie, who is a school band member, also decides to become an athlete? Do you make another class called SchoolBandMemberAndStudentAthlete? What if she joins the student union, too? Obviously, things could get out of hand quickly.
+
+This has led many people to say, prefer composition over inheritance. The phrase means that, when appropriate, you should add behavior to a class rather than share behavior with an ancestor. It’s more of a focus on what an object has, rather than what an object is. For example, you could flatten the hierarchy for Student by giving the student a list of roles, like so:
+    class Student {
+        List<Role>? roles;
+    }
+
+When you create a student, you could pass in the roles as a constructor parameter. This would also let you add and remove roles later. Of course, since Dart doesn’t come with the Role type, you’d have to define it yourself. You’d need to make Role abstract enough so that a role could be a band member, an athlete or a student union member. You’ll learn about making abstract classes like this in the next section.
+
+All this talk of composition isn’t to say that inheritance is always bad. It might make sense to still have Student extend Person. Inheritance can be good when a subclass needs all of the behavior of its parent. However, when you only need some of that behavior, you should consider passing in the behavior as a parameter, or perhaps even using a mixin, which you’ll learn about later in this course.
+
+
+Mini-exercises
+1. Create a class named Fruit with a String field named color and a method named describeColor, which uses color to print a message.
+
+2. Create a subclass of Fruit named Melon and then create two Melon subclasses named Watermelon and Cantaloupe.
+
+3. Override describeColor in the Watermelon class to vary the output.

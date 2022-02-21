@@ -1,0 +1,145 @@
+* Interfaces
+Interfaces are similar to abstract classes in that they let you define the behavior you expect for all classes that implement the interface. They’re a means of hiding the implementation details of the concrete classes from the rest of your code. Why is that important? To answer that question it’s helpful to understand a little about architecture. Not the Taj Mahal kind of architecture, software architecture.
+
+* Software architecture
+When you’re building an app, your goal should be to keep core business logic separate from infrastructure like the UI, database, network and third-party packages. Why? The core business logic doesn’t change frequently, while the infrastructure often does. Mixing unstable code with stable would cause the stable code to become unstable.
+
+The following image shows an idealized app with the stable business logic in the middle and the more volatile infrastructure parts surrounding it:
+
+The UI shouldn’t communicate directly with the web. You also shouldn’t scatter direct calls to the database across your app. Everything goes through the central business logic. In addition to that, the business logic shouldn’t know any implementation details about the infrastructure.
+
+This gives you a plug-in style architecture, where you can swap one database framework for another and the rest of the app won’t even know anything changed. You could replace your mobile UI with a desktop UI, and the rest of the app wouldn’t care. This is useful for building scalable, maintainable and testable apps.
+
+* Communication rules
+Here’s where interfaces come in. An interface is a description of how communication will be managed between two parties. A phone number is a type of interface. If you want to call your friend, you have to dial your friend’s phone number. Dialing a different number won’t work. Another word for interface is protocol, as in Internet Protocol or Hypertext Transfer Protocol. Those protocols are the rules for how communication happens among the users of the protocol.
+
+When you create an interface in Dart, you define the rules for how one part of your codebase will communicate with another part. As long as both parts follow the interface rules, each part can change independently of the other. This makes your app much more manageable. In team settings, interfaces also allow different people to work on different parts of the codebase without worrying that they’re going to mess up someone else’s code.
+
+* Separating business logic from infrastructure
+In the image below, you can see the interface is between the business logic and the code for accessing the database.
+
+The business logic doesn’t know anything about the database. It’s just talking to the interface. That means you could even swap out the database for a completely different form of storage like cloud storage or file storage. The business logic doesn’t care.
+
+There’s a famous adage related to this that goes, code against interfaces, not implementations. You define an interface, and then you code your app to use that interface only. While you must implement the interface with concrete classes, the rest of your app shouldn’t know anything about those concrete classes, only the interface.
+
+* Creating an interface
+There’s no interface keyword in Dart. Instead, you can use any class as an interface. Since only the field and method names are important, most interfaces are made from abstract classes that contain no logic.
+
+Say you want to make a weather app, and your business logic needs to get the current temperature in some city. Since those are the requirements, your Dart interface class would look like this:
+    abstract class DataRepository {
+        double? fetchTemperature(String city);
+    }
+
+Note that repository is a common term to call an interface that hides the details of how data is stored and retrieved. Also, the reason the result of fetchTemperature is nullable is that someone might ask for the temperature in a city that doesn't exist.
+
+* Implementing the interface
+The Dart class above was just a normal abstract class, like the one you made earlier. However, when creating a concrete class to implement the interface, you must use the implements keyword instead of the extends keyword.
+
+Add the following concrete class:
+    class FakeWebServer implements DataRepository {
+        @override
+        double? fetchTemperature(String city) {
+        return 42.0;
+        }
+    }
+
+Here are a couple of points to note:
+Besides the benefits mentioned previously, another great advantage of using an interface is that you can create mock implementations to temporarily replace real implementations. In the FakeWebServer class, you are simply returning a random number instead of going to all the work of contacting a real server. This allows you to have a “working” app until you can get around to writing the code to contact the web server. This is also useful when you’re testing your code and you don’t want to wait for a real connection to the server.
+
+Speaking of waiting for a web server, a real interface would return a type of Future<double?> instead of returning double? directly. However, we haven’t practiced about asynchronous programming yet, so this example omits the Future part.
+
+* Using the interface
+How do you use the interface on the business logic side? Remember that you can’t instantiate an abstract class, so this won’t work:
+    final repository = DataRepository();
+You could potentially use the FakeWebServer implementation directly like so:
+    final DataRepository repository = FakeWebServer();
+    final temperature = repository.fetchTemperature('Berlin');
+
+But this defeats the whole point of trying to keep the implementation details separate from the business logic. When you get around to swapping out the FakeWebServer with another class, you’ll have to go back and make updates at every place in your business logic that mentions it.
+
+* Adding a factory constructor
+Do you remember factory constructors from Classes? If you do, you’ll recall that factory constructors can return subclasses. Add the following line to your interface class:
+    factory DataRepository() => FakeWebServer();
+Your interface should look like this now:
+    abstract class DataRepository {
+        factory DataRepository() => FakeWebServer();
+        double? fetchTemperature(String city);
+    }
+Since FakeWebServer is a subclass of DataRepository, the factory constructor is allowed to return it. The neat trick is that by using an unnamed constructor for the factory, you can make it look like it’s possible to instantiate the class now.
+
+Write the following in main:
+    final repository = DataRepository();
+    final temperature = repository.fetchTemperature('Manila');
+
+Ah, now your code on this side has no idea that that repository is actually FakeWebServer. When it comes time to swap in the real implementation, you only need to update the subclass returned by the factory constructor in the DataRepository interface.
+
+* Interfaces and the Dart SDK
+If you browse the Dart source code, which you can do by Command or Control-clicking Dart class names like int or List or String, you’ll see that Dart makes heavy use of interfaces to define its API. That allows the Dart team to change the implementation details without affecting developers. The only time developers are affected is when the interface changes.
+
+This concept is key to the flexibility that Dart has as a language. The Dart VM implements the interface one way and gives you the ability to hot-reload your Flutter apps. The dart compile js tool implements the interface using JavaScript and gives you the ability to run your code on the web. The dart compile exe tool implements the interface on Windows or Linux or Mac to let you run your code on those platforms.
+
+The implementation details are different for every platform, but you don’t have to worry about that, because your code will only talk to the interface, not to the platform. Are you starting to see how powerful interfaces can be?
+
+* Extending vs implementing
+There are a couple of differences between extends and implements. Dart only allows you to extend a single superclass. This is known as single inheritance, in contrast with other languages that allow multiple inheritance.
+
+So the following is not allowed in Dart:
+    class MySubclass extends OneClass, AnotherClass {} // Not OK
+
+However, you can implement more than one interface:
+    class MyClass implements OneClass, AnotherClass {} // OK
+
+You can also combine extends and implements:
+    class MySubclass extends OneClass implements AnotherClass {}
+
+But what’s the difference between just extending or implementing? That is, how are these two lines different?
+    class SomeClass extends AnotherClass {}
+    class SomeClass implements AnotherClass {}
+
+When you extend AnotherClass, SomeClass has access to any logic or variables in AnotherClass. However, if SomeClass implements AnotherClass, SomeClass must provide its own version of all methods and variables in AnotherClass.
+
+* Example of extending
+Assume AnotherClass looks like the following:
+    class AnotherClass {
+        int myField = 42;
+        void myMethod() => print(myField);
+    }
+You can extend it like this with no issue:
+    class SomeClass extends AnotherClass {}
+
+Check that SomeClass objects have access to AnotherClass data and methods:
+    final someClass = SomeClass();
+    print(someClass.myField); // 42
+    someClass.myMethod(); // 42
+
+Run that and you’ll see 42 printed twice.
+
+* Example of implementing
+Using implements in the same way doesn’t work:
+    class SomeClass implements AnotherClass {} // Not OK
+
+The implements keyword tells Dart that you only want the field types and method signatures. You’ll provide the concrete implementation details for everything yourself. How you implement it is up to you, as demonstrated in the following example:
+
+    class SomeClass implements AnotherClass {
+        @override
+        int myField = 0;
+
+        @override
+        void myMethod() => print('Hello');
+    }
+
+Test that code again as before:
+    final someClass = SomeClass();
+    print(someClass.myField); // 0
+    someClass.myMethod(); // Hello
+
+This time you see your custom implementation results in 0 and Hello.
+
+Mini-exercises
+1. Create an interface called Bottle and add a method to it called open.
+
+2. Create a concrete class called SodaBottle that implements Bottle and prints “Fizz fizz” when open is called.
+
+3. Add a factory constructor to Bottle that returns a SodaBottle instance.
+
+4. Instantiate SodaBottle by using the Bottle factory constructor and call open on the object.
