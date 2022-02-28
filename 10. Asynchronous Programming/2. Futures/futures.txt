@@ -1,0 +1,315 @@
+* Futures
+You now know, at a high level, how Dart handles asynchronous code with its event loop. Now it’s time to learn how to work with asynchronous code at a practical level.
+
+* The Future type
+Dart has a type called Future, which is basically a promise to give you the value you really want later. Here’s the signature of a method that returns a future:
+    Future<int> countTheAtoms();
+
+Future itself is generic; it can provide any type. In this case, though, the future is promising to give you an integer. In your code, if you called countTheAtoms, Dart would quickly return an object of type Future<int>. In effect, this is saying, “Hey, I’ll get back to you with that int sometime later. Carry on!”, in which case you’d proceed to run whatever synchronous code is next.
+
+Behind the scenes, Dart has passed your request on to, presumably, an atom counting machine, which runs independently of your main Dart isolate. At this point, there is nothing on the event queue, and your main thread is free to do other things. Dart knows about the uncompleted future, though. When the atom counting machine finishes its work, it tells Dart and Dart puts the result, along with any code you gave it to handle the result, on the event queue. Dart says, “Sorry that took so long. Who knew that there were 9.2 quintillion atoms in that little grain of sand! I’ll put your handling code at the end of the event queue. Give the event loop a few milliseconds and then it’ll be your turn.”
+
+* States for a future
+Before a future completes, there isn’t really anything you can do with it, but after it completes it will have two possible results: the value you were asking for, or an error. This all works out to three different states for a future:
+    - Uncompleted
+    - Completed with a value
+    - Completed with an error
+
+* Example of a future
+One easy way to see a future in action is with the Future.delayed constructor.
+    final myFuture = Future<int>.delayed(
+        Duration(seconds: 1),
+        () => 42,
+    );
+
+Here’s what’s happening:
+    - myFuture is of type Future<int>.
+
+    - The first argument is a Duration. After a delay of 1 second, Dart will add the anonymous function in the second argument to the event queue.
+
+    - When the event loop gets to () => 42 it will run that function in the main isolate, which results in the function returning the integer 42.
+
+In the future above, the value you really want is the 42, but how do you get it? Your variable myFuture isn’t 42; it’s a future that’s a promise to return an int or an error. You can see that if you try to print myFuture:
+    print(myFuture);
+
+The result is:
+    Instance of 'Future<int>'
+There are two ways to get at the value after a future completes. One is with callbacks and the other is using the async-await syntax.
+
+* Getting the result with callbacks
+A callback is an anonymous function that will run after some event has completed. In the case of a future, there are three callback opportunities: then, catchError and whenComplete. Replace the body of the main function with the following code:
+    print('Before the future');
+
+    final myFuture = Future<int>.delayed(
+        Duration(seconds: 1),
+        () => 42,
+    )
+        .then(
+            (value) => print('Value: $value'),
+        )
+        .catchError(
+            (error) => print('Error: $error'),
+        )
+        .whenComplete(
+            () => print('Future is complete'),
+        );
+    print('After the future');
+
+You recall that a future will either give you a value or an error. If it completes with a value, you can get the value by adding a callback to the then method. The anonymous function provides the value as an argument so that you have access to it. On the other hand, if the future completes with an error, you can handle it in catchError. Either way, though, whether the future completes with a value or an error, you have the opportunity to run any final code in whenComplete.
+
+Run the code above to see these results:
+    Before the future
+    After the future
+    Value: 42
+    Future is complete.
+
+Were you surprised that “After the future” was printed before the future results? That print statement is synchronous, so it ran immediately. Even if the future didn’t have a onesecond delay, it would still have to go to the event queue and wait for all the synchronous code to finish.
+
+* Getting the result with async-await
+Callbacks are pretty easy to understand, but they can be hard to read, especially if you nest them in multiple layers. A more readable way to write the code above is using the async and await syntax. This syntax makes futures look much more like synchronous code.
+
+Replace the entire main function with the following:
+    Future<void> main() async {
+        print('Before the future');
+
+        final value = await Future<int>.delayed(
+            Duration(seconds: 1),
+            () => 42,
+        );
+        print('Value: $value');
+
+        print('After the future');
+    }
+There are a few changes this time:
+    - If a function uses the await keyword, then it must return a Future and add the async keyword before the function body. Using async clearly tells Dart that this is an asynchronous function, and that the results will go to the event queue. Since main doesn’t return a value, you use Future<void>.
+
+    - In front of the future, you added the await keyword. Once Dart sees await, the rest of the function won’t run until the future completes. If the future completes with a value, there are no callbacks. You have direct access to that value. Thus, the type of the value variable above is not Future, but int.
+
+Run the code above to see the following results:
+    Before the future
+    Value: 42
+    After the future
+
+This time, “After the future” gets printed last. That’s because everything after the await keyword is sent to the event queue.
+
+What if the future returns an error, though?
+
+For that, you need to learn about an error handling feature of Dart called a try-catch block.
+
+* Handling errors with try-catch blocks
+The syntax of a try-catch block looks like this:
+    try {
+    } catch (error) {
+    } finally {
+    }
+
+If you’re attempting an operation that might result in an error, you’ll place it in the try block. If there is an error, Dart will give you a chance to handle it in the catch block. And whether there is an error or not, you can run some last code in the finally block.
+
+* Try-catch blocks with async-await
+Here’s what the future looks like inside the try-catch block:
+    print('Before the future');
+
+    try {
+        final value = await Future<int>.delayed(
+        Duration(seconds: 1),
+        () => 42,
+        );
+        print('Value: $value');
+    }   catch (error) {
+        print(error);
+    }   finally {
+        print('Future is complete');
+    }
+    print('After the future');
+
+The catch and finally blocks correspond to the catchError and whenComplete callbacks that you saw earlier. If the future completes with an error, then the try block will immediately be aborted and the catch block will be called. But no matter whether the future completes with a value or an error, the finally block will always be called.
+
+Run the code above to see the following result:
+    Before the future
+    Value: 42
+    Future is complete
+    After the future
+
+The future finished with a value, so the catch block was not called.
+
+* Catching an error
+In order to see what happens when there’s an error, add the following line to the try block on the line immediately before print('Value: $value'):
+
+    throw Exception('There was an error');
+The throw keyword is how you return an instance of Exception or Error.
+
+Run the code again:
+    Before the future
+    Exception: There was an error
+    Future is complete
+    After the future
+
+This time you can see that the try block never got a chance to print the value, but the catch block picked up the error message from the exception.
+
+* Asynchronous network requests
+In the examples above, you used Future.delayed to simulate a task that takes a long time. Using Future.delayed is useful during app development for this same reason: You can implement an interface with a mock network request class to see how your UI will react while the app is waiting for a response.
+
+As useful as Future.delayed is, though, eventually you’ll need to implement the real network request class. The following example will show how to make an HTTP request to access a REST API. This example will make use of many of the concepts you’ve learned previously in this course.
+
+    Note: HTTP, or hypertext transfer protocol, is a standardway of communicating with a remote server. REST, or representational state transfer, is an architectural style that includes commands like GET, POST, PUT, and DELETE. The API, or application programing interface, is similar in idea to the interfaces you made in Advanced Classes. A remote server defines a specific API using REST commands which allow clients to access and modify resources on the server.
+
+* Creating a data class
+The web API you’re going to use will return some data about a todo list item. The data will be in JSON format, so in order to convert that into a more usable Dart object, you’ll create a special class to hold the data.
+
+Add the following code below the main function:
+    class Todo {
+        Todo({
+            required this.userId,
+            required this.id,
+            required this.title,
+            required this.completed,
+        });
+
+    factory Todo.fromJson(Map<String, Object?> jsonMap) {
+    return Todo(
+        userId: jsonMap['userId'] as int,
+        id: jsonMap['id'] as int,
+        title: jsonMap['title'] as String,
+        completed: jsonMap['completed'] as bool,
+        );
+    }
+    final int userId;
+    final int id;
+    final String title;
+    final bool completed;
+
+    @override
+    String toString() {
+        return 'userId: $userId\n'
+        'id: $id\n'
+        'title: $title\n'
+        'completed: $completed';
+        }
+    }
+This is all content that you learned in Classes. You’ll use the fromJson factory constructor in a minute.
+
+* Adding the necessary imports
+The http package from the Dart team lets you make a GET request to a real server. Make sure your project has a pubspec.yaml file, and then add the following dependency:
+    dependencies:
+    http: ^0.13.1
+
+Save the file, and if necessary, run dart pub get in the terminal to pull the http package from Pub.
+
+Then at the top of the file with your main function, add the following imports:
+    import 'dart:convert';
+    import 'dart:io';
+    import 'package:http/http.dart' as http;
+
+Here’s what each import is for:
+
+    - The dart:convert library will give you jsonDecode, a function for converting a raw JSON string to a Dart map.
+
+    - The dart:io library has HttpException and SocketException, which you’ll use shortly.
+
+    - The final import is the http library that you just added to pubspec.yaml. Note the as http at the end. This isn’t necessary, but the as keyword lets you prefix any functions from the library with the name http. You don’t need to call it http — any arbitrary name is fine. Feel free to change the name to pinkElephants if you so desire. Providing a custom name can be useful for avoiding naming conflicts with other libraries or functions.
+
+* Making a GET request
+Now that you have the necessary imports, replace your main function with the following code:
+    Future<void> main() async {
+        final url = 'https://jsonplaceholder.typicode.com/todos/1';
+        final parsedUrl = Uri.parse(url);
+        final response = await http.get(parsedUrl);
+        final statusCode = response.statusCode;
+        if (statusCode == 200) {
+            final rawJsonString = response.body;
+            final jsonMap = jsonDecode(rawJsonString);
+            final todo = Todo.fromJson(jsonMap);
+            print(todo);
+        } else {
+            throw HttpException('$statusCode');
+        }
+    }
+
+There are a few new things here, so have a look at each of them:
+
+    - The URL address is for a server that provides an API that returns sample JSON for developers. It’s very similar to the type of API you would make as a backend for a client app. Uri.parse converts the raw URL string to a format that http.get will recognize.
+
+    - You use http.get to make a GET request to the URL. Change http to pinkElephants if that’s what you called it earlier. GET requests are the same kinds of requests that browsers make whenever you type a URL in the address bar.
+
+    - Since it takes time to contact a server that may exist in another continent, http.get returns a future. Dart passes off the work of contacting the remote server to the underlying platform, so you won’t need to worry about it blocking your app while you wait. Since you are using the await keyword, the rest of the main method will be added to the event queue when the future completes. If the future completes with a value, the value will be an object of type Response, which includes information from the server.
+
+    - HTTP defines various three-digit status codes. A status code of 200 means OK — the request was successful and the server did what you asked of it. The common status code of 404, on the other hand, means the server couldn’t find what you were asking for. If that happens you’ll throw an HttpException.
+
+    - The response body from this URL address includes a string in JSON format. You use jsonDecode from the dart:convert library to convert the raw JSON string into a Dart map.
+
+    - Once you have a Dart map, you can pass it into the fromJson factory constructor of your Todo class that you wrote earlier.
+
+Make sure you have an internet connection, then run the code above. You’ll see a printout from your Todo object’s toString method:
+    userId: 1
+    id: 1
+    title: delectus aut autem
+    completed: false
+
+The values of each field come from the remote server.
+
+* Handling errors
+There are a few things that could go wrong with the code above, so you’ll need to be ready to handle any errors that come up. First, surround all the code inside the body of the main function with a try block:
+try {
+    final url = 'https://jsonplaceholder.typicode.com/todos/1';
+    // ...
+    }
+
+Then below the try block, add the following catch blocks:
+
+    on SocketException catch (error) {
+        print(error);
+    } on HttpException catch (error) {
+        print(error);
+    } on FormatException catch (error) {
+        print(error);
+    }
+These catch blocks handle specific types of errors. You use the on keyword to specify the name of the exception. Here’s what each one means:
+
+    - SocketException: You’ll get this exception if there’s no internet connection. The http.get method is the one to throw the exception.
+
+    - HttpException: You’re throwing this exception yourself if the status code is not 200 OK.
+
+    - FormatException: jsonDecode throws this exception if the JSON string from the server isn’t in proper JSON format. It would be unwise to blindly trust whatever the server gives you.
+
+* Testing a socket exception
+Turn off your internet and run the code again. You should
+see the following output:
+    SocketException: Failed host lookup: 'jsonplaceholder.typicode.com'
+
+In an actual app, instead of just printing a message to the console, you’d probably want to remind the user to turn on their internet.
+
+Turn your internet back on and proceed to the next test.
+
+* Testing an HTTP exception
+Change the URL to the following:
+    final url = 'https://jsonplaceholder.typicode.com/todos/pink-elephants';
+
+Unless https://jsonplaceholder.typicode.com has recently added the /pink-elephants URL endpoint, you should get a 404 when you run the code again:
+    HttpException: 404
+
+In a real app, you’d inform the user that whatever they were looking for isn’t available.
+
+Restore the URL as it was before:
+
+    final url = 'https://jsonplaceholder.typicode.com/todos/1';
+
+* Testing a JSON format exception
+Replace the following line:
+    final rawJsonString = response.body;
+with this:
+    final rawJsonString = 'abc';
+
+Since abc isn’t properly formatted JSON, you’ll see the following error when you run the code again:
+    FormatException: Unexpected character (at character 1)
+    abc
+    ^
+Nice work! You now know how to get the value from a future and handle any errors.
+
+After you finish the following mini-exercises, you’ll learn about streams, a concept closely related to futures.
+
+Mini-exercises
+1. Use the Future.delayed constructor to provide a string after two seconds that says “I am from the future.”
+
+2. Create a String variable named message that awaits the future to complete with a value.
+
+3. Surround the code above with a try-catch block.

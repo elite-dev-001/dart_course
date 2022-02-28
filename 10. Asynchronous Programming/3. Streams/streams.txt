@@ -1,0 +1,268 @@
+* Streams
+A future represents a single value that will arrive in the future. A stream, on the other hand, represents multiple values that will arrive in the future. Think of a stream like a list of futures. You can imagine a stream meandering through the woods as the autumn leaves fall onto the surface of the water. Each time a leaf floats by, it’s like the value that a Dart stream provides.
+
+Streaming music online as opposed to downloading the song before playing it is another good comparison. When you stream music, you get lots of little chunks of data, but when you download the whole file, you only get a single value, which is the entire file — a little like what a future returns. In fact, the http.get command you used in the last section was actually implemented as a stream internally. However, Dart just waited until the stream finished and then returned all of the data at once in the form of a completed future.
+
+Streams, which are of type Stream, are used extensively in Dart and Dart-based frameworks. Here are some examples:
+
+    - Reading a large file stored locally where new data from the file comes in chunks.
+
+    - Downloading a file from a remote server.
+
+    - Listening for requests coming into a server.
+
+    - Representing user events such as button clicks.
+
+    - Relaying changes in app state to the UI.
+
+While it’s possible to build your own streams from scratch, most of the time you don’t need to do that. You only need to be able to use the streams that Dart or a Dart package provides for you, which is what this section will teach you.
+
+* Subscribing to a stream
+The dart:io library contains a File class which allows you to read data from a file. First, you’ll read data the easy way using the readAsString method, which returns the contents of the file as a future. Then you’ll do it again by reading the data as a stream of bytes.
+
+* Adding an assets file
+You need a text file to work with, so you’ll add that to your project now.
+
+Create a new folder named assets in the root of your project. In that folder, create a file named text.txt. Add some text to the file. Although any text will work, Lorem Ipsum is a good standby:
+    Lorem ipsum dolor sit amet, consectetur adipisci
+    ng elit, sed do eiusmod tempor incididunt ut lab
+    ore et dolore magna aliqua. Ut enim ad minim ven
+    iam, quis nostrud exercitation ullamco laboris n
+    isi ut aliquip ex ea commodo consequat. Duis aut
+    e irure dolor in reprehenderit in voluptate veli
+    t esse cillum dolore eu fugiat nulla pariatur. E
+    xcepteur sint occaecat cupidatat non proident, s
+    unt in culpa qui officia deserunt mollit anim id
+    est laborum.
+
+Then save the file.
+
+* Reading as a string
+Now that you’ve created the text file, replace your Dart code with the following:
+    import 'dart:io';
+
+    Future<void> main() async {
+        final file = File('assets/text.txt');
+        final contents = await file.readAsString();
+        print(contents);
+    }
+
+Here’s what’s new:
+    - File takes the relative path to your text file as the argument.
+    - readAsString returns Future<String>, but by using await you’ll receive the string itself when it’s ready.
+
+File also has a readAsStringSync method, which would run synchronously and avoid awaiting a future. However, doing so would block your app if the reading takes a while. Many of the methods on File have synchronous versions, but in order to prevent blocking your app, you should generally prefer the asynchronous versions.
+
+Run the code above, and you’ll see the contents of text.txt printed to the console.
+
+* Increasing the file size
+If the file is large, you can read it as a stream. This allows you to start processing the data more quickly, since you don’t have to wait to finish reading the entire file as you did in the last example.
+
+When you read a file as a stream, it reads the file in chunks. The size of the chunks depends on how Dart is implemented on the system you’re using, but it’s probably 65,536 bytes per chunk as it was on the local machines used when writing this course. The text.txt file with Lorem Ipsum that you created earlier is only 445 bytes, so that means trying to stream that file would be no different than simply reading the whole thing as you did before.
+
+In order to get a text file large enough to stream in chunks, create a new file in the assets folder called text_long.txt. Copy the Lorem Ipsum text and paste it in text_long.txt as new lines so that there are 1000 Lorem Ipsum copies. You can of course select-all and recopy from time to time, unless you find it therapeutic to paste things a thousand times. Save the file and you’ll be ready to proceed.
+
+Alternatively, you can find text_long.txt in the assets folder of the final project that comes with this course.
+
+* Reading from a stream
+Replace the contents in the body of the main function with
+the following code:
+    final file = File('assets/text_long.txt');
+    final stream = file.openRead();
+    stream.listen(
+        (data) {
+            print(data.length);
+        },
+    );
+Here are a few points to note:
+
+    - Instead of calling readAsString on file, this time you’re calling openRead, which returns an object of type Stream<List<int>>. That’s a lot of angle brackets, but Stream<List<int>> simply means that it’s a stream that periodically produces a list, and that list is a list of integers. The integers are the byte values, and the list is the chunk of data that’s being passed in.
+
+    - To subscribe for notifications whenever there’s new data coming in the stream, you call the listen method and pass it an anonymous function that takes a single parameter. The data parameter here is of type List<int>, so now you have access to the chunk of data coming in from the file.
+
+    - Since each integer in the list is one byte, calling data.length will tell you the number of bytes in the chunk.
+
+Run the code in main and you should see something similar to the following:
+    65536
+    65536
+    65536
+    65536
+    65536
+    65536
+    52783
+The data, at least on the computer used while writing this course, was all in 65,536-byte chunks until the final one, which was smaller since it didn’t quite fill up the 65,536-byte buffer size. Your final chunk may be a different size than the one shown here, depending on how therapeutic your copyand-paste session was.
+
+* Using an asynchronous for loop
+Just as you can use callbacks or async-await to get the value of a future, there are also two ways to get the values of a stream. In the example above, you used the listen callback. Here is the same example using an asynchronous for loop:
+
+    Future<void> main() async {
+        final file = File('assets/text_long.txt');
+        final stream = file.openRead();
+        await for (var data in stream) {
+            print(data.length);
+        }
+    }
+The await for keywords cause the loop to pause until the next data event comes in. Run this and you’ll see the same results as before.
+
+* Error handling
+Like futures, stream events can also produce an error rather than a value. You can handle errors using a callback or try-catch blocks.
+
+* Using a callback
+One way to handle errors is to use the onError callback like so:
+    final file = File('assets/text_long.txt');
+    final stream = file.openRead();
+    stream.listen(
+        (data) {
+            print(data.length);
+        },
+        onError: (error) {
+            print(error);
+        },
+        onDone: () {
+            print('All finished');
+        },
+    );
+Here are a couple of points to note:
+
+    - When an error occurs, it won’t cancel the stream, and you’ll continue to receive more data events. If you actually did want to cancel the stream after an error, then listen also has a cancelOnError parameter which you can set to true.
+
+    - When a stream finishes sending all of its data, it’ll fire a done event. This gives you a chance to respond with an onDone callback.
+
+* Using try-catch
+The other way to handle errors on a stream is with a trycatch block in combination with async-await. Here is what that looks like:
+    try {
+    final file = File('assets/text_long.txt');
+    final stream = file.openRead();
+    await for (var data in stream) {
+    print(data.length);
+    }
+    } on Exception catch (error) {
+    print(error);
+    } finally {
+    print('All finished');
+    }
+In this example, you’re catching all exceptions. A more robust solution would check for specific errors like FileSystemException, which would be thrown if the file didn’t exist.
+
+Run either the callback version, or the try-catch version, and you’ll see the same chunk sizes as before, with the additional text “All finished” printed at the end.
+
+Change the filename to something nonexistent, like pink_elephants.txt, and run the code again. Confirm that you have a FileSystemException.
+
+    FileSystemException: Cannot open file, path = 'as
+    sets/pink_elephants.txt' (OS Error: No such file or directory, errno = 2)
+    All finished
+
+Even with the exception, the finally block, or onDone
+callback if that’s what you used, still printed “All finished”.
+
+* Cancelling a stream
+As mentioned above, you may use the cancelOnError
+parameter to tell the stream that you want to stop listening
+in the event of an error. However, even if there isn’t an error,
+you should always cancel your subscription to a stream if you
+no longer need it. This allows Dart to clean up the memory the stream was using. Failing to do so can cause a memory leak.
+
+Replace your Dart code with the following version:
+    import 'dart:async';
+    import 'dart:io';
+    Future<void> main() async {
+    final file = File('assets/text_long.txt');
+    final stream = file.openRead();
+    StreamSubscription<List<int>>? subscription;
+    subscription = stream.listen(
+    (data) {
+    print(data.length);
+    subscription?.cancel();
+    },
+    cancelOnError: true,
+    onDone: () {
+    print('All finished');
+    },
+    );
+    }
+
+Calling listen returns a StreamSubscription, which is part
+of the dart:async library. Keeping a reference to that in the
+subscription variable allows you to cancel the subscription
+whenever you want. In this case, you cancel it after the first
+data event.
+
+Run the code and you’ll only see 65536 printed once. The
+onDone callback was never called because the stream never
+completed.
+
+* Transforming a stream
+Being able to transform a stream as the data is coming in is
+very powerful. In the examples above, you never did
+anything with the data except print the length of the list of
+bytes. Those bytes represent text, though, so you’re going to
+transform the data from numbers to text.
+
+For this demonstration, there’s no need to use a large text
+file so you’ll switch back to the 445-byte version of Lorem
+Ipsum in text.txt.
+
+* Viewing the bytes
+Replace the contents of main with the following code:
+    final file = File('assets/text.txt');
+    final stream = file.openRead();
+    stream.listen(
+    (data) {
+    print(data);
+    },
+    );
+
+Run that and you’ll see a long list of bytes in decimal form:
+    [76, 111, 114, 101, ... ]
+
+Although different computers encode text files using
+different encodings, the abbreviated list above is from a
+computer that uses UTF-8 encoding. You may recall that
+UTF-16 uses 16-bit, or 2-byte, code units to encode Unicode
+text. UTF-8 uses one to four 8-bit units to encode Unicode
+text. Since for values of 127 and below, UTF-8 and Unicode
+code points are the same, English text only takes one byte
+per letter. This makes file sizes smaller than UTF-16
+encoding, which is beneficial when saving to disk or sending
+over a network.
+
+If you look up 76 in Unicode you’ll see that it’s the capital
+letter L, 111 is o, and on it goes with Lorem ipsum dolor
+sit....
+
+* Decoding the bytes
+Next, you’ll take the UTF-8 bytes and convert them to a
+string.
+
+Make sure you have the following imports and main method:
+    import 'dart:convert';
+    import 'dart:io';
+    Future<void> main() async {
+    final file = File('assets/text.txt');
+    final stream = file.openRead();
+    await for (var data in stream.transform(utf8.d
+    ecoder)) {
+    print(data);
+    }
+    }
+
+The difference here is that you added the transform method
+to the stream. This method takes the input from the original
+stream, transforms it with a StreamTransformer, and
+outputs a new stream, which you can listen to or loop over as
+before. In this case, the stream transformer was the
+dart:convert library’s utf8.decoder, which takes a list of
+bytes and converts them to a string.
+
+Run the code and you’ll see the Lorem Ipsum passage
+printed in plain text.
+
+Mini-exercises
+The following code produces a stream that outputs an
+integer every second and then stops after the tenth time.
+
+    Stream<int>.periodic(
+    Duration(seconds: 1),
+    (value) => value,
+    ).take(10);
+1. Set the stream above to a variable named myStream.
+2. Use await for to print the value of the integer on each data event coming from the stream.

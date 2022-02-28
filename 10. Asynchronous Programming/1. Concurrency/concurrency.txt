@@ -1,0 +1,71 @@
+* Concurrency in Dart
+A thread is a sequence of commands that a computer executes. Some programming languages support multithreading, which is running multiple threads at the same time, while others do not. Dart, in particular, is a single-threaded language.
+
+* Parallelism vs. concurrency
+To understand Dart’s model for handling long-running tasks, and also to see why the creators of Dart decided to make Dart single-threaded, it’s helpful to understand the difference between parallelism and concurrency. In common English, these words mean approximately the same thing, but in computer science, there’s a distinction.
+
+Parallelism is when multiple tasks run at the same time on multiple processors or CPU cores. Concurrency, on the other hand, is when multiple tasks take turns running on a single CPU core. When a restaurant has a single person alternately taking orders and clearing tables, that’s concurrency. But a restaurant that has one person taking orders and a different person clearing tables, that’s parallelism.
+
+“It seems like parallelism is better.”
+
+It can be — when there’s a lot of work to do and that work is easy to split into independent tasks. However, there are some disadvantages with parallelism, too.
+
+* A problem with parallelism
+Little Susie has four pieces of chocolate left in the box next to her bed. She used to have ten, but she’s already eaten six of them. She’s saved the best ones for last, because after school today, three of her friends are coming home with her. She can’t wait to share her chocolates with them. Imagine her horror, though, when she gets home and finds only two pieces of chocolate left in the box! After a lengthy investigation, it turns out that Susie’s brother had discovered her stash and helped himself to two of the chocolates. From that day on, Susie always locked her box whenever she left home.
+
+The same thing can happen in parallel threads that have access to the same memory. One thread saves a value in memory and expects the value to be the same when the thread checks the value later. However, if a second thread modifies the value, the first thread gets confused. It can be a major headache to track down those kinds of bugs because they come from a source completely separated from the code that reports the error. A language that supports multithreading needs to set up a system of locks so that values won’t be changed at the wrong time. The cognitive load of designing, implementing, and debugging a system with multiple threads can be heavy, to say the least.
+
+So the problem isn’t so much with parallelism itself, but rather with multiple threads having access to the same state in memory.
+
+* Dart isolates
+Dart’s single thread runs in what it calls an isolate. Each isolate has its own allocated memory area, which ensures that no isolate can access any other isolate’s state. That means that there’s no need for a complicated locking system. It also means that sensitive data is much more secure. Such a system greatly reduces the cognitive load on a programmer.
+
+* But isn’t concurrency slow?
+If you’re running all of a program’s tasks on a single thread, it seems like it would be really slow. However, it turns out that that’s not usually the case. 
+
+The concurrent version does take a little longer, but it isn’t much longer. The reason is that the parallel threads were idle for much of the time. A single thread is usually more than enough to accomplish what needs to be done.
+
+Flutter needs to update the UI 60 times a second, where each update timeslice is called a frame. That leaves about 16 milliseconds to redraw the UI on each frame. It doesn’t take that long, normally, so that gives you additional time to perform other work while the thread is idle. As long as that work doesn’t block Flutter from updating the UI on the next frame, the user won’t notice any problems. The trick is to schedule tasks during the thread’s downtimes.
+
+* Synchronous vs. asynchronous code
+The word synchronous is composed of syn, meaning “together”, and chron, meaning “time”, thus together in time. Synchronous code is where each instruction is executed in order, one line of code immediately following the previous one.
+
+This is in contrast to asynchronous code, which means not together in time. That is, with asynchronous code, certain tasks are rescheduled to be run in the future when the thread isn’t busy.
+
+All of the code that you’ve written so far in the course has been synchronous. For example:
+    print('first');
+    print('second');
+    print('third');
+Run that and it prints:
+    first
+    second
+    third
+Since the code is executed synchronously, it’ll never print in a different order like third first second.
+
+For many tasks, order matters. Multiplying before adding is different than adding before multiplying. You have to open the bottle before you can take a drink. For other tasks, though, the order doesn’t matter. It doesn’t matter if you brush your teeth first or wash your face first. It doesn’t matter if you put a sock on the right foot first or the left foot first.
+
+As in life, so it is with Dart. While some code needs to be executed in order, other tasks can be temporarily postponed. The postponable tasks are where the Dart event loop comes in.
+
+* The event loop
+You’ve learned that Dart is based around concurrency on a single thread, but how does Dart manage to schedule tasks asynchronously? Dart uses what it calls an event loop toexecute tasks that had previously been postponed.
+
+The event loop has two queues: a microtask queue and an event queue. The microtask queue is mostly used internally by Dart. The event queue is for events like a user entering a keystroke or touching the screen, or data coming from a database, file, or remote server. 
+
+    - Synchronous tasks in the main isolate thread are always run immediately. You can’t interrupt them.
+
+    - If Dart finds any long-running tasks that agree to be postponed, Dart puts them in the event queue.
+
+    - When Dart is finished running the synchronous tasks, the event loop checks the microtask queue. If the microtask queue has any tasks, the event loop puts them on the main thread to execute next. The event loop keeps checking the microtask queue until it’s empty.
+
+    - If the synchronous tasks and microtask queue are both empty, then the event loop sends the next waiting task in the event queue to run in the main thread. Once it gets there, the code is executed synchronously. Just like any other synchronous code, nothing can interrupt it after it starts.
+
+    - If any new microtasks enter the microtask queue, the event loop always handles them before the next event in the event queue.
+
+    - This process continues until all of the queues are empty.
+
+* Running code in parallel
+When people say Dart is single-threaded, they mean that Dart only runs on a single thread in the isolate. However, that doesn’t mean you can’t have tasks running on another thread. One example of this is when the underlying platform performs some work at the request of Dart. For example, when you ask to read a file on the system, that work isn’t happening on the Dart thread. The system is doing the work inside its own process. Once the system finishes its work, it passes the result back to Dart, and Dart schedules some code to handle the result in the event queue. A lot of the I/O work from the dart:io library happens in this way.
+
+Another way to perform work on other threads is to create a new Dart isolate. The new isolate has its own memory and its own thread working in parallel with the main isolate. The two isolates are only able to communicate through messages, though. They have no access to each other’s memory state. The idea is similar to messaging a friend. Sending Ray a text message doesn’t give you access to the internal memory of his mobile device. He simply checks his messages and replies to you when he feels like it.
+
+You won’t often need to create a new isolate. However, if you have a task that’s taking too long on your main isolate thread, which you’ll notice as unresponsiveness or jank in the UI, then this work is likely a good candidate for handing it off to another isolate. The final section of this course will tell you how to do that.

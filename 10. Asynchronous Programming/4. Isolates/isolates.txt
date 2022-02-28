@@ -1,0 +1,93 @@
+* Isolates
+Most of the time it’s fine to run your own code synchronously, and for long-running I/O tasks, you can use Dart libraries that return futures or streams. However you may sometimes discover that your code is too computationally expensive and degrades the performance of your app.
+
+* App stopping synchronous code
+Have a look at this example:
+    String playHideAndSeekTheLongVersion() {
+        var counting = 0;
+        for (var i = 1; i <= 10000000000; i++) {
+            counting = i;
+        }
+        return '$counting! Ready or not, here I come!';
+    }
+
+Counting to ten billion takes a while — even for a computer! If you run that function in a Flutter app, your app’s UI would freeze until the function finishes.
+
+Try running that function from main like so:
+    print("OK, I'm counting...");
+    print(playHideAndSeekTheLongVersion());
+
+You’ll notice a significant wait until the counting finishes.
+
+* App stopping asynchronous code
+Since you’ve read this far in the chapter, you should be aware that making the function asynchronous doesn’t fix the problem:
+    Future<String> playHideAndSeekTheLongVersion() a
+    sync {
+        var counting = 0;
+        await Future(() {
+            for (var i = 1; i <= 10000000000; i++) {
+                counting = i;
+            }
+        });
+        return '$counting! Ready or not, here I come!';
+    }
+
+Run that using await:
+    print("OK, I'm counting...");
+    print(await playHideAndSeekTheLongVersion());
+
+Adding the computationally intensive loop as an anonymous function in a Future constructor does indeed make it a future. However, think about what’s going on here. Dart simply puts that anonymous function at the end of the event queue. True, all the events before it will get to go first, but once the 10-billion-counter-loop gets to the end of the queue, it’ll start running synchronously and block the app until it finishes. Using a future only delays the eventual block.
+
+* Spawning an isolate
+When you’re used to using futures from the Dart I/O libraries, it’s easy to get lulled into thinking that futures always run in the background, but that’s not the case. If you want to run some computationally intensive code on another thread, then you’ll need to create a new isolate to do that.
+
+The term for creating an isolate in Dart is called spawning. Since isolates don’t share any memory with each other, they can only communicate by sending messages. When you spawn a new isolate, you give it a message communication object called a send port. The new isolate uses the send port to send messages back to a receive port, which is listening on the main isolate.
+
+* Using a send port to return results
+Add the new version of playHideAndSeekTheLongVersion as
+a top level method in your file:
+    import 'dart:isolate';
+
+    void playHideAndSeekTheLongVersion(SendPort sendPort) {
+        var counting = 0;
+        for (var i = 1; i <= 1000000000; i++) {
+            counting = i;
+        }
+        sendPort.send('$counting! Ready or not, here I come!');
+    }
+
+Note that now it’s a void function that takes a SendPort object as a parameter. SendPort is like one of those emergency mobile phones for kids where the phone can only call home. Home in this case is the main isolate. Instead of returning a string from the function like you were doing before, this time you’re sending it as a message over the sendport. Back in the main isolate, there will be a receive port listening for the message.
+
+* Spawning the isolate and listening for messages
+Replace the main method with the following code:
+    Future<void> main() async {
+    // 1
+        final receivePort = ReceivePort();
+    // 2
+        final isolate = await Isolate.spawn(
+        playHideAndSeekTheLongVersion,
+    // 3
+        receivePort.sendPort,
+        );
+    // 4
+        receivePort.listen((message) {
+        print(message);
+    // 5
+        receivePort.close();
+        isolate.kill();
+        });
+    }
+Here’s what you did:
+    1. You created a receive port to listen for messages from the new isolate.
+
+    2. Next, you spawned a new isolate and gave it two arguments. The first argument is the function that you want the isolate to execute. That function must be a top-level or static function. It must also take a single parameter. The second argument of spawn will be passed as the argument to playHideAndSeekTheLongVersion.
+
+    3. The receivePort has a sendPort that belongs to it. This is the part where Mommy gives little Timmy the phone and says to call home if anything happens. The second parameter of spawn isn’t actually required to be a SendPort object, but how is Timmy going to call home without a phone? If you want to pass additional parameters to the function, you can make the second parameter of spawn be a list or a map in which one of the elements is a SendPort and the other elements are additional arguments.
+
+    4. Finally, receivePort.listen gets a callback whenever sendPort sends a message. This is where Mommy carries her phone with her wherever she goes, always waiting for a call from Timmy.
+
+    5. In this example, the isolate is no longer needed after the work is done, so you can close the receive port and kill the isolate to free up the memory. This is where the Mommy-Timmy analogy fails. Mommy goes and saves Timmy before anything bad happens.
+
+Note: The Flutter framework has a highly simplified way to start a new isolate, perform some work, and then return the result using a function called compute. Rather than passing the function a send port, you just pass it any values that are needed. In this case, you could just pass it the number to count to: await compute(playHideAndSeekTheLongVersion,10000000000);
+
+That’s enough to get you started on working with isolates. As a word of advice, though, don’t feel like you need to preoptimize everything you think might be a computationally intensive task. Write your code as if it will all run on the main isolate. Only after you encounter performance problems will you need to start thinking about moving some code to a separate isolate.

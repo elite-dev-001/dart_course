@@ -39,7 +39,7 @@ You’ll see the following error:
     Try creating an instance of a concrete subtype.
 Isn’t that good advice! That’s what you’re going to do next.
 
-Concrete subclass
+* Concrete subclass
 Create a concrete Platypus now. Stop thinking about cement. Just add the following empty class to your IDE below your Animal class:
     class Platypus extends Animal {}
 Immediately you’ll notice the wavy red line:
@@ -65,7 +65,7 @@ This will give you the following code:
 
 Starting a comment with TODO: is a common way to mark parts of your code where you need to do more work. Later, you can search your entire project in VS Code for the remaining TODOs by pressing Command+Shift+F on a Mac or Control+Shift+F on a PC and writing “TODO” in the search box. You’re going to complete these TODOs right now, though.
 
-Filling in the TODOs
+* Filling in the TODOs
 Since this is a concrete class, it needs to provide the actual implementation of the eat and move methods. In the eat method body, add the following line:
     print('Munch munch');
 A platypus may not have teeth, but it should still be able to munch.
