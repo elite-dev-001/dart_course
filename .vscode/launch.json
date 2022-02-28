@@ -1,0 +1,62 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dart_application_1",
+            "cwd": "2. Expressions, Variables & Constants\\dart_application_1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "types_and_operations",
+            "cwd": "3. Types and Operation\\types_and_operations",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "control_flow",
+            "cwd": "4. Control Flow\\control_flow",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "classes",
+            "cwd": "6. Classes\\classes",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "classes_tutorial",
+            "cwd": "6. Classes\\classes_tutorial",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "nullability",
+            "cwd": "7. Nullability\\nullability",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "null_application_1",
+            "cwd": "7. Nullability\\null_application_1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "collections",
+            "cwd": "8. Collections\\collections",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "collection_class",
+            "cwd": "8. Collections\\collection_class",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
